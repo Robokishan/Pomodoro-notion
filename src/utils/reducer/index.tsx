@@ -11,8 +11,8 @@ export interface IAppState {
   databaseId?: string;
 }
 
-export const DEFAULT_SESSION_TIMER = 2;
-export const DEFAULT_BREAK_TIEMR = 5;
+export const DEFAULT_SESSION_TIMER = 45;
+export const DEFAULT_BREAK_TIEMR = 15;
 export const DEFAULT_TIMER_VALUE = DEFAULT_SESSION_TIMER * 60;
 
 const timerInit = {
