@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import useSyncPomo from "../../hooks/useSyncPomo";
 import { useStateValue } from "../../utils/reducer/Context";
 import Break from "../Break";
@@ -11,9 +11,12 @@ type Props = {
 };
 
 export default function Timer({ projectName }: Props) {
-  const [{ timerLabel }] = useStateValue();
+  const [{ timerLabel, projectId }] = useStateValue();
 
-  const { clockifiedValue, togglePlayPause, resetPomoDoro } = useSyncPomo();
+  const { clockifiedValue, togglePlayPause, resetTimer } = useSyncPomo();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => resetTimer(false), [projectId]);
 
   return (
     <div
@@ -64,7 +67,7 @@ export default function Timer({ projectName }: Props) {
       >
         {clockifiedValue}
       </h1>
-      <Controls handleReset={resetPomoDoro} handlePlayPause={togglePlayPause} />
+      <Controls handleReset={resetTimer} handlePlayPause={togglePlayPause} />
       <div className="flex w-full items-center justify-between">
         <Container title="Break Length">
           <Break />

@@ -15,12 +15,20 @@ export const DEFAULT_SESSION_TIMER = 2;
 export const DEFAULT_BREAK_TIEMR = 5;
 export const DEFAULT_TIMER_VALUE = DEFAULT_SESSION_TIMER * 60;
 
-const initialTimer = {
-  timerLabel: "Session",
+const timerInit = {
   breakValue: DEFAULT_BREAK_TIEMR,
   sessionValue: DEFAULT_SESSION_TIMER,
+};
+
+const session = {
+  timerLabel: "Session",
   // timerValue is the initial value of 45 minnutes multiplied by 60 in order to have it in seconds much more easily decreasable by 1
   timerValue: DEFAULT_TIMER_VALUE, //2700, // TODO: for debug timer set 2
+} as const;
+
+const initialTimer = {
+  ...session,
+  ...timerInit,
 } as const;
 
 export const initialState: IAppState = {
@@ -33,8 +41,9 @@ export enum actionTypes {
   FROZE_POMODORO = "FROZE_POMODORO",
   SET_PROJECTNAME = "SET_PROJECTNAME",
   SET_PROJECTID = "SET_PROJECTID",
-  SET_DATABASEID = "SET_PROJECTID",
+  SET_DATABASEID = "SET_DATABASEID",
   RESET_TIMERS = "RESET_TIMERS",
+  RESET_STATE = "RESET_STATE",
   START_TIMER = "START_TIMER",
   TOGGLE_TIMER_LABEL = "TOGGLE_TIMER_LABEL",
   TOGGLE_ISBUSY_INDICATOR = "TOGGLE_ISBUSY_INDICATOR",
@@ -46,7 +55,7 @@ export enum actionTypes {
 
 type SET_PROJECTID = {
   type: actionTypes.SET_PROJECTID;
-  payload: string;
+  payload?: string;
 };
 
 type SET_DATABASEID = {
@@ -55,6 +64,7 @@ type SET_DATABASEID = {
 };
 
 export type IAction =
+  | { type: actionTypes.RESET_STATE }
   | SET_PROJECTID
   | SET_DATABASEID
   | {
@@ -142,12 +152,17 @@ const reducer = (state = initialState, action: IAction): IAppState => {
         ...state,
         timerValue: action.payload.timerValue,
       };
-    case actionTypes.RESET_TIMERS:
-      const vals: IAppState = {
+    case actionTypes.RESET_STATE:
+      return {
         ...state,
         ...initialTimer,
       };
-      return vals;
+    case actionTypes.RESET_TIMERS:
+      return {
+        ...state,
+        ...session,
+        timerValue: state.sessionValue * 60,
+      };
     default:
       return state;
   }

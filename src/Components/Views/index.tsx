@@ -5,10 +5,12 @@ export default function Views({
   activeTab,
   pieData,
   projectName = "Please select project",
+  handleSelect,
 }: {
   activeTab: string;
   pieData: PieData[];
   projectName?: string;
+  handleSelect: ({ label, value }: { label: string; value: string }) => void;
 }) {
   return (
     <div className="relative w-full ">
@@ -17,14 +19,14 @@ export default function Views({
           activeTab === "analytics" ? "visible" : "invisible"
         } absolute w-[100%]`}
       >
-        <Piechart data={pieData} />
+        <Piechart onProjectSelect={handleSelect} data={pieData} />
       </div>
       <div
         className={`${
           activeTab === "timer" ? "visible" : "invisible"
         } absolute flex w-full items-center justify-center `}
       >
-        <Timer timerLabel="Session" projectName={projectName} />
+        <Timer projectName={projectName} />
       </div>
       <div
         className={`${

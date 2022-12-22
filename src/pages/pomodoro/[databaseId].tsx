@@ -60,9 +60,11 @@ export default function Pages({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [piedata] = usePieData({ inputData: database?.results || [] });
-  const [project, setProject] = useState<string | null>(null);
+  const [project, setProject] = useState<
+    Record<string, unknown> | undefined | null
+  >(null);
   const [activeTab, setActiveTab] = useState(tabs[0]!.value);
-  const [, dispatch] = useStateValue();
+  const [{ busyIndicator }, dispatch] = useStateValue();
 
   const projects = useMemo(() => {
     return (
@@ -73,22 +75,22 @@ export default function Pages({
     );
   }, [database?.results]);
 
-  const onProjectSelect = (val: string | null) => {
-    if (!val)
+  const onProjectSelect = (proj?: { label: string; value: string }) => {
+    if (!proj)
       dispatch({
         type: actionTypes.RESET_TIMERS,
       });
-    else {
-      dispatch({
-        type: actionTypes.SET_PROJECTID,
-        payload: val,
-      });
-    }
+
+    dispatch({
+      type: actionTypes.SET_PROJECTID,
+      payload: proj?.value,
+    });
+
     dispatch({
       type: actionTypes.FROZE_POMODORO,
-      payload: !val,
+      payload: !proj,
     });
-    setProject(val);
+    setProject(proj);
   };
 
   return (
@@ -117,6 +119,8 @@ export default function Pages({
             />
             <div className="m-5">
               <ProjectSelection
+                disabled={busyIndicator}
+                value={project}
                 handleSelect={onProjectSelect}
                 projects={projects}
               />
@@ -124,6 +128,7 @@ export default function Pages({
             <Views
               activeTab={activeTab}
               pieData={piedata}
+              handleSelect={onProjectSelect}
               projectName={getProjectTitle(
                 database?.results.find((pr) => pr.id == String(project)),
                 "Please select project"

@@ -25,10 +25,8 @@ export default function Controls({ handlePlayPause, handleReset }: Props) {
         )}
       </BigButton>
 
-      <BigButton disabled={state.frozePomodoro} onClick={handleReset}>
-        <ArrowPathIcon
-          className={`h-5 w-5 ${state.frozePomodoro && "fill-gray-200"}`}
-        />
+      <BigButton onClick={handleReset}>
+        <ArrowPathIcon className="h-5 w-5 " />
       </BigButton>
     </div>
   );

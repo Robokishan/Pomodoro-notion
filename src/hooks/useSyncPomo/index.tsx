@@ -7,7 +7,7 @@ import usePomoDoro from "../Pomodoro/usePomoDoro";
 import { useProjectTimer } from "../Storage/useProjectTimer";
 
 export default function useSyncPomo() {
-  const [{ projectId, timerValue, timerLabel, sessionValue }] = useStateValue();
+  const [{ projectId, timerValue, sessionValue }] = useStateValue();
   const { clockifiedValue, handlePlayPause, resetTimer } = usePomoDoro({
     onEnd,
     onPomoPause,
@@ -35,26 +35,14 @@ export default function useSyncPomo() {
   const getSessionInSecond = () => sessionValue * 60;
 
   function saveProjectTime() {
+    // persist project timer
     if (projectId) {
       setProjectTime({
         projectId,
         value: projectTime + getSessionInSecond() - timerValue,
       });
     }
-
-    console.log(
-      { value: projectTime + getSessionInSecond() - timerValue },
-      projectTime,
-      getSessionInSecond(),
-      timerValue,
-      timerLabel,
-      projectId
-    );
   }
 
-  function resetPomoDoro() {
-    resetTimer();
-  }
-
-  return { clockifiedValue, togglePlayPause, resetPomoDoro };
+  return { clockifiedValue, togglePlayPause, resetTimer };
 }

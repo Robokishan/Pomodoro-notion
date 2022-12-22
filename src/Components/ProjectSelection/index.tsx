@@ -2,8 +2,10 @@ import React from "react";
 import Select from "react-select";
 
 type Props = {
+  disabled: boolean;
+  value: Record<string, unknown> | undefined | null;
   projects: Array<Record<string, unknown>>;
-  handleSelect: (val: string | null) => void;
+  handleSelect: ({ label, value }: { label: string; value: string }) => void;
 };
 
 const colourStyles = ({
@@ -59,9 +61,16 @@ const colourStyles = ({
   };
 };
 
-export default function ProjectSelection({ projects, handleSelect }: Props) {
+export default function ProjectSelection({
+  value,
+  projects,
+  disabled,
+  handleSelect,
+}: Props) {
   return (
     <Select
+      isDisabled={disabled}
+      value={value}
       id="projectlist-select"
       instanceId="projectlist-select"
       styles={colourStyles({})}
@@ -69,7 +78,7 @@ export default function ProjectSelection({ projects, handleSelect }: Props) {
       isClearable={true}
       placeholder="Select Project"
       onChange={(e: any) => {
-        handleSelect(e?.value);
+        handleSelect(e);
       }}
     />
   );

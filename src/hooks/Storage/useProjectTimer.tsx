@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { convertToMMSS } from "../Pomodoro/Time/useTime";
+import { PROJECT_KEY } from "./storage.constant";
 import { useLocalStorage } from "./useLocalStorage";
 
 type ID = string;
@@ -10,8 +10,6 @@ interface Projects {
   projects: ProjectTimer;
 }
 
-const projectKey = "PROJECT_KEY";
-
 type ProjectState = { projectId: string; value: number };
 type SetterProject = (prevState: number) => ProjectState;
 type SetStateAction = ProjectState | SetterProject;
@@ -20,7 +18,7 @@ export const useProjectTimer = (
   projectId?: string
 ): [number, (data: SetStateAction) => void] => {
   const [preservedData, setPreservedData] = useLocalStorage<Projects>(
-    projectKey,
+    PROJECT_KEY,
     { projects: {} }
   );
   const [projectTimer, setProjectTimer] = useState<number>(0);

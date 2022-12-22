@@ -4,7 +4,7 @@ import { persistentStorage } from "./persistentStorage";
 export const useLocalStorage = <S>(
   key: string,
   initialState?: S | (() => S)
-): [S, React.Dispatch<React.SetStateAction<S>>] => {
+): [S, React.Dispatch<React.SetStateAction<S>>, () => void] => {
   const [state, setState] = useState<S>(() => {
     const valueFromStorage = persistentStorage.getItem(key);
 
@@ -23,15 +23,21 @@ export const useLocalStorage = <S>(
   });
 
   useEffect(() => {
-    const item = localStorage.getItem(key);
-    if (item) setState(parse(item));
+    fetch();
   }, []);
 
   useEffect(() => {
+    //persist data in storage
     localStorage.setItem(key, JSON.stringify(state));
   }, [key, state]);
 
-  return [state, setState];
+  function fetch() {
+    // update data from persisted storage to state
+    const item = localStorage.getItem(key);
+    if (item) setState(parse(item));
+  }
+
+  return [state, setState, fetch];
 };
 
 const parse = (value: string) => {

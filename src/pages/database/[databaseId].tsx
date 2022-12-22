@@ -24,39 +24,6 @@ export const getServerSideProps = async ({
   }
 };
 
-// const piedata = [
-//   {
-//     id: "rust",
-//     label: "rust",
-//     value: 209,
-//     color: "hsl(199, 70%, 50%)",
-//   },
-//   {
-//     id: "make",
-//     label: "make",
-//     value: 139,
-//     color: "hsl(145, 70%, 50%)",
-//   },
-//   {
-//     id: "sass",
-//     label: "sass",
-//     value: 122,
-//     color: "hsl(158, 70%, 50%)",
-//   },
-//   {
-//     id: "hack",
-//     label: "hack",
-//     value: 457,
-//     color: "hsl(113, 70%, 50%)",
-//   },
-//   {
-//     id: "css",
-//     label: "css",
-//     value: 30,
-//     color: "hsl(218, 70%, 50%)",
-//   },
-// ];
-
 export default function Pages({
   database,
   error,

@@ -64,11 +64,17 @@ export default function usePomoDoro({
     });
   }
 
-  function resetTimer() {
+  function resetTimer(resetState = true) {
     reset();
-    dispatch({
-      type: actionTypes.RESET_TIMERS,
-    });
+    if (resetState) {
+      dispatch({
+        type: actionTypes.RESET_STATE,
+      });
+    } else {
+      dispatch({
+        type: actionTypes.RESET_TIMERS,
+      });
+    }
   }
 
   function tick() {
