@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { PieData } from "../../Components/PieChart";
-import { useStateValue } from "../../utils/reducer/Context";
 import { Result } from "../../utils/types/database/databaseQuery";
 import { notEmpty } from "../../utils/types/notEmpty";
+import useInterval from "../Pomodoro/Time/useInterval";
 import { convertToMMSS } from "../Pomodoro/Time/useTime";
 import { PROJECT_KEY } from "../Storage/storage.constant";
 import { useLocalStorage } from "../Storage/useLocalStorage";
@@ -20,15 +20,18 @@ type Props = {
 };
 
 export default function usePieData({ inputData }: Props): [PieData[]] {
-  const [{ projectId }] = useStateValue();
   const [filteredData, setFileredData] = useState<PieData[]>([]);
 
   // TODO: save it inside context
   const [preservedData, , fetch] = useLocalStorage<Projects>(PROJECT_KEY, {
     projects: {},
   });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => fetch(), [projectId]);
+
+  // Poll localstorage for update since
+  // TODO: fetch after push happens in persist database
+  useInterval(() => {
+    fetch();
+  }, 1000);
 
   useEffect(() => {
     const data: PieData[] = inputData
