@@ -432,6 +432,11 @@
   dependencies:
     tslib "^2.4.0"
 
+"@types/chroma-js@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@types/chroma-js/-/chroma-js-2.1.4.tgz#52e3a8453000cdb9ad76357c2c47dbed702d136f"
+  integrity sha512-l9hWzP7cp7yleJUI7P2acmpllTJNYf5uU6wh50JzSIZt3fFHe+w2FM6w9oZGBTYzjjm2qHdnQvI+fF/JF/E5jQ==
+
 "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
@@ -857,6 +862,11 @@ chokidar@^3.5.3:
     readdirp "~3.6.0"
   optionalDependencies:
     fsevents "~2.3.2"
+
+chroma-js@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/chroma-js/-/chroma-js-2.4.2.tgz#dffc214ed0c11fa8eefca2c36651d8e57cbfb2b0"
+  integrity sha512-U9eDw6+wt7V8z5NncY2jJfZa+hUH8XEj8FQHgFJTrUFnJfXYf4Ml4adI2vXZOjqRDpFWtYVWypDfZwnJ+HIR4A==
 
 color-convert@^1.9.0:
   version "1.9.3"

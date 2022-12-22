@@ -4,23 +4,33 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import Line from "../../Components/Line";
+import NotionTags from "../../Components/NotionTags";
 import ProjectSelection from "../../Components/ProjectSelection";
 import Tabs from "../../Components/Tabs";
 import Views from "../../Components/Views";
 import usePieData from "../../hooks/usePieData";
-import { queryDatabase } from "../../utils/apis/notion/database";
+import {
+  queryDatabase,
+  retrieveDatabase,
+} from "../../utils/apis/notion/database";
 import { getProjectId, getProjectTitle } from "../../utils/notion";
 import { actionTypes } from "../../utils/reducer";
 import { useStateValue } from "../../utils/reducer/Context";
+import { notEmpty } from "../../utils/types/notEmpty";
 
 export const getServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
   try {
-    const database = await queryDatabase(query.databaseId as string, true);
+    const [database, db] = await Promise.all([
+      queryDatabase(query.databaseId as string, true),
+      retrieveDatabase(query.databaseId as string, true),
+    ]);
+
     return {
       props: {
         database,
+        db,
       },
     };
   } catch (error) {
@@ -57,23 +67,82 @@ const tabs = [
 ];
 export default function Pages({
   database,
+  db,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [piedata] = usePieData({ inputData: database?.results || [] });
   const [project, setProject] = useState<
     Record<string, unknown> | undefined | null
   >(null);
+  const [selectedProperties, setProperties] = useState<
+    Array<{
+      label: string;
+      value: string;
+      color: string;
+    }>
+  >([]);
   const [activeTab, setActiveTab] = useState(tabs[0]!.value);
+
   const [{ busyIndicator }, dispatch] = useStateValue();
+
+  const inputData = useMemo(
+    () =>
+      database?.results
+        .map((project) => {
+          // filter project list based on tags selected
+          if (
+            selectedProperties.every(
+              (sp) =>
+                project.properties?.Tags?.multi_select?.findIndex(
+                  (m) => m.id == sp.value
+                ) != -1
+            ) ||
+            selectedProperties.length == 0
+          )
+            return project;
+          return null;
+        })
+        .filter(notEmpty) || [],
+    [database?.results, selectedProperties]
+  );
+  const [piedata] = usePieData({ inputData });
 
   const projects = useMemo(() => {
     return (
-      database?.results.map((project) => ({
-        label: getProjectTitle(project),
-        value: getProjectId(project),
-      })) || []
+      database?.results
+        .map((project) => {
+          // filter project list based on tags selected
+          if (
+            selectedProperties.every(
+              (sp) =>
+                project.properties?.Tags?.multi_select?.findIndex(
+                  (m) => m.id == sp.value
+                ) != -1
+            ) ||
+            selectedProperties.length == 0
+          )
+            return {
+              label: getProjectTitle(project),
+              value: getProjectId(project),
+            };
+          return null;
+        })
+        .filter(notEmpty) || []
     );
-  }, [database?.results]);
+  }, [database?.results, selectedProperties]);
+
+  const properties = useMemo(() => {
+    if (
+      db?.properties &&
+      db.properties.Tags?.multi_select &&
+      db.properties.Tags.multi_select.options
+    )
+      return db?.properties?.Tags?.multi_select?.options.map((prp) => ({
+        label: prp.name,
+        value: prp.id,
+        color: prp.color,
+      }));
+    else return [];
+  }, []);
 
   const onProjectSelect = (proj?: { label: string; value: string }) => {
     if (!proj)
@@ -125,6 +194,11 @@ export default function Pages({
                 projects={projects}
               />
             </div>
+            <NotionTags
+              disabled={busyIndicator}
+              handleSelect={setProperties}
+              options={properties}
+            />
             <Views
               activeTab={activeTab}
               pieData={piedata}

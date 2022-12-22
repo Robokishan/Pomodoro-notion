@@ -16,7 +16,7 @@ const colourStyles = ({
   borderRadius = "6px",
   minWidth = "310px",
   controlFontWeight = 400,
-  whiteBackground = true,
+  whiteBackground = "white",
   minHeight = "48px",
 }) => {
   return {

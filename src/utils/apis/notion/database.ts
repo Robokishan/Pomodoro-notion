@@ -2,6 +2,7 @@ import { DatabaseList } from "../../types/database/database.list";
 import { DatabaseQuery } from "../../types/database/databaseQuery";
 import notionClient from "../notionServerClient";
 import PomodoroClient from "../notionClient";
+import { DatabaseDetail } from "../../types/database/databaseDetail";
 
 const BASE_DATABASE = "/v1/databases";
 
@@ -18,7 +19,7 @@ export const queryDatabase = async (
 export const retrieveDatabase = async (
   id: string,
   serverSide = false
-): Promise<any> => {
+): Promise<DatabaseDetail> => {
   const { data } = serverSide
     ? await notionClient.get(BASE_DATABASE + "/" + id)
     : await PomodoroClient.get(BASE_DATABASE + "/" + id);
