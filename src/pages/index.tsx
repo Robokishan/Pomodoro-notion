@@ -25,14 +25,14 @@ function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
-          Pomodoro <span className="text-purple-300">T3</span> App
+      <main className="container mx-auto flex min-h-screen flex-col items-center  p-4">
+        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
+          Pomodoro <span className="text-purple-300">Databases</span> Notion
         </h1>
-        {databases && databases.results ? (
+        {databases?.results ? (
           <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
             {databases.results.map((d) => (
-              <TechnologyCard
+              <DatabaseCard
                 key={d.id}
                 title={(d.title && d?.title[0]?.text?.content) || "Unkown"}
                 description={
@@ -41,7 +41,8 @@ function Home({
                     JSON.stringify(d.description)) ||
                   "No description"
                 }
-                href={`database/${d.id}`}
+                databasehref={`database/${d.id}`}
+                pomodorohref={`pomodoro/${d.id}`}
               />
             ))}
           </div>
@@ -57,18 +58,29 @@ function Home({
 
 export default Home;
 
-type TechnologyCardProps = {
+type DatabaseProps = {
   title: string;
   description: string;
-  href: string;
+  databasehref: string;
+  pomodorohref: string;
 };
 
-const TechnologyCard = ({ title, description, href }: TechnologyCardProps) => {
+const DatabaseCard = ({
+  title,
+  description,
+  databasehref,
+  pomodorohref,
+}: DatabaseProps) => {
   return (
-    <Link href={href}>
-      <section className="flex cursor-pointer flex-col justify-center rounded border-2 border-gray-500 p-6 shadow-xl duration-500 motion-safe:hover:scale-105">
+    <Link href={databasehref}>
+      <section className="flex cursor-pointer flex-col justify-center rounded-md border-2 border-gray-500 p-6 shadow-xl duration-500 motion-safe:hover:scale-105">
         <h2 className="text-lg text-gray-700">{title}</h2>
         <p className="text-sm text-gray-600">{description}</p>
+        <Link href={pomodorohref}>
+          <button className="mt-5 rounded-md bg-gray-600 py-2 px-4 text-gray-200  hover:bg-gray-400">
+            Pomodoro
+          </button>
+        </Link>
       </section>
     </Link>
   );

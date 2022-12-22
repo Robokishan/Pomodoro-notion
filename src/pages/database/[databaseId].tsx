@@ -1,9 +1,8 @@
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import React from "react";
-import { queryDatabase } from "../../utils/apis/notion/database";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { queryDatabase } from "../../utils/apis/notion/database";
 
 export const getServerSideProps = async ({
   query,
@@ -25,19 +24,55 @@ export const getServerSideProps = async ({
   }
 };
 
+// const piedata = [
+//   {
+//     id: "rust",
+//     label: "rust",
+//     value: 209,
+//     color: "hsl(199, 70%, 50%)",
+//   },
+//   {
+//     id: "make",
+//     label: "make",
+//     value: 139,
+//     color: "hsl(145, 70%, 50%)",
+//   },
+//   {
+//     id: "sass",
+//     label: "sass",
+//     value: 122,
+//     color: "hsl(158, 70%, 50%)",
+//   },
+//   {
+//     id: "hack",
+//     label: "hack",
+//     value: 457,
+//     color: "hsl(113, 70%, 50%)",
+//   },
+//   {
+//     id: "css",
+//     label: "css",
+//     value: 30,
+//     color: "hsl(218, 70%, 50%)",
+//   },
+// ];
+
 export default function Pages({
   database,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
+      <main className=" container mx-auto flex min-h-screen flex-col items-center p-4">
+        <h2 className="flex items-center gap-5 text-4xl font-extrabold leading-normal text-gray-700">
           <Link href="/">
-            <ArrowLeftIcon className="h-5 w-5 cursor-pointer text-blue-500" />
+            <ArrowLeftIcon className="inline h-5 w-5 cursor-pointer text-gray-700 md:top-[45px] md:left-[-45px] md:h-[1.75rem] md:w-[1.75rem]" />
           </Link>
-          Pomodoro <span className="text-purple-300">T3</span> App
-        </h1>
+          <span>
+            Project <span className="text-purple-300">Lists</span>
+          </span>
+        </h2>
+
         {database ? (
           <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
             {database.results && database.results?.length > 0 ? (
@@ -45,7 +80,11 @@ export default function Pages({
                 <PageTile
                   key={r.id}
                   description={r.icon?.emoji || ""}
-                  title={r.properties?.Name?.title[0]?.text?.content || ""}
+                  title={
+                    (r.properties?.Name?.title?.length &&
+                      r.properties?.Name?.title[0]?.text?.content) ||
+                    ""
+                  }
                 />
               ))
             ) : (

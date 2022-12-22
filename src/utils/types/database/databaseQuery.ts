@@ -1,6 +1,6 @@
 export interface DatabaseQuery {
   object?: string;
-  results?: Result[];
+  results: Result[];
   next_cursor?: string;
   has_more?: boolean;
   type?: string;
@@ -11,7 +11,7 @@ export interface Page {}
 
 export interface Result {
   object?: string;
-  id?: string;
+  id: string;
   created_time?: string;
   last_edited_time?: string;
   created_by?: TedBy;

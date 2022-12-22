@@ -1,6 +1,8 @@
 import Head from "next/head";
 import React from "react";
 import NextNProgress from "nextjs-progressbar";
+import { TimerStateProvider } from "../../utils/reducer/Context";
+import reducer, { initialState } from "../../utils/reducer";
 
 interface Props {
   children: JSX.Element | React.ReactNode;
@@ -8,7 +10,7 @@ interface Props {
 
 export default function index({ children }: Props) {
   return (
-    <>
+    <TimerStateProvider reducer={reducer} initialState={initialState}>
       <NextNProgress
         color="#374151"
         showOnShallow={true}
@@ -24,6 +26,6 @@ export default function index({ children }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {children}
-    </>
+    </TimerStateProvider>
   );
 }

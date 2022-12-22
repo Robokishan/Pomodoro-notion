@@ -5,7 +5,7 @@ import Shield from "../Components/Shield";
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <Shield>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </Shield>
   );
 };
