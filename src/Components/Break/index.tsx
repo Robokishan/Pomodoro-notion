@@ -1,4 +1,6 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
+import useInterval from "../../hooks/Pomodoro/Time/useInterval";
 import { actionTypes } from "../../utils/reducer";
 import { useStateValue } from "../../utils/reducer/Context";
 import SmallButton from "../SmallButton";
@@ -6,6 +8,10 @@ import SmallButton from "../SmallButton";
 export default function Break() {
   const [{ breakValue, busyIndicator }] = useStateValue();
   const [, dispatch] = useStateValue();
+  const [mouseDown, setMouseDown] = useState({
+    increase: false,
+    decrease: false,
+  });
 
   const handleDecrement = () => {
     dispatch({
@@ -25,9 +31,36 @@ export default function Break() {
   };
   const decreaseDisabled = busyIndicator || breakValue <= 1;
   const increaseDisabled = busyIndicator || breakValue > 59;
+
+  useInterval(
+    () => {
+      if (mouseDown.increase && !increaseDisabled) handleIncrement();
+      if (mouseDown.decrease && !decreaseDisabled) handleDecrement();
+    },
+    (mouseDown.increase && !increaseDisabled) ||
+      (mouseDown.decrease && !decreaseDisabled)
+      ? 100
+      : null
+  );
+
+  useEffect(() => {
+    if (increaseDisabled) {
+      setMouseDown((prev) => ({ ...prev, increase: false }));
+    } else if (decreaseDisabled) {
+      setMouseDown((prev) => ({ ...prev, decrease: false }));
+    }
+  }, [increaseDisabled, decreaseDisabled]);
+
   return (
     <>
-      <SmallButton disabled={decreaseDisabled} onClick={handleDecrement}>
+      <SmallButton
+        onMouseDown={() =>
+          setMouseDown((prev) => ({ ...prev, decrease: true }))
+        }
+        onMouseUp={() => setMouseDown((prev) => ({ ...prev, decrease: false }))}
+        disabled={decreaseDisabled}
+        onClick={handleDecrement}
+      >
         <MinusIcon
           className={`h-5 w-5 ${decreaseDisabled && "fill-gray-200"}`}
         />
@@ -35,7 +68,14 @@ export default function Break() {
       <p id="break-length" className="text-md min-w-[27px] px-2 py-4 font-bold">
         {breakValue}
       </p>
-      <SmallButton disabled={increaseDisabled} onClick={handleIncrement}>
+      <SmallButton
+        onMouseDown={() =>
+          setMouseDown((prev) => ({ ...prev, increase: true }))
+        }
+        onMouseUp={() => setMouseDown((prev) => ({ ...prev, increase: false }))}
+        disabled={increaseDisabled}
+        onClick={handleIncrement}
+      >
         <PlusIcon
           className={`h-5 w-5 ${increaseDisabled && "fill-gray-200"}`}
         />

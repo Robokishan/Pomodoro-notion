@@ -1,6 +1,7 @@
 // this will do jobs regarding synchronization and working with pomodoro timer
 // save project timeline on pause
 
+import { useRef } from "react";
 import { TimerLabelType } from "../../utils/reducer";
 import { useStateValue } from "../../utils/reducer/Context";
 import usePomoDoro from "../Pomodoro/usePomoDoro";
@@ -13,6 +14,8 @@ export default function useSyncPomo() {
     onPomoPause,
   });
   const [projectTime, setProjectTime] = useProjectTimer(projectId);
+
+  const elapsedTime = useRef(0);
 
   function togglePlayPause() {
     handlePlayPause();
@@ -39,8 +42,10 @@ export default function useSyncPomo() {
     if (projectId) {
       setProjectTime({
         projectId,
-        value: projectTime + getSessionInSecond() - timerValue,
+        value:
+          projectTime + getSessionInSecond() - timerValue - elapsedTime.current,
       });
+      elapsedTime.current = getSessionInSecond() - timerValue;
     }
   }
 
