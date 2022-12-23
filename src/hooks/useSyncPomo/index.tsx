@@ -45,7 +45,8 @@ export default function useSyncPomo() {
         value:
           projectTime + getSessionInSecond() - timerValue - elapsedTime.current,
       });
-      elapsedTime.current = getSessionInSecond() - timerValue;
+      elapsedTime.current =
+        timerValue == 0 ? 0 : getSessionInSecond() - timerValue; //if timer value is having some value then delete session time from there
     }
   }
 
