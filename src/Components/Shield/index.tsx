@@ -13,7 +13,7 @@ export default function index({ children }: Props) {
     <TimerStateProvider reducer={reducer} initialState={initialState}>
       <NextNProgress
         color="#374151"
-        showOnShallow={true}
+        showOnShallow={false}
         stopDelayMs={0}
         options={{
           showSpinner: false,

@@ -20,7 +20,6 @@ const colourStyles: StylesConfig<ColourOption, true> = {
       boxShadow: "unset",
       cursor: "pointer",
       margin: "unset",
-      padding: "12px 16px 12px, 16px",
       backgroundColor: "white",
       border: `1px solid #DAE6EF`,
       "&:hover": {
@@ -45,6 +44,7 @@ const colourStyles: StylesConfig<ColourOption, true> = {
       color: chroma.contrast(color, "white") > 2 ? "white" : "black",
       margin: "2px 0px",
       borderRadius: "2px",
+      padding: "10px 25px",
 
       cursor: isDisabled ? "not-allowed" : "pointer",
 

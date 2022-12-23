@@ -2,7 +2,8 @@ import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import Line from "../../Components/Line";
 import NotionTags from "../../Components/NotionTags";
 import ProjectSelection from "../../Components/ProjectSelection";
@@ -26,11 +27,11 @@ export const getServerSideProps = async ({
       queryDatabase(query.databaseId as string, true),
       retrieveDatabase(query.databaseId as string, true),
     ]);
-
     return {
       props: {
         database,
         db,
+        tab: (query?.tab as string) || null,
       },
     };
   } catch (error) {
@@ -68,11 +69,13 @@ const tabs = [
 export default function Pages({
   database,
   db,
+  tab,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [project, setProject] = useState<
     Record<string, unknown> | undefined | null
   >(null);
+  const router = useRouter();
   const [selectedProperties, setProperties] = useState<
     Array<{
       label: string;
@@ -80,9 +83,25 @@ export default function Pages({
       color: string;
     }>
   >([]);
-  const [activeTab, setActiveTab] = useState(tabs[0]!.value);
+
+  const [activeTab, setActiveTab] = useState(tab || tabs[0]!.value);
 
   const [{ busyIndicator }, dispatch] = useStateValue();
+
+  useEffect(() => {
+    router.push(
+      {
+        query: {
+          databaseId: router.query.databaseId,
+          tab: activeTab,
+        },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
+  }, [activeTab]);
 
   const inputData = useMemo(
     () =>
