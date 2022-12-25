@@ -31,9 +31,9 @@ export default function Piechart({ data, onProjectSelect }: Props) {
           }}
           data={data}
           margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-          innerRadius={0.5}
-          padAngle={1}
-          cornerRadius={3}
+          innerRadius={0.6}
+          padAngle={2} //for gap between charts
+          cornerRadius={5}
           activeOuterRadiusOffset={8}
           borderWidth={2}
           arcLinkLabel={(d) => d.data.label}
