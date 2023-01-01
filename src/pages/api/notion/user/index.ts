@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { showError } from "../../../../utils/apis";
-import {
-  createNotionUser,
-  getUserById,
-} from "../../../../utils/apis/firebase/user";
+import { getUserById } from "../../../../utils/apis/firebase/auth";
+import { createNotionUser } from "../../../../utils/apis/firebase/userNotion";
 
 export default async function handler(
   req: NextApiRequest,

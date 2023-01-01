@@ -1,17 +1,28 @@
-import type { InferGetServerSidePropsType } from "next";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
+import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
+import Header from "../Components/Header";
+import { fetchNotionUser } from "../utils/apis/firebase/userNotion";
 import { listDatabases } from "../utils/apis/notion/database";
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({
+  req,
+}: GetServerSidePropsContext) => {
   try {
-    const databases = await listDatabases(true);
+    const session = await getSession({ req });
+    const user = await fetchNotionUser(session?.user?.email);
+    const databases = await listDatabases(true, user.accessToken);
+
     return {
       props: {
         databases,
+        workspace: user.workspace,
       },
     };
   } catch (error) {
-    console.log(error);
     return {
       props: {
         error: "Something went wrong",
@@ -22,13 +33,13 @@ export const getServerSideProps = async () => {
 
 function Home({
   databases,
+  workspace,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const session = useSession();
   return (
     <>
       <main className="container mx-auto flex min-h-screen flex-col items-center  p-4">
-        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
-          Pomodoro <span className="text-purple-300">Databases</span> Notion
-        </h1>
+        <Header imgSrc={workspace?.workspace_icon} />
 
         {databases?.results ? (
           <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
@@ -53,11 +64,11 @@ function Home({
               No Database found
             </h2>
             <Link
-              href={`https://api.notion.com/v1/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_NOTION_AUTH_CLIENT_ID}&response_type=code&owner=user&redirect_uri=${process.env.NEXT_PUBLIC_NOTION_AUTH_REDIRECT_URI}`}
+              href={`https://api.notion.com/v1/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_NOTION_AUTH_CLIENT_ID}&response_type=code&owner=user&redirect_uri=${process.env.NEXT_PUBLIC_NOTION_AUTH_REDIRECT_URI}&state=${session.data?.user?.email}`}
             >
               <a>
                 <button className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
-                  Add to Notion
+                  Add Notion
                 </button>
               </a>
             </Link>
@@ -89,7 +100,7 @@ const DatabaseCard = ({
         <h2 className="text-lg text-gray-700">{title}</h2>
         <p className="text-sm text-gray-600">{description}</p>
         <Link href={pomodorohref}>
-          <button className="mt-5 rounded-md bg-gray-600 py-2 px-4 text-gray-200  hover:bg-gray-400">
+          <button className="mt-5 rounded-md bg-gray-600 py-2 px-4 text-gray-200  hover:bg-gray-700">
             Pomodoro
           </button>
         </Link>

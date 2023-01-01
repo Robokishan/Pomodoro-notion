@@ -1,43 +1,13 @@
-import argon2 from "argon2";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  serverTimestamp,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
-import { generateUUID } from "../../utils";
 import { FIREBASE_COLLECTIONS } from "./constants";
 
-// for signin controller
-export const validateUser = async ({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) => {
+export const getUserById = async (userId: string) => {
   const querySnapshot = await getDocs(
-    query(
-      collection(db, FIREBASE_COLLECTIONS.USERS),
-      where("email", "==", email)
-    )
+    query(collection(db, FIREBASE_COLLECTIONS.USERS), where("id", "==", userId))
   );
-  if (querySnapshot.docs.length > 0) {
-    const userData = querySnapshot.docs[0]?.data();
-    const hashedPassword = userData?.password;
-    if (hashedPassword && (await argon2.verify(hashedPassword, password))) {
-      // password match
-      return true;
-    } else {
-      // password did not match
-      throw new Error("Email or Password wrong");
-    }
-  } else {
-    throw new Error("No user found");
-  }
+  const users = querySnapshot.docs.map((d) => d.data());
+  return users;
 };
 
 export const getUserByEmail = async (email: string): Promise<boolean> => {
@@ -47,25 +17,26 @@ export const getUserByEmail = async (email: string): Promise<boolean> => {
       where("email", "==", email)
     )
   );
-  return querySnapshot.docs.length > 0;
+  if (querySnapshot.docs.length > 0) return querySnapshot.docs[0]?.data();
+  else return {};
 };
 
 // sign up controller
-export const createUser = async ({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) => {
-  if (await getUserByEmail(email)) throw new Error("User already exists");
-  const uid = generateUUID(); // generate random uuid
-  const hashedPassword = await argon2.hash(password); //hash password using argon2
-  await addDoc(collection(db, FIREBASE_COLLECTIONS.USERS), {
-    id: uid,
-    email,
-    hashedPassword,
-    createdAt: serverTimestamp(),
-  });
-  return uid;
-};
+// export const createUser = async ({
+//   email,
+//   password,
+// }: {
+//   email: string;
+//   password: string;
+// }) => {
+//   if (await getUserByEmail(email)) throw new Error("User already exists");
+//   const uid = generateUUID(); // generate random uuid
+//   const hashedPassword = await argon2.hash(password); //hash password using argon2
+//   await addDoc(collection(db, FIREBASE_COLLECTIONS.USERS), {
+//     id: uid,
+//     email,
+//     hashedPassword,
+//     createdAt: serverTimestamp(),
+//   });
+//   return uid;
+// };
