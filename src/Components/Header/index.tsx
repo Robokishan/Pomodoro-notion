@@ -12,7 +12,7 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
       {session && (
         <div>
           <div className="flex flex-col items-center justify-center ">
-            {session.user.email} <br />
+            {session.user && session?.user.email} <br />
           </div>
           <Image
             loading="lazy"

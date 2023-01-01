@@ -5,15 +5,24 @@ import { useRef } from "react";
 import { TimerLabelType } from "../../utils/reducer";
 import { useStateValue } from "../../utils/reducer/Context";
 import usePomoDoro from "../Pomodoro/usePomoDoro";
+import useClickSound from "../Sound/useClickSound";
+import useNotificationSound from "../Sound/useNotificationSound";
 import { useProjectTimer } from "../Storage/useProjectTimer";
 
 export default function useSyncPomo() {
   const [{ projectId, timerValue, sessionValue }] = useStateValue();
-  const { clockifiedValue, handlePlayPause, resetTimer } = usePomoDoro({
-    onEnd,
-    onPomoPause,
-  });
+  const { clockifiedValue, handlePlayPause, resetTimer, restartPomo } =
+    usePomoDoro({
+      onEnd,
+      onPomoPause,
+      onStart,
+    });
   const [projectTime, setProjectTime] = useProjectTimer(projectId);
+  const {
+    tickingSlow: { play: tickingSlowPlay, stop: tickingSlowStop },
+  } = useClickSound();
+
+  const { bellRingPlay, alarmWoodPlay } = useNotificationSound();
 
   const elapsedTime = useRef(0);
 
@@ -22,17 +31,26 @@ export default function useSyncPomo() {
   }
 
   function onPomoPause(type: TimerLabelType) {
+    tickingSlowStop();
     if (type == "Session") {
       //when session ends save session time
       saveProjectTime();
     }
   }
 
+  // this will be excecuted when sessions switch happens during running pomo
   function onEnd(type: TimerLabelType) {
     if (type == "Session") {
+      bellRingPlay();
       //when session ends save session time
       saveProjectTime();
+    } else {
+      alarmWoodPlay();
     }
+  }
+
+  function onStart() {
+    setTimeout(tickingSlowPlay, 1000);
   }
 
   const getSessionInSecond = () => sessionValue * 60;
@@ -50,5 +68,5 @@ export default function useSyncPomo() {
     }
   }
 
-  return { clockifiedValue, togglePlayPause, resetTimer };
+  return { clockifiedValue, togglePlayPause, resetTimer, restartPomo };
 }

@@ -9,15 +9,20 @@ export interface IAppState {
   frozePomodoro: boolean;
   projectId?: string;
   databaseId?: string;
+  shouldTickSound?: boolean;
 }
 
-export const DEFAULT_SESSION_TIMER = 45;
-export const DEFAULT_BREAK_TIEMR = 15;
+export const DEFAULT_SESSION_TIMER = 1; //45;
+export const DEFAULT_BREAK_TIEMR = 1; //15;
 export const DEFAULT_TIMER_VALUE = DEFAULT_SESSION_TIMER * 60;
 
 const timerInit = {
   breakValue: DEFAULT_BREAK_TIEMR,
   sessionValue: DEFAULT_SESSION_TIMER,
+};
+
+const soundInit = {
+  shouldTickSound: false,
 };
 
 const session = {
@@ -35,10 +40,12 @@ export const initialState: IAppState = {
   busyIndicator: false,
   frozePomodoro: true,
   ...initialTimer,
+  ...soundInit,
 };
 
 export enum actionTypes {
   FROZE_POMODORO = "FROZE_POMODORO",
+  RESTART_POMODORO = "RESTART_POMODORO",
   SET_PROJECTNAME = "SET_PROJECTNAME",
   SET_PROJECTID = "SET_PROJECTID",
   SET_DATABASEID = "SET_DATABASEID",
@@ -51,6 +58,7 @@ export enum actionTypes {
   DECREASE_BREAK_VALUE = "DECREASE_BREAK_VALUE",
   INCREASE_SESSION_VALUE = "INCREASE_SESSION_VALUE",
   DECREASE_SESSION_VALUE = "DECREASE_SESSION_VALUE",
+  CHANGE_TICKING_SOUND = "CHANGE_TICKING_SOUND",
 }
 
 type SET_PROJECTID = {
@@ -64,6 +72,11 @@ type SET_DATABASEID = {
 };
 
 export type IAction =
+  | {
+      type: actionTypes.CHANGE_TICKING_SOUND;
+      payload: boolean;
+    }
+  | { type: actionTypes.RESTART_POMODORO }
   | { type: actionTypes.RESET_STATE }
   | SET_PROJECTID
   | SET_DATABASEID
@@ -162,6 +175,17 @@ const reducer = (state = initialState, action: IAction): IAppState => {
         ...state,
         ...session,
         timerValue: state.sessionValue * 60,
+      };
+    case actionTypes.RESTART_POMODORO:
+      return {
+        ...state,
+        timerLabel: "Session",
+        timerValue: state.sessionValue * 60,
+      };
+    case actionTypes.CHANGE_TICKING_SOUND:
+      return {
+        ...state,
+        shouldTickSound: action.payload,
       };
     default:
       return state;

@@ -1,4 +1,4 @@
-import { Result } from "../types/database/databaseQuery";
+import { Result } from "../../types/database/databaseQuery";
 
 export const getProjectTitle = (
   project: Result | undefined,

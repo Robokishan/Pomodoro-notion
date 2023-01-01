@@ -7,7 +7,7 @@ export default function Login() {
     return (
       <>
         <div className="flex h-screen flex-col items-center justify-center ">
-          Signed in as {session.user.email} <br />
+          Signed in as {session?.user?.email} <br />
           <button
             onClick={() => signOut()}
             className="mt-3 block 

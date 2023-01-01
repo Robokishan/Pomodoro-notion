@@ -1,11 +1,5 @@
-export interface DatabaseList {
-  object?: string;
-  results?: Result[];
-  next_cursor?: null;
-  has_more?: boolean;
-}
-
-export interface Result {
+/* eslint-disable @typescript-eslint/no-empty-interface */
+export interface DatabaseDetail {
   object?: string;
   id?: string;
   cover?: null;
@@ -66,9 +60,9 @@ export interface Select {
 }
 
 export interface Option {
-  id?: string;
-  name?: string;
-  color?: string;
+  id: string;
+  name: string;
+  color: string;
 }
 
 export interface Title {

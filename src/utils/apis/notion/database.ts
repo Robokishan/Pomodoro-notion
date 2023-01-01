@@ -1,8 +1,8 @@
-import { DatabaseList } from "../../types/database/database.list";
-import { DatabaseQuery } from "../../types/database/databaseQuery";
+import { DatabaseList } from "../../../types/database/database.list";
+import { DatabaseQuery } from "../../../types/database/databaseQuery";
 import notionClient from "../notionServerClient";
 import PomodoroClient from "../notionClient";
-import { DatabaseDetail } from "../../types/database/databaseDetail";
+import { DatabaseDetail } from "../../../types/database/databaseDetail";
 
 const BASE_DATABASE = "/v1/databases";
 

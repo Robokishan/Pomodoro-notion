@@ -18,7 +18,7 @@ import {
 import { getProjectId, getProjectTitle } from "../../utils/notion";
 import { actionTypes } from "../../utils/reducer";
 import { useStateValue } from "../../utils/reducer/Context";
-import { notEmpty } from "../../utils/types/notEmpty";
+import { notEmpty } from "../../types/notEmpty";
 import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
 
 export const getServerSideProps = async ({
@@ -27,7 +27,9 @@ export const getServerSideProps = async ({
 }: GetServerSidePropsContext) => {
   try {
     const session = await getSession({ req });
+    if (!session?.user?.email) throw new Error("Session not found");
     const user = await fetchNotionUser(session?.user?.email);
+    if (!user) throw new Error("User not found");
     const [database, db] = await Promise.all([
       queryDatabase(query.databaseId as string, true, user.accessToken),
       retrieveDatabase(query.databaseId as string, true, user.accessToken),
@@ -78,9 +80,11 @@ export default function Pages({
   tab,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [project, setProject] = useState<
-    Record<string, unknown> | undefined | null
-  >(null);
+  const [project, setProject] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+
   const router = useRouter();
   const [selectedProperties, setProperties] = useState<
     Array<{
@@ -169,7 +173,7 @@ export default function Pages({
     else return [];
   }, []);
 
-  const onProjectSelect = (proj?: { label: string; value: string }) => {
+  const onProjectSelect = (proj: { label: string; value: string } | null) => {
     if (!proj)
       dispatch({
         type: actionTypes.RESET_TIMERS,
@@ -229,7 +233,7 @@ export default function Pages({
               pieData={piedata}
               handleSelect={onProjectSelect}
               projectName={getProjectTitle(
-                database?.results.find((pr) => pr.id == String(project)),
+                database?.results.find((pr) => pr.id == String(project?.value)),
                 "Please select project"
               )}
             />

@@ -20,11 +20,11 @@ const colourStyles = ({
   minHeight = "48px",
 }) => {
   return {
-    menuPortal: (base) => {
+    menuPortal: (base: any) => {
       const { ...rest } = base;
       return { ...rest, zIndex: 9999 };
     },
-    control: (styles) => {
+    control: (styles: any) => {
       return {
         ...styles,
         fontWeight: controlFontWeight,
@@ -43,21 +43,21 @@ const colourStyles = ({
         minHeight,
       };
     },
-    menu: (styles) => ({
+    menu: (styles: any) => ({
       ...styles,
       minWidth,
       boxShadow: `0px 2px 24px #DAE6EF`,
       zIndex: 99999, //fix so that it can overlap over other components
     }),
-    dropdownIndicator: (style) => ({
+    dropdownIndicator: (style: any) => ({
       ...style,
     }),
-    menuList: (styles) => ({
+    menuList: (styles: any) => ({
       ...styles,
       padding: "0px",
       borderRadius,
     }),
-    indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
+    indicatorSeparator: (styles: any) => ({ ...styles, display: "none" }),
   };
 };
 

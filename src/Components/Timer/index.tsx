@@ -1,5 +1,6 @@
 import Head from "next/head";
 import React, { useEffect } from "react";
+import { actionTypes } from "src/utils/reducer";
 import useSyncPomo from "../../hooks/useSyncPomo";
 import { useStateValue } from "../../utils/reducer/Context";
 import Break from "../Break";
@@ -11,12 +12,21 @@ type Props = {
 };
 
 export default function Timer({ projectName }: Props) {
-  const [{ timerLabel, projectId }] = useStateValue();
+  const [{ timerLabel, projectId, shouldTickSound }, dispatch] =
+    useStateValue();
 
-  const { clockifiedValue, togglePlayPause, resetTimer } = useSyncPomo();
+  const { clockifiedValue, togglePlayPause, resetTimer, restartPomo } =
+    useSyncPomo();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetTimer(false), [projectId]);
+
+  function handleTickChange(e: React.ChangeEvent<HTMLInputElement>) {
+    dispatch({
+      type: actionTypes.CHANGE_TICKING_SOUND,
+      payload: e.target.checked,
+    });
+  }
 
   return (
     <div
@@ -67,7 +77,11 @@ export default function Timer({ projectName }: Props) {
       >
         {clockifiedValue}
       </h1>
-      <Controls handleReset={resetTimer} handlePlayPause={togglePlayPause} />
+      <Controls
+        handleReset={resetTimer}
+        handlePlayPause={togglePlayPause}
+        handleRestart={restartPomo}
+      />
       <div className="flex w-full items-center justify-between">
         <Container title="Break Length">
           <Break />
@@ -75,6 +89,23 @@ export default function Timer({ projectName }: Props) {
         <Container title=" Session Length">
           <Session />
         </Container>
+      </div>
+
+      <div className="flex items-center ">
+        <input
+          id="shouldTickSound"
+          type="checkbox"
+          value="ticksound"
+          checked={shouldTickSound}
+          onChange={handleTickChange}
+          className="h-4 w-4 rounded border-0 bg-gray-100 accent-gray-600 focus:ring-gray-500"
+        />
+        <label
+          htmlFor="shouldTickSound"
+          className="ml-2 text-sm font-medium text-gray-900"
+        >
+          Ticking
+        </label>
       </div>
     </div>
   );
