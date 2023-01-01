@@ -18,6 +18,7 @@ export default function middleware(req: NextRequest) {
 
   // ignore api _next static files and publicpathname
   if (
+    // ignore all api routes
     ignoredApiRoutes.findIndex((route) => pathname.startsWith(route)) != -1 ||
     pathname.startsWith("_next") ||
     pathname.startsWith("/static") ||
@@ -26,7 +27,10 @@ export default function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const isAuthenticated = !!(req.cookies.get("next-auth.session-token") ?? req.cookies.get("__Secure-next-auth.session-token"));
+  const isAuthenticated = !!(
+    req.cookies.get("next-auth.session-token") ??
+    req.cookies.get("__Secure-next-auth.session-token")
+  );
 
   // if not authenticated and accessing login route then allow
   if (!isAuthenticated) {
