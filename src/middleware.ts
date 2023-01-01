@@ -26,7 +26,7 @@ export default function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const isAuthenticated = !!req.cookies.get("next-auth.session-token");
+  const isAuthenticated = !!(req.cookies.get("next-auth.session-token") ?? req.cookies.get("__Secure-next-auth.session-token"));
 
   // if not authenticated and accessing login route then allow
   if (!isAuthenticated) {
