@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { getToken } from ".";
 
 const notionClient = axios.create();
 
@@ -14,7 +13,7 @@ const notionRequestInterceptor = (
 ): AxiosRequestConfig => {
   config.baseURL = "https://api.notion.com";
   config.headers = {
-    Authorization: "Bearer " + getToken(),
+    ...config.headers,
     "Notion-Version": "2021-08-16",
   };
   return config;

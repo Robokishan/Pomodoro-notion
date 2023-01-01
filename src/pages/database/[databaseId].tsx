@@ -1,14 +1,23 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
+import { getSession } from "next-auth/react";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { queryDatabase } from "../../utils/apis/notion/database";
+import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
 
 export const getServerSideProps = async ({
   query,
+  req,
 }: GetServerSidePropsContext) => {
   try {
-    const database = await queryDatabase(query.databaseId as string, true);
+    const session = await getSession({ req });
+    const user = await fetchNotionUser(session?.user?.email);
+    const database = await queryDatabase(
+      query.databaseId as string,
+      true,
+      user.accessToken
+    );
     return {
       props: {
         database,

@@ -10,6 +10,7 @@ import ProjectSelection from "../../Components/ProjectSelection";
 import Tabs from "../../Components/Tabs";
 import Views from "../../Components/Views";
 import usePieData from "../../hooks/usePieData";
+import { getSession } from "next-auth/react";
 import {
   queryDatabase,
   retrieveDatabase,
@@ -18,14 +19,18 @@ import { getProjectId, getProjectTitle } from "../../utils/notion";
 import { actionTypes } from "../../utils/reducer";
 import { useStateValue } from "../../utils/reducer/Context";
 import { notEmpty } from "../../utils/types/notEmpty";
+import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
 
 export const getServerSideProps = async ({
   query,
+  req,
 }: GetServerSidePropsContext) => {
   try {
+    const session = await getSession({ req });
+    const user = await fetchNotionUser(session?.user?.email);
     const [database, db] = await Promise.all([
-      queryDatabase(query.databaseId as string, true),
-      retrieveDatabase(query.databaseId as string, true),
+      queryDatabase(query.databaseId as string, true, user.accessToken),
+      retrieveDatabase(query.databaseId as string, true, user.accessToken),
     ]);
     return {
       props: {
@@ -35,6 +40,7 @@ export const getServerSideProps = async ({
       },
     };
   } catch (error) {
+    console.log(error);
     const err = error as AxiosError;
     if (process.env.NODE_ENV === "development")
       return {
