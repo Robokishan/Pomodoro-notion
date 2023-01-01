@@ -23,6 +23,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-select": "^5.7.0",
+    "use-sound": "^4.0.1",
     "zod": "^3.18.0"
   },
   "devDependencies": {
@@ -35,6 +36,7 @@
     "autoprefixer": "^10.4.13",
     "eslint": "8.22.0",
     "eslint-config-next": "12.3.1",
+    "file-loader": "^6.2.0",
     "git-cz": "^4.9.0",
     "postcss": "^8.4.20",
     "prettier": "2.7.1",

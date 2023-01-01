@@ -29,7 +29,23 @@ export default defineNextConfig({
       },
     ],
   },
-  // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
+  webpack(config, options) {
+    const { isServer } = options;
+    config.module.rules.push({
+      test: /\.(ogg|mp3|wav|mpe?g)$/i,
+      use: {
+        loader: "file-loader",
+        options: {
+          publicPath: `/_next/static/audio/`,
+          outputPath: `${isServer ? "../" : ""}static/audio/`,
+          name: "[name]-[hash].[ext]",
+          esModule: config.esModule || false,
+        },
+      },
+    });
+    return config;
+  },
+
   async rewrites() {
     return [
       {

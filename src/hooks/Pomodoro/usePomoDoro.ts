@@ -16,16 +16,20 @@ const countStep = 1;
 export default function usePomoDoro({
   onEnd,
   onPomoPause,
+  onTick,
+  onStart,
 }: {
   onEnd?: (type: TimerLabelType) => void;
   onPomoPause?: (type: TimerLabelType) => void;
+  onStart?: () => void;
+  onTick?: () => void;
 }) {
   const [{ timerValue }] = useStateValue();
   const [, isRunning, toggleTimer, reset] = useTimer(
     timerValue,
     intervalmillis,
     {
-      onStart: onStart,
+      onStart: onPomoStart,
       onPause: onPause,
       onTick: tick,
     }
@@ -45,7 +49,8 @@ export default function usePomoDoro({
     return !busyIndicator;
   }
 
-  function onStart() {
+  function onPomoStart() {
+    if (onStart) onStart();
     dispatch({
       type: actionTypes.TOGGLE_ISBUSY_INDICATOR,
       payload: {
@@ -77,7 +82,15 @@ export default function usePomoDoro({
     }
   }
 
+  function restartPomo() {
+    reset();
+    dispatch({
+      type: actionTypes.RESTART_POMODORO,
+    });
+  }
+
   function tick() {
+    if (onTick) onTick();
     dispatch({
       type: actionTypes.START_TIMER,
       payload: {
@@ -121,5 +134,5 @@ export default function usePomoDoro({
     }
   }
 
-  return { clockifiedValue, handlePlayPause, resetTimer };
+  return { clockifiedValue, handlePlayPause, resetTimer, restartPomo };
 }

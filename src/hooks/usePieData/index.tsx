@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PieData } from "../../Components/PieChart";
-import { Result } from "../../utils/types/database/databaseQuery";
-import { notEmpty } from "../../utils/types/notEmpty";
+import { Result } from "../../types/database/databaseQuery";
+import { notEmpty } from "../../types/notEmpty";
 import useInterval from "../Pomodoro/Time/useInterval";
 import { convertToMMSS } from "../Pomodoro/Time/useTime";
 import { PROJECT_KEY } from "../Storage/storage.constant";
