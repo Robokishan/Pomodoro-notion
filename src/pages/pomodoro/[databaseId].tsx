@@ -27,7 +27,9 @@ export const getServerSideProps = async ({
 }: GetServerSidePropsContext) => {
   try {
     const session = await getSession({ req });
+    if (!session?.user?.email) throw new Error("Session not found");
     const user = await fetchNotionUser(session?.user?.email);
+    if (!user) throw new Error("User not found");
     const [database, db] = await Promise.all([
       queryDatabase(query.databaseId as string, true, user.accessToken),
       retrieveDatabase(query.databaseId as string, true, user.accessToken),

@@ -20,12 +20,10 @@ export default defineNextConfig({
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
-        port: "",
       },
       {
         protocol: "https",
         hostname: "picsum.photos",
-        port: "",
       },
     ],
   },

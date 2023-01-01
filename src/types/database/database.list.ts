@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 export interface DatabaseList {
   object?: string;
   results?: Result[];

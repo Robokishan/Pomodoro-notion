@@ -10,7 +10,7 @@ export const getUserById = async (userId: string) => {
   return users;
 };
 
-export const getUserByEmail = async (email: string): Promise<boolean> => {
+export const getUserByEmail = async (email: string) => {
   const querySnapshot = await getDocs(
     query(
       collection(db, FIREBASE_COLLECTIONS.USERS),
