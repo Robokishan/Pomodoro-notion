@@ -29,6 +29,7 @@ function Home({
         <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
           Pomodoro <span className="text-purple-300">Databases</span> Notion
         </h1>
+
         {databases?.results ? (
           <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
             {databases.results.map((d) => (
@@ -47,9 +48,20 @@ function Home({
             ))}
           </div>
         ) : (
-          <h2 className="w-100 mt-10 text-center text-4xl leading-normal text-gray-500">
-            No Database found
-          </h2>
+          <>
+            <h2 className="w-100 mt-10 text-center text-4xl leading-normal text-gray-500">
+              No Database found
+            </h2>
+            <Link
+              href={`https://api.notion.com/v1/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_NOTION_AUTH_CLIENT_ID}&response_type=code&owner=user&redirect_uri=${process.env.NEXT_PUBLIC_NOTION_AUTH_REDIRECT_URI}`}
+            >
+              <a>
+                <button className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
+                  Add to Notion
+                </button>
+              </a>
+            </Link>
+          </>
         )}
       </main>
     </>
