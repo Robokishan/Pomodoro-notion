@@ -5,12 +5,12 @@ import Image from "next/image";
 export default function Header({ imgSrc }: { imgSrc?: string }) {
   const { data: session } = useSession();
   return (
-    <div className="flex gap-10 ">
+    <div className="flex flex-col gap-10 sm:flex-row sm:justify-center">
       <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
         Pomodoro <span className="text-purple-300">Databases</span> Notion
       </h1>
       {session && (
-        <div>
+        <div className="flex flex-col items-center md:block ">
           <div className="flex flex-col items-center justify-center ">
             {session.user && session?.user.email} <br />
           </div>
