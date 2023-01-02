@@ -7,13 +7,13 @@ export interface IAppState {
   timerValue: number;
   timerLabel: TimerLabelType;
   frozePomodoro: boolean;
-  projectId?: string;
+  project?: { label: string; value: string } | null;
   databaseId?: string;
   shouldTickSound?: boolean;
 }
 
-export const DEFAULT_SESSION_TIMER = 1; //45;
-export const DEFAULT_BREAK_TIEMR = 1; //15;
+export const DEFAULT_SESSION_TIMER = 45;
+export const DEFAULT_BREAK_TIEMR = 15;
 export const DEFAULT_TIMER_VALUE = DEFAULT_SESSION_TIMER * 60;
 
 const timerInit = {
@@ -63,7 +63,10 @@ export enum actionTypes {
 
 type SET_PROJECTID = {
   type: actionTypes.SET_PROJECTID;
-  payload?: string;
+  payload?: {
+    label: string;
+    value: string;
+  } | null;
 };
 
 type SET_DATABASEID = {
@@ -111,7 +114,7 @@ const reducer = (state = initialState, action: IAction): IAppState => {
     case actionTypes.SET_PROJECTID:
       return {
         ...state,
-        projectId: action.payload,
+        project: action.payload ?? null,
       };
     case actionTypes.SET_DATABASEID:
       return {

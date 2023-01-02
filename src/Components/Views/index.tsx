@@ -1,17 +1,36 @@
+import { actionTypes } from "../../utils/Context/PomoContext/reducer";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import Piechart, { PieData } from "../PieChart";
 import Timer from "../Timer";
+import TimesheetList from "../TimesheetList";
 
 export default function Views({
   activeTab,
   pieData,
   projectName = "Please select project",
-  handleSelect,
 }: {
   activeTab: string;
   pieData: PieData[];
   projectName?: string;
-  handleSelect: ({ label, value }: { label: string; value: string }) => void;
 }) {
+  const [, dispatch] = usePomoState();
+
+  const onProjectSelect = (proj: { label: string; value: string } | null) => {
+    if (!proj)
+      dispatch({
+        type: actionTypes.RESET_TIMERS,
+      });
+
+    dispatch({
+      type: actionTypes.SET_PROJECTID,
+      payload: proj,
+    });
+    dispatch({
+      type: actionTypes.FROZE_POMODORO,
+      payload: !proj,
+    });
+  };
+
   return (
     <div className="relative w-full ">
       <div
@@ -19,8 +38,10 @@ export default function Views({
           activeTab === "analytics" ? "visible" : "invisible"
         } absolute w-[100%]`}
       >
-        <Piechart onProjectSelect={handleSelect} data={pieData} />
+        <Piechart onProjectSelect={onProjectSelect} data={pieData} />
+        <TimesheetList />
       </div>
+
       <div
         className={`${
           activeTab === "timer" ? "visible" : "invisible"
@@ -33,7 +54,9 @@ export default function Views({
           activeTab === "noise" ? "visible" : "invisible"
         } absolute flex w-full items-center justify-center `}
       >
-        <h1>Right now no noise added</h1>
+        <div>
+          <h1>Right now no noise added</h1>
+        </div>
       </div>
     </div>
   );

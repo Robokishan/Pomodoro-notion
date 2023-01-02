@@ -9,17 +9,21 @@ import NotionTags from "../../Components/NotionTags";
 import ProjectSelection from "../../Components/ProjectSelection";
 import Tabs from "../../Components/Tabs";
 import Views from "../../Components/Views";
-import usePieData from "../../hooks/usePieData";
+import useFormattedData from "../../hooks/useFormattedData";
 import { getSession } from "next-auth/react";
 import {
   queryDatabase,
   retrieveDatabase,
 } from "../../utils/apis/notion/database";
-import { getProjectId, getProjectTitle } from "../../utils/notion";
-import { actionTypes } from "../../utils/reducer";
-import { useStateValue } from "../../utils/reducer/Context";
+import { getProjectId, getProjectTitle } from "../../utils/notionutils";
+import { actionTypes } from "../../utils/Context/PomoContext/reducer";
+import { actionTypes as userActiontype } from "../../utils/Context/UserContext/reducer";
+import { actionTypes as projActiontype } from "../../utils/Context/ProjectContext/reducer";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import { notEmpty } from "../../types/notEmpty";
 import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
+import { useUserState } from "../../utils/Context/UserContext/Context";
+import { useProjectState } from "@/utils/Context/ProjectContext/Context";
 
 export const getServerSideProps = async ({
   query,
@@ -36,6 +40,7 @@ export const getServerSideProps = async ({
     ]);
     return {
       props: {
+        userId: user.id,
         database,
         db,
         tab: (query?.tab as string) || null,
@@ -75,16 +80,12 @@ const tabs = [
   },
 ];
 export default function Pages({
+  userId,
   database,
   db,
   tab,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [project, setProject] = useState<{
-    label: string;
-    value: string;
-  } | null>(null);
-
   const router = useRouter();
   const [selectedProperties, setProperties] = useState<
     Array<{
@@ -96,7 +97,9 @@ export default function Pages({
 
   const [activeTab, setActiveTab] = useState(tab || tabs[0]!.value);
 
-  const [{ busyIndicator }, dispatch] = useStateValue();
+  const [{ busyIndicator, project }, dispatch] = usePomoState();
+  const [, userDispatch] = useUserState();
+  const [, projectDispatch] = useProjectState();
 
   useEffect(() => {
     router.push(
@@ -113,27 +116,42 @@ export default function Pages({
     );
   }, [activeTab]);
 
-  const inputData = useMemo(
+  useEffect(
     () =>
-      database?.results
-        .map((project) => {
-          // filter project list based on tags selected
-          if (
-            selectedProperties.every(
-              (sp) =>
-                project.properties?.Tags?.multi_select?.findIndex(
-                  (m) => m.id == sp.value
-                ) != -1
-            ) ||
-            selectedProperties.length == 0
-          )
-            return project;
-          return null;
-        })
-        .filter(notEmpty) || [],
-    [database?.results, selectedProperties]
+      userDispatch({
+        type: userActiontype.SET_USERID,
+        payload: userId,
+      }),
+    [userId]
   );
-  const [piedata] = usePieData({ inputData });
+
+  useEffect(() => {
+    if (database?.results) {
+      const notionProjects =
+        database?.results
+          .map((project) => {
+            // filter project list based on tags selected
+            if (
+              selectedProperties.every(
+                (sp) =>
+                  project.properties?.Tags?.multi_select?.findIndex(
+                    (m) => m.id == sp.value
+                  ) != -1
+              ) ||
+              selectedProperties.length == 0
+            )
+              return project;
+            return null;
+          })
+          .filter(notEmpty) || [];
+      projectDispatch({
+        type: projActiontype.UPDATE_NOTION_PROJECTS,
+        payload: notionProjects,
+      });
+    }
+  }, [database?.results, selectedProperties]);
+
+  const [piedata] = useFormattedData();
 
   const projects = useMemo(() => {
     return (
@@ -181,14 +199,12 @@ export default function Pages({
 
     dispatch({
       type: actionTypes.SET_PROJECTID,
-      payload: proj?.value,
+      payload: proj,
     });
-
     dispatch({
       type: actionTypes.FROZE_POMODORO,
       payload: !proj,
     });
-    setProject(proj);
   };
 
   return (
@@ -231,7 +247,6 @@ export default function Pages({
             <Views
               activeTab={activeTab}
               pieData={piedata}
-              handleSelect={onProjectSelect}
               projectName={getProjectTitle(
                 database?.results.find((pr) => pr.id == String(project?.value)),
                 "Please select project"

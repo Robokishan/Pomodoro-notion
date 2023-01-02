@@ -2,22 +2,23 @@
 // save project timeline on pause
 
 import { useRef } from "react";
-import { TimerLabelType } from "../../utils/reducer";
-import { useStateValue } from "../../utils/reducer/Context";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
+import { TimerLabelType } from "../../utils/Context/PomoContext/reducer";
 import usePomoDoro from "../Pomodoro/usePomoDoro";
 import useClickSound from "../Sound/useClickSound";
 import useNotificationSound from "../Sound/useNotificationSound";
-import { useProjectTimer } from "../Storage/useProjectTimer";
+import { usePomoClient } from "../Storage/usePomoClient";
 
 export default function useSyncPomo() {
-  const [{ projectId, timerValue, sessionValue }] = useStateValue();
+  const [{ project, timerValue, sessionValue }] = usePomoState();
   const { clockifiedValue, handlePlayPause, resetTimer, restartPomo } =
     usePomoDoro({
       onEnd,
       onPomoPause,
       onStart,
     });
-  const [projectTime, setProjectTime] = useProjectTimer(projectId);
+
+  const [refetch, addTimesheet] = usePomoClient();
   const {
     tickingSlow: { play: tickingSlowPlay, stop: tickingSlowStop },
   } = useClickSound();
@@ -41,9 +42,9 @@ export default function useSyncPomo() {
   // this will be excecuted when sessions switch happens during running pomo
   function onEnd(type: TimerLabelType) {
     if (type == "Session") {
-      bellRingPlay();
-      //when session ends save session time
       saveProjectTime();
+      //when session ends save session time
+      bellRingPlay();
     } else {
       alarmWoodPlay();
     }
@@ -57,14 +58,15 @@ export default function useSyncPomo() {
 
   function saveProjectTime() {
     // persist project timer
-    if (projectId) {
-      setProjectTime({
-        projectId,
-        value:
-          projectTime + getSessionInSecond() - timerValue - elapsedTime.current,
+    if (project?.value) {
+      addTimesheet(
+        project.value,
+        getSessionInSecond() - timerValue - elapsedTime.current
+      ).then(() => {
+        elapsedTime.current =
+          timerValue == 0 ? 0 : getSessionInSecond() - timerValue; //if timer value is having some value then delete session time from there
+        setTimeout(refetch, 3000); //refetch after 3 sec
       });
-      elapsedTime.current =
-        timerValue == 0 ? 0 : getSessionInSecond() - timerValue; //if timer value is having some value then delete session time from there
     }
   }
 

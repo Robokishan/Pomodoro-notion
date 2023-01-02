@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { IAction, IAppState, initialState } from ".";
+import { IAction, IAppState, initialState } from "./reducer";
 export type IAppContext = [IAppState, React.Dispatch<IAction>];
 const defaultDispatch: React.Dispatch<IAction> = () => initialState; // we never actually use this
 
@@ -8,7 +8,7 @@ export const StateContext = createContext<IAppContext>([
   defaultDispatch,
 ]);
 
-export const TimerStateProvider = ({
+export const UserStateProvider = ({
   reducer,
   initialState,
   children,
@@ -24,4 +24,4 @@ export const TimerStateProvider = ({
   </StateContext.Provider>
 );
 
-export const useStateValue = () => useContext(StateContext);
+export const useUserState = () => useContext(StateContext);

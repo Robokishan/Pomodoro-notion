@@ -2,14 +2,14 @@ import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import useInterval from "../../hooks/Pomodoro/Time/useInterval";
 import useAlert from "../../hooks/Sound/useClickSound";
-import { actionTypes } from "../../utils/reducer";
-import { useStateValue } from "../../utils/reducer/Context";
+import { actionTypes } from "../../utils/Context/PomoContext/reducer";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import SmallButton from "../SmallButton";
 
 export default function Break() {
   const { clickPlay } = useAlert();
-  const [{ breakValue, busyIndicator }] = useStateValue();
-  const [, dispatch] = useStateValue();
+  const [{ breakValue, busyIndicator }] = usePomoState();
+  const [, dispatch] = usePomoState();
   const [mouseDown, setMouseDown] = useState({
     increase: false,
     decrease: false,

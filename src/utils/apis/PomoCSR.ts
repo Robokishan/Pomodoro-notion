@@ -8,15 +8,16 @@ const parseErrorCodeV1 = (error: AxiosError) => {
 };
 
 // Request parsing interceptor
-const notionRequestInterceptor = (
+const pomoRequestInterceptor = (
   config: AxiosRequestConfig
 ): AxiosRequestConfig => {
-  config.url = "/notion" + config.url;
+  if (!config.baseURL) config.baseURL = window.location.origin;
+  config.withCredentials = true;
   return config;
 };
 
 // Request parsing interceptor
-PomodoroClient.interceptors.request.use(notionRequestInterceptor, (error) => {
+PomodoroClient.interceptors.request.use(pomoRequestInterceptor, (error) => {
   console.error("[REQUEST_ERROR]", error);
   return Promise.reject(error);
 });

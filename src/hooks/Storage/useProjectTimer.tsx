@@ -21,6 +21,7 @@ export const useProjectTimer = (
     PROJECT_KEY,
     { projects: {} }
   );
+
   const [projectTimer, setProjectTimer] = useState<number>(0);
   const memoryState = useRef<Projects>({
     projects: {},
