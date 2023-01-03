@@ -1,5 +1,5 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../../firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "../../firebaseutils";
 import { generateUUID } from "../../utils";
 import { getUserByEmail } from "./auth";
 import { FIREBASE_COLLECTIONS } from "./constants";
@@ -15,7 +15,7 @@ export const createNotionUser = async ({
   workspace: any;
 }) => {
   const uid = generateUUID();
-  await addDoc(collection(db, FIREBASE_COLLECTIONS.USERS), {
+  await setDoc(doc(db, FIREBASE_COLLECTIONS.USERS, email), {
     id: uid,
     email,
     accessToken,

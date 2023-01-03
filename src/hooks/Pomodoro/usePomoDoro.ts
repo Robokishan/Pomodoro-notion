@@ -5,8 +5,11 @@
   2. break
 */
 
-import { actionTypes, TimerLabelType } from "../../utils/reducer";
-import { useStateValue } from "../../utils/reducer/Context";
+import {
+  actionTypes,
+  TimerLabelType,
+} from "../../utils/Context/PomoContext/reducer";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import { useClockified } from "./Time/useTime";
 import useTimer from "./Time/useTimer";
 
@@ -24,7 +27,7 @@ export default function usePomoDoro({
   onStart?: () => void;
   onTick?: () => void;
 }) {
-  const [{ timerValue }] = useStateValue();
+  const [{ timerValue }] = usePomoState();
   const [, isRunning, toggleTimer, reset] = useTimer(
     timerValue,
     intervalmillis,
@@ -35,7 +38,7 @@ export default function usePomoDoro({
     }
   );
   const [{ busyIndicator, breakValue, sessionValue, timerLabel }, dispatch] =
-    useStateValue();
+    usePomoState();
   const clockifiedValue = useClockified();
 
   function handlePlayPause() {

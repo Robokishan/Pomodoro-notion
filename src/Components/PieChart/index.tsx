@@ -1,6 +1,9 @@
+import { useUserState } from "@/utils/Context/UserContext/Context";
+import { actionTypes } from "@/utils/Context/UserContext/reducer";
 import { ResponsivePie } from "@nivo/pie";
 import React from "react";
-import { useStateValue } from "../../utils/reducer/Context";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
+import DateRange from "../DateRange";
 
 export type PieData = {
   id: string;
@@ -16,10 +19,21 @@ type Props = {
   onProjectSelect: ({ label, value }: { label: string; value: string }) => void;
 };
 
-export default function Piechart({ data, onProjectSelect }: Props) {
-  const [{ busyIndicator }] = useStateValue();
+function Piechart({ data, onProjectSelect }: Props) {
+  const [{ busyIndicator }] = usePomoState();
+
+  const [, userDispatch] = useUserState();
+
   return (
-    <div className="h-[600px] w-full ">
+    <div className="h-[600px] w-full">
+      <DateRange
+        onDateRangeChange={(dates) =>
+          userDispatch({
+            type: actionTypes.SET_DATES,
+            payload: dates,
+          })
+        }
+      />
       {data.length > 0 ? (
         <ResponsivePie
           isInteractive={!busyIndicator}
@@ -94,10 +108,12 @@ export default function Piechart({ data, onProjectSelect }: Props) {
           }}
         />
       ) : (
-        <h2 className=" w-ful text-center font-quicksand text-3xl font-extrabold leading-normal text-gray-700">
+        <h2 className="w-ful mt-10 text-center font-quicksand text-3xl font-extrabold leading-normal text-gray-700">
           No data for analysis
         </h2>
       )}
     </div>
   );
 }
+
+export default Piechart;

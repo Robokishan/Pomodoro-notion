@@ -1,8 +1,8 @@
 import Head from "next/head";
 import React, { useEffect } from "react";
-import { actionTypes } from "src/utils/reducer";
+import { actionTypes } from "@/utils/Context/PomoContext/reducer";
 import useSyncPomo from "../../hooks/useSyncPomo";
-import { useStateValue } from "../../utils/reducer/Context";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import Break from "../Break";
 import Controls from "../Controls";
 import Session from "../Session";
@@ -12,14 +12,13 @@ type Props = {
 };
 
 export default function Timer({ projectName }: Props) {
-  const [{ timerLabel, projectId, shouldTickSound }, dispatch] =
-    useStateValue();
+  const [{ timerLabel, project, shouldTickSound }, dispatch] = usePomoState();
 
   const { clockifiedValue, togglePlayPause, resetTimer, restartPomo } =
     useSyncPomo();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => resetTimer(false), [projectId]);
+  useEffect(() => resetTimer(false), [project?.value]);
 
   function handleTickChange(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({

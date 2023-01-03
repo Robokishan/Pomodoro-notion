@@ -1,5 +1,12 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebaseutils";
 import { FIREBASE_COLLECTIONS } from "./constants";
 
 export const getUserById = async (userId: string) => {
@@ -11,32 +18,6 @@ export const getUserById = async (userId: string) => {
 };
 
 export const getUserByEmail = async (email: string) => {
-  const querySnapshot = await getDocs(
-    query(
-      collection(db, FIREBASE_COLLECTIONS.USERS),
-      where("email", "==", email)
-    )
-  );
-  if (querySnapshot.docs.length > 0) return querySnapshot.docs[0]?.data();
-  else return {};
+  const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.USERS, email));
+  return userDoc.data();
 };
-
-// sign up controller
-// export const createUser = async ({
-//   email,
-//   password,
-// }: {
-//   email: string;
-//   password: string;
-// }) => {
-//   if (await getUserByEmail(email)) throw new Error("User already exists");
-//   const uid = generateUUID(); // generate random uuid
-//   const hashedPassword = await argon2.hash(password); //hash password using argon2
-//   await addDoc(collection(db, FIREBASE_COLLECTIONS.USERS), {
-//     id: uid,
-//     email,
-//     hashedPassword,
-//     createdAt: serverTimestamp(),
-//   });
-//   return uid;
-// };

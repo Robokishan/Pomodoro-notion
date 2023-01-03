@@ -4,7 +4,7 @@ import {
   PauseIcon,
   PlayIcon,
 } from "@heroicons/react/24/solid";
-import { useStateValue } from "../../utils/reducer/Context";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import BigButton from "../BigButton";
 import useAlert from "../../hooks/Sound/useClickSound";
 
@@ -20,8 +20,8 @@ export default function Controls({
   handleRestart,
 }: Props) {
   const { clickPlay } = useAlert();
-  const [{ busyIndicator }] = useStateValue();
-  const [state] = useStateValue();
+  const [{ busyIndicator }] = usePomoState();
+  const [state] = usePomoState();
 
   return (
     <div className="z-30 mb-[2em]	flex items-center justify-between">

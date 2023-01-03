@@ -1,4 +1,4 @@
-import { useStateValue } from "../../../utils/reducer/Context";
+import { usePomoState } from "../../../utils/Context/PomoContext/Context";
 
 function pad2(num: number) {
   return num > 9 ? num : `0${num}`;
@@ -6,7 +6,7 @@ function pad2(num: number) {
 
 export function useClockified(): string {
   // custom hook for seconds to mm:ss convert
-  const [{ timerValue }] = useStateValue();
+  const [{ timerValue }] = usePomoState();
   return convertToMMSS(timerValue);
 }
 

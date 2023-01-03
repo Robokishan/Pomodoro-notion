@@ -1,7 +1,7 @@
 import { DatabaseList } from "../../../types/database/database.list";
 import { DatabaseQuery } from "../../../types/database/databaseQuery";
 import notionClient from "../notionServerClient";
-import PomodoroClient from "../notionClient";
+import NotionClient from "../notionCSR";
 import { DatabaseDetail } from "../../../types/database/databaseDetail";
 
 const BASE_DATABASE = "/v1/databases";
@@ -21,7 +21,7 @@ export const queryDatabase = async (
           },
         }
       )
-    : await PomodoroClient.post(BASE_DATABASE + "/" + id + "/query");
+    : await NotionClient.post(BASE_DATABASE + "/" + id + "/query");
   return data;
 };
 
@@ -36,7 +36,7 @@ export const retrieveDatabase = async (
           Authorization: "Bearer " + token,
         },
       })
-    : await PomodoroClient.get(BASE_DATABASE + "/" + id);
+    : await NotionClient.get(BASE_DATABASE + "/" + id);
   return data;
 };
 
@@ -50,6 +50,6 @@ export const listDatabases = async (
           Authorization: "Bearer " + token,
         },
       })
-    : await PomodoroClient.get(BASE_DATABASE);
+    : await NotionClient.get(BASE_DATABASE);
   return data;
 };
