@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useProjectState } from "../../utils/Context/ProjectContext/Context";
 import { actionTypes } from "../../utils/Context/ProjectContext/reducer";
 import { useUserState } from "../../utils/Context/UserContext/Context";
@@ -10,12 +10,14 @@ import {
 
 type Return = [
   () => void,
-  (projectId: string, timerValue: number) => Promise<void>
+  (projectId: string, timerValue: number) => Promise<void>,
+  (delay?: number) => void
 ];
 
 export const usePomoClient = (): Return => {
   const [{ userId, startDate, endDate }] = useUserState();
   const [, dispatch] = useProjectState();
+  const prevApi = useRef<NodeJS.Timeout>();
 
   const mutate = useCallback(() => {
     if (startDate && endDate && userId) {
@@ -61,6 +63,11 @@ export const usePomoClient = (): Return => {
     mutate();
   }, [mutate]);
 
+  function DelayedMutate(timer = 3000) {
+    if (prevApi.current) clearTimeout(prevApi.current);
+    prevApi.current = setTimeout(mutate, timer);
+  }
+
   async function addTimesheet(projectId: string, timerValue: number) {
     pushTimesheet({
       projectId,
@@ -69,5 +76,5 @@ export const usePomoClient = (): Return => {
     });
   }
 
-  return [mutate, addTimesheet];
+  return [mutate, addTimesheet, DelayedMutate];
 };

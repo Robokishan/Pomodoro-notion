@@ -8,7 +8,7 @@ import useFormattedData from "../../hooks/useFormattedData";
 
 export default function TimesheetList() {
   const [, projectTimesheets] = useFormattedData();
-  const [mutate] = usePomoClient();
+  const [, , mutate] = usePomoClient();
   const [totalTime, setTotalTime] = useState(0);
   const [{ userId }] = useUserState();
 
@@ -42,7 +42,7 @@ export default function TimesheetList() {
                     })
                       .then(() => {
                         toast.success("Delete done");
-                        setTimeout(mutate, 3000);
+                        mutate();
                       })
                       .catch(() => toast.error("Delete error"));
                   }}
