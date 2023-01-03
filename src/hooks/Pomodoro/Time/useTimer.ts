@@ -16,7 +16,7 @@ export default function useTimer(
   }: {
     onPause?: () => void;
     onStart?: () => void;
-    onReset?: () => void;
+    onReset?: (wasRunning: boolean) => void;
     onTick?: () => void;
   } = {
     onPause: undefined,
@@ -46,9 +46,9 @@ export default function useTimer(
   );
 
   const resetTimer = () => {
-    toggleTimer(false);
+    if (onReset) onReset(isRunning);
+    setRunning(false);
     setTimer(timerValue);
-    if (onReset) onReset();
   };
 
   return [timer, isRunning, toggleTimer, resetTimer];

@@ -21,11 +21,13 @@ export default function usePomoDoro({
   onPomoPause,
   onTick,
   onStart,
+  onReset,
 }: {
   onEnd?: (type: TimerLabelType) => void;
   onPomoPause?: (type: TimerLabelType) => void;
   onStart?: () => void;
   onTick?: () => void;
+  onReset?: (wasRunning: boolean) => void;
 }) {
   const [{ timerValue }] = usePomoState();
   const [, isRunning, toggleTimer, reset] = useTimer(
@@ -35,6 +37,7 @@ export default function usePomoDoro({
       onStart: onPomoStart,
       onPause: onPause,
       onTick: tick,
+      onReset: onTimerReset,
     }
   );
   const [{ busyIndicator, breakValue, sessionValue, timerLabel }, dispatch] =
@@ -89,6 +92,16 @@ export default function usePomoDoro({
     reset();
     dispatch({
       type: actionTypes.RESTART_POMODORO,
+    });
+  }
+
+  function onTimerReset(wasRunning: boolean) {
+    if (onReset) onReset(wasRunning);
+    dispatch({
+      type: actionTypes.TOGGLE_ISBUSY_INDICATOR,
+      payload: {
+        busyIndicator: false,
+      },
     });
   }
 

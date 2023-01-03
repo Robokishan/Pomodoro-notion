@@ -16,6 +16,7 @@ export default function useSyncPomo() {
       onEnd,
       onPomoPause,
       onStart,
+      onReset,
     });
 
   const [refetch, addTimesheet] = usePomoClient();
@@ -56,17 +57,26 @@ export default function useSyncPomo() {
 
   const getSessionInSecond = () => sessionValue * 60;
 
+  function onReset(wasRunning: boolean) {
+    tickingSlowStop();
+    if (wasRunning) saveProjectTime(); //only save project time if it was running
+    elapsedTime.current = 0; //reset whatever time spent on session when reset pomodoro
+  }
+
   function saveProjectTime() {
     // persist project timer
     if (project?.value) {
       addTimesheet(
         project.value,
         getSessionInSecond() - timerValue - elapsedTime.current
-      ).then(() => {
-        elapsedTime.current =
-          timerValue == 0 ? 0 : getSessionInSecond() - timerValue; //if timer value is having some value then delete session time from there
-        setTimeout(refetch, 3000); //refetch after 3 sec
-      });
+      )
+        .then(() => {
+          setTimeout(refetch, 3000); //refetch after 3 sec
+        })
+        .catch();
+      // even if api fails reset elapsed timer
+      elapsedTime.current =
+        timerValue == 0 ? 0 : getSessionInSecond() - timerValue; //if timer value is having some value then delete session time from there
     }
   }
 
