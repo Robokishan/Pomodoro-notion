@@ -38,9 +38,7 @@ export default function Timer({ projectName }: Props) {
     >
       {clockifiedValue && (
         <Head>
-          <title>
-            {clockifiedValue} - {timerLabel}
-          </title>
+          <title>{`${clockifiedValue} - ${timerLabel}`}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
       )}
