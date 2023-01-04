@@ -5,6 +5,7 @@ const withPWA = WithPWA({
   dest: "public",
   register: true,
   skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
 });
 /**
  * Don't be scared of the generics here.
