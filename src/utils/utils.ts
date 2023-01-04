@@ -20,3 +20,6 @@ export function generateUUID() {
     return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
 }
+
+export const sleep = (delay = 3000) =>
+  new Promise((resolve) => setTimeout(resolve, delay));

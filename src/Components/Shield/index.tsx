@@ -31,7 +31,7 @@ export default function index({ children }: Props) {
               showSpinner: false,
             }}
           />
-          <ToastContainer />
+          <ToastContainer hideProgressBar newestOnTop={true} />
 
           <Head>
             <title>Pomodoro</title>
