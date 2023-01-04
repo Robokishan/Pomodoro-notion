@@ -37,18 +37,28 @@ export default withPWA(
     },
     webpack(config, options) {
       const { isServer } = options;
-      config.module.rules.push({
-        test: /\.(ogg|mp3|wav|mpe?g)$/i,
-        use: {
-          loader: "file-loader",
-          options: {
-            publicPath: `/_next/static/audio/`,
-            outputPath: `${isServer ? "../" : ""}static/audio/`,
-            name: "[name]-[hash].[ext]",
-            esModule: config.esModule || false,
+      config.module.rules.push(
+        {
+          test: /\.(ogg|mp3|wav|mpe?g)$/i,
+          use: {
+            loader: "file-loader",
+            options: {
+              publicPath: `/_next/static/audio/`,
+              outputPath: `${isServer ? "../" : ""}static/audio/`,
+              name: "[name]-[hash].[ext]",
+              esModule: config.esModule || false,
+            },
           },
         },
-      });
+        {
+          test: /\.svg$/,
+          issuer: {
+            // for webpack 5 use
+            and: [/\.(js|ts)x?$/],
+          },
+          use: ["@svgr/webpack"],
+        }
+      );
       return config;
     },
 

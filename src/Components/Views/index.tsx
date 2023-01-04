@@ -3,6 +3,7 @@ import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import Piechart, { PieData } from "../PieChart";
 import Timer from "../Timer";
 import TimesheetList from "../TimesheetList";
+import Noises from "../Noises";
 
 export default function Views({
   activeTab,
@@ -54,8 +55,8 @@ export default function Views({
           activeTab === "noise" ? "visible" : "invisible"
         } absolute flex w-full items-center justify-center `}
       >
-        <div>
-          <h1>Right now no noise added</h1>
+        <div className="w-full">
+          <Noises />
         </div>
       </div>
     </div>

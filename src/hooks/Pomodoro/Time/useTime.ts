@@ -22,7 +22,8 @@ export function convertToMMSS(
     const minutes = pad2(min);
     const seconds = pad2(sec);
     const hour = pad2(hh);
-    return !optionalHour && !!hour
+
+    return optionalHour || !!hh
       ? `${hour}:${minutes}:${seconds}`
       : `${minutes}:${seconds}`;
   } else {
