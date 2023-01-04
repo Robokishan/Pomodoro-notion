@@ -15,17 +15,17 @@ export default function TimesheetList() {
   const prefTimeout = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (projectTimesheets.length > 0)
-      projectTimesheets.forEach((prj) =>
-        setTotalTime((prev) => prev + prj.timerValue)
-      );
-    else setTotalTime(0);
+    if (projectTimesheets.length > 0) {
+      let totalTime = 0;
+      projectTimesheets.forEach((prj) => (totalTime += prj.timerValue));
+      setTotalTime(totalTime);
+    } else setTotalTime(0);
   }, [projectTimesheets]);
 
   return (
     <div className="mb-10 mt-10 rounded-md bg-white p-5 shadow-2xl">
-      <h1 className="text-xl text-gray-400">Timesheets</h1>
-      <hr className="my-3 h-px border-0 bg-gray-200 dark:bg-gray-700" />
+      <h1 className="text-center text-xl text-gray-400">Timesheets</h1>
+      <hr className="my-3 h-px border-0 bg-gray-200 " />
       <div className="max-h-96 overflow-auto ">
         <table className="w-full table-auto  ">
           <thead>

@@ -88,20 +88,19 @@ export default function Timer({ projectName }: Props) {
         </Container>
       </div>
 
-      <div className="flex items-center ">
-        <input
-          id="shouldTickSound"
-          type="checkbox"
-          value="ticksound"
-          checked={shouldTickSound}
-          onChange={handleTickChange}
-          className="h-4 w-4 rounded border-0 bg-gray-100 accent-gray-600 focus:ring-gray-500"
-        />
-        <label
-          htmlFor="shouldTickSound"
-          className="ml-2 text-sm font-medium text-gray-900"
-        >
-          Ticking
+      <div className="mt-2 flex items-center">
+        <label className="relative inline-flex cursor-pointer items-center">
+          <input
+            checked={shouldTickSound}
+            onChange={handleTickChange}
+            type="checkbox"
+            value=""
+            className="peer sr-only"
+          />
+          <div className="peer h-6 w-11 rounded-full bg-gray-300 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white "></div>
+          <span className="ml-3 text-sm font-medium text-gray-900 ">
+            Ticking
+          </span>
         </label>
       </div>
     </div>
