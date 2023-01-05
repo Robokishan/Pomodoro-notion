@@ -9,6 +9,8 @@ const anonymousRoutes = [
   "/auth/verify-request",
 ]; // The whitelisted routes
 
+const publicUrls = ["/privacy", "/terms"];
+
 const ignoredApiRoutes = ["/api"];
 
 //https://stackoverflow.com/a/73845472/4919370
@@ -22,7 +24,8 @@ export default function middleware(req: NextRequest) {
     ignoredApiRoutes.findIndex((route) => pathname.startsWith(route)) != -1 ||
     pathname.startsWith("_next") ||
     pathname.startsWith("/static") ||
-    publicFileRegex.test(pathname)
+    publicFileRegex.test(pathname) ||
+    publicUrls.findIndex((r) => pathname.startsWith(r)) != -1
   ) {
     return NextResponse.next();
   }
