@@ -1,11 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
-import { BASE_URL } from "@/utils/constants";
+import { BASE_URL, GITHUB_URL, PORTFOLIO_URL } from "@/utils/constants";
 import Dropdown, { MenuType } from "../Dropdown";
+import NotionConnectModal from "../NotionModifyModal";
 
 export default function Header({ imgSrc }: { imgSrc?: string }) {
   const { data: session } = useSession();
+
+  const [showModal, setModal] = useState(false);
 
   const menuList: MenuType[] = useMemo(
     (): MenuType[] => [
@@ -20,13 +23,39 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
         },
       },
       {
-        label: "Modify Notion (coming soon)",
+        label: "Modify Notion Connection",
         value: "modifynotionsettings",
         component: {
           type: "button",
           onClick() {
-            //
+            setModal(true);
           },
+        },
+      },
+      {
+        label: "How to ? (coming soon)",
+        value: "how to",
+        component: {
+          type: "button",
+          onClick() {
+            // dummy onClick
+          },
+        },
+      },
+      {
+        label: "About me",
+        value: "aboutme",
+        component: {
+          type: "link",
+          href: PORTFOLIO_URL,
+        },
+      },
+      {
+        label: "Github",
+        value: "github",
+        component: {
+          type: "link",
+          href: GITHUB_URL,
         },
       },
       {
@@ -76,6 +105,7 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
           </div>
         </div>
       )}
+      {showModal && <NotionConnectModal setModal={setModal} />}
     </div>
   );
 }

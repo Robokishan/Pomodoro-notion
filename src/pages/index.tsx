@@ -4,8 +4,10 @@ import type {
 } from "next";
 import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
+import NotionConnectModal from "../Components/NotionConnectModal";
 import { fetchNotionUser } from "../utils/apis/firebase/userNotion";
 import { listDatabases } from "../utils/apis/notion/database";
 
@@ -38,7 +40,7 @@ function Home({
   databases,
   workspace,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const session = useSession();
+  const [showModal, setModal] = useState(false);
   return (
     <>
       <main className="container mx-auto flex min-h-screen flex-col items-center  p-4">
@@ -66,18 +68,16 @@ function Home({
             <h2 className="w-100 mt-10 text-center text-4xl leading-normal text-gray-500">
               No Database found
             </h2>
-            <Link
-              href={`https://api.notion.com/v1/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_NOTION_AUTH_CLIENT_ID}&response_type=code&owner=user&redirect_uri=${process.env.NEXT_PUBLIC_NOTION_AUTH_REDIRECT_URI}&state=${session.data?.user?.email}`}
+            <button
+              onClick={() => setModal(true)}
+              className="mt-5 rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
             >
-              <a>
-                <button className="mt-5 rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
-                  Add Notion
-                </button>
-              </a>
-            </Link>
+              Add Notion
+            </button>
             <section className="mt-10">
               <Footer />
             </section>
+            {showModal && <NotionConnectModal setModal={setModal} />}
           </>
         )}
       </main>
