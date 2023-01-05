@@ -1,10 +1,57 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { BASE_URL } from "@/utils/constants";
+import Dropdown, { MenuType } from "../Dropdown";
 
 export default function Header({ imgSrc }: { imgSrc?: string }) {
   const { data: session } = useSession();
+
+  const menuList: MenuType[] = useMemo(
+    (): MenuType[] => [
+      {
+        label: session?.user?.email ?? "No email found",
+        value: session?.user?.email ?? "noemail",
+        component: {
+          type: "button",
+          onClick: () => {
+            // dummy on click
+          },
+        },
+      },
+      {
+        label: "Modify Notion (coming soon)",
+        value: "modifynotionsettings",
+        component: {
+          type: "button",
+          onClick() {
+            //
+          },
+        },
+      },
+      {
+        label: "Privacy Policy",
+        value: "privacypolicy",
+        component: {
+          type: "link",
+          href: "/privacy",
+        },
+      },
+      {
+        style: "text-red-600",
+        label: "Sign out",
+        value: "signout",
+        component: {
+          type: "button",
+          onClick: () => {
+            signOut();
+          },
+        },
+      },
+    ],
+    [session?.user?.email]
+  );
+
   return (
     <div className="flex flex-col gap-10 sm:flex-row sm:justify-center">
       <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
@@ -15,7 +62,7 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
       {session && (
         <div className="flex flex-col items-center md:block ">
           <div className="flex flex-col items-center justify-center ">
-            {session.user && session?.user.email} <br />
+            {session.user && session?.user.name} <br />
           </div>
           <Image
             loading="lazy"
@@ -24,14 +71,9 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
             width={50}
             height={50}
           />
-          <button
-            onClick={() => signOut()}
-            className="mt-3 block 
-                rounded-lg bg-gray-800 px-3 py-2
-                text-sm font-semibold text-white shadow-xl hover:bg-black hover:text-white"
-          >
-            Sign out
-          </button>
+          <div>
+            <Dropdown menuList={menuList} />
+          </div>
         </div>
       )}
     </div>
