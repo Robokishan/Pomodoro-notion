@@ -4,6 +4,7 @@ import type {
 } from "next";
 import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
+import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import { fetchNotionUser } from "../utils/apis/firebase/userNotion";
 import { listDatabases } from "../utils/apis/notion/database";
@@ -69,11 +70,14 @@ function Home({
               href={`https://api.notion.com/v1/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_NOTION_AUTH_CLIENT_ID}&response_type=code&owner=user&redirect_uri=${process.env.NEXT_PUBLIC_NOTION_AUTH_REDIRECT_URI}&state=${session.data?.user?.email}`}
             >
               <a>
-                <button className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
+                <button className="mt-5 rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
                   Add Notion
                 </button>
               </a>
             </Link>
+            <section className="mt-10">
+              <Footer />
+            </section>
           </>
         )}
       </main>
