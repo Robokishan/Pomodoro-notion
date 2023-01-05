@@ -79,7 +79,7 @@ export default function Pages({
 type PageProps = {
   icon: any;
   title: string;
-  description: string;
+  description?: string;
 };
 
 const PageTile = ({ icon, title, description }: PageProps) => {
@@ -89,7 +89,7 @@ const PageTile = ({ icon, title, description }: PageProps) => {
         <span>{icon}</span>
         <span className=" text-gray-700">{title}</span>
       </div>
-      <p className="text-sm text-gray-600">{description}</p>
+      {description && <p className="text-sm text-gray-600">{description}</p>}
     </section>
   );
 };

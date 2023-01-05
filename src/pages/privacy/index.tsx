@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { BASE_URL } from "@/utils/constants";
 import React from "react";
 import Footer from "../../Components/Footer";
