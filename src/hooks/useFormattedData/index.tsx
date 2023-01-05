@@ -31,18 +31,13 @@ export default function useFormattedData(): [
       const data: PieData[] = notionProjects
         .map((input) => {
           const t = projectAnalysis[input.id];
-
           if (t) {
             return {
               id: input.id,
               key: input.id,
               value: t,
               sessionTime: convertToMMSS(t, true, true),
-              label:
-                (input.properties?.Name?.title &&
-                  input.properties?.Name?.title?.length > 0 &&
-                  input.properties?.Name?.title[0]?.text?.content) ||
-                "No title",
+              label: getProjectTitle(input, "No title"),
               hexcolor: Math.floor(Math.random() * 16777215).toString(16),
             };
           } else {

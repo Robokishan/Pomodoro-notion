@@ -5,6 +5,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { queryDatabase } from "../../utils/apis/notion/database";
 import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
+import { getProjectTitle } from "@/utils/notionutils";
 
 export const getServerSideProps = async ({
   query,
@@ -57,12 +58,8 @@ export default function Pages({
               database.results.map((r) => (
                 <PageTile
                   key={r.id}
-                  description={r.icon?.emoji || ""}
-                  title={
-                    (r.properties?.Name?.title?.length &&
-                      r.properties?.Name?.title[0]?.text?.content) ||
-                    ""
-                  }
+                  icon={r.icon?.emoji || ""}
+                  title={getProjectTitle(r) || ""}
                 />
               ))
             ) : (
@@ -80,14 +77,18 @@ export default function Pages({
 }
 
 type PageProps = {
+  icon: any;
   title: string;
   description: string;
 };
 
-const PageTile = ({ title, description }: PageProps) => {
+const PageTile = ({ icon, title, description }: PageProps) => {
   return (
-    <section className="flex cursor-pointer flex-col justify-center rounded border-2 border-gray-500 p-6 shadow-xl duration-500 motion-safe:hover:scale-105">
-      <h2 className="text-lg text-gray-700">{title}</h2>
+    <section className="flex cursor-pointer flex-col justify-center rounded border-2 border-gray-200 p-2 shadow-md duration-500 motion-safe:hover:scale-105">
+      <div className="flex items-baseline gap-[4px] text-sm">
+        <span>{icon}</span>
+        <span className=" text-gray-700">{title}</span>
+      </div>
       <p className="text-sm text-gray-600">{description}</p>
     </section>
   );

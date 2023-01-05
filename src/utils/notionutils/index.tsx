@@ -4,12 +4,18 @@ export const getProjectTitle = (
   project: Result | undefined,
   defaultText = "Empty"
 ): string => {
-  return (
-    (project?.properties?.Name?.title &&
-      project.properties?.Name?.title.length > 0 &&
-      project.properties?.Name?.title[0]?.text?.content) ||
-    defaultText
-  );
+  if (
+    project?.properties?.Name?.title &&
+    project?.properties?.Name?.title?.length > 0
+  ) {
+    return project.properties?.Name?.title
+      .map(function (t) {
+        return t.text?.content;
+      })
+      .join("");
+  } else {
+    return defaultText;
+  }
 };
 export const getProjectId = (project: Result): string => {
   return project.id;
