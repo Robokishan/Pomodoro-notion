@@ -33,6 +33,10 @@ export default withPWA(
           protocol: "https",
           hostname: "picsum.photos",
         },
+        {
+          protocol: "https",
+          hostname: "upload.wikimedia.org",
+        },
       ],
     },
     webpack(config, options) {
