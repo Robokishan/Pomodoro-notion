@@ -79,7 +79,7 @@ export default function Timer({ projectName }: Props) {
         handlePlayPause={togglePlayPause}
         handleRestart={restartPomo}
       />
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between gap-5">
         <Container title="Break Length">
           <Break />
         </Container>
@@ -119,7 +119,7 @@ function Container({
       <span id="break-label" className="text-md">
         {title}
       </span>
-      <div className="flex items-center justify-between text-center	">
+      <div className="flex items-center justify-between gap-2	text-center">
         {children}
       </div>
     </div>
