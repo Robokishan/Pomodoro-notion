@@ -4,6 +4,7 @@ import Image from "next/image";
 import { BASE_URL, GITHUB_URL, PORTFOLIO_URL } from "@/utils/constants";
 import Dropdown, { MenuType } from "../Dropdown";
 import NotionConnectModal from "../NotionModifyModal";
+import Link from "next/link";
 
 export default function Header({ imgSrc }: { imgSrc?: string }) {
   const { data: session } = useSession();
@@ -112,20 +113,23 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
   );
 
   return (
-    <div className="flex flex-col gap-10 sm:flex-row sm:justify-center">
-      <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
-        <a href={BASE_URL}>
-          Pomodoro <span className="text-purple-300">Databases</span> Notion
-        </a>
+    <div className="flex flex-row gap-10 sm:flex-row sm:justify-center">
+      <h1 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
+        <Link href="/">
+          <a>
+            Pomodoro <span className="text-purple-300">Databases</span> Notion
+          </a>
+        </Link>
       </h1>
+      {/* show dropdown if user logged in */}
       {session && (
-        <div className="flex flex-col items-center md:block ">
-          <div className="flex flex-col items-center justify-center ">
+        <div>
+          <div className="hidden flex-col items-center justify-center sm:flex ">
             {session.user && session?.user.name} <br />
           </div>
           <Image
             loading="lazy"
-            src={imgSrc ?? "https://picsum.photos/50"}
+            src={imgSrc ?? session.user?.image ?? "https://picsum.photos/50"}
             alt="pic"
             width={50}
             height={50}

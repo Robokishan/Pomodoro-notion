@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/utils/constants";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -12,13 +13,13 @@ export default function Footer() {
         </h1>
       </section>
       <section className="mt-5">
-        <a href={`${BASE_URL}/privacy`} className="underline">
-          Privacy Policy
-        </a>
+        <Link href="/privacy">
+          <a className="underline">Privacy Policy</a>
+        </Link>
         {` - `}
-        <a href={`${BASE_URL}/terms`} className="underline">
-          Terms and condition
-        </a>
+        <Link href="/terms">
+          <a className="underline">Terms and condition</a>
+        </Link>
       </section>
     </footer>
   );

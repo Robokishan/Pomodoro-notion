@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { BASE_URL } from "@/utils/constants";
+import Link from "next/link";
 import React from "react";
 import Footer from "../../Components/Footer";
 import Header from "../../Components/Header";
@@ -557,9 +558,11 @@ export default function Privacy() {
 }
 
 const PomoWebsite = () => (
-  <a className="font-normal underline" href={BASE_URL}>
-    {` `}
-    {BASE_URL}
-    {` `}
-  </a>
+  <Link href="/">
+    <a className="font-normal underline">
+      {` `}
+      {BASE_URL}
+      {` `}
+    </a>
+  </Link>
 );
