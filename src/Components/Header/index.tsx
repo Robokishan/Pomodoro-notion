@@ -43,6 +43,36 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
         },
       },
       {
+        label: "Import Data (coming soon)",
+        value: "importdata",
+        component: {
+          type: "button",
+          onClick() {
+            // dummy onClick
+          },
+        },
+      },
+      {
+        label: "Export data (coming soon)", //data will be mailed modal open
+        value: "exportdata",
+        component: {
+          type: "button",
+          onClick() {
+            // dummy onClick
+          },
+        },
+      },
+      {
+        label: "Export data as (coming soon)", //export modal will open and we can export as csv , text or excel. this will not be backup data and data will be mailed modal open
+        value: "exportasexcel",
+        component: {
+          type: "button",
+          onClick() {
+            // dummy onClick
+          },
+        },
+      },
+      {
         label: "About me",
         value: "aboutme",
         component: {
