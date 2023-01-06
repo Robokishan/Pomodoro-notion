@@ -1,6 +1,7 @@
 import React from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Footer from "../Components/Footer";
+import GoogleButton from "../Components/GoogleButton";
 
 export default function Login() {
   const { data: session } = useSession();
@@ -28,14 +29,7 @@ export default function Login() {
       ) : (
         <>
           <div className="flex h-screen flex-col items-center justify-center ">
-            <button
-              onClick={() => signIn()}
-              className="mt-3 block 
-                rounded-lg bg-gray-800 px-6 py-3
-                text-lg font-semibold text-white shadow-xl hover:bg-black hover:text-white"
-            >
-              Login
-            </button>
+            <GoogleButton />
             <section className="mt-10">
               <Footer />
             </section>
