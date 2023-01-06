@@ -45,14 +45,18 @@ export default function TimesheetList() {
                   className="border-b border-slate-100 text-center"
                   key={proj.timesheetId}
                 >
-                  <td className="p-4 pl-8">
+                  <td className="whitespace-nowrap p-4 pl-8	">
                     <span>{proj.projectName}</span>
                   </td>
                   <td>
-                    <span>{proj.createdAt}</span>
+                    <span className="mx-2 whitespace-nowrap">
+                      {proj.createdAt}
+                    </span>
                   </td>
                   <td>
-                    <span>{convertToMMSS(proj.timerValue, true)}</span>
+                    <span className="mx-2">
+                      {convertToMMSS(proj.timerValue, true)}
+                    </span>
                   </td>
                   <td>
                     <button
