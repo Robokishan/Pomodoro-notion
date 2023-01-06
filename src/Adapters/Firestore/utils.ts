@@ -17,10 +17,9 @@ export async function findOne(
 export async function findMany(
   q: Query<DocumentData>
 ): Promise<QueryDocumentSnapshot<DocumentData>[]> {
-  const querySnap = await q.get();
+  const querySnap = await getDocs(q);
   const docs: QueryDocumentSnapshot<DocumentData>[] = [];
   querySnap.forEach((doc) => docs.push(doc));
-
   return docs;
 }
 
@@ -39,34 +38,36 @@ export function from<T = Record<string, unknown>>(
   return newObject as T;
 }
 
-export function asyncMap<T>(promiseFns: (() => Promise<T>)[], max: number) {
-  const result: T[] = [];
+// TODO: Change asyncmap
+// export function asyncMap<T>(promiseFns: (() => Promise<T>)[], max: number) {
+//   const result: T[] = [];
 
-  let count = 0;
-  let cursor = 0;
+//   let count = 0;
+//   let cursor = 0;
 
-  return new Promise((res) => {
-    function run() {
-      while (count < max && cursor < promiseFns.length) {
-        count++;
-        const index = cursor++;
-        promiseFns[index]()
-          .then(
-            (value) => {
-              result[index] = value;
-            },
-            (rej) => console.log(rej)
-          )
-          .catch((err) => console.error(err))
-          .finally(() => {
-            run();
-            count--;
+//   return new Promise((res) => {
+//     function run() {
+//       while (count < max && cursor < promiseFns.length) {
+//         count++;
+//         const index = cursor++;
 
-            if (!count) res(result);
-          });
-      }
-    }
+//         promiseFns[index]()
+//           .then(
+//             (value) => {
+//               result[index] = value;
+//             },
+//             (rej) => console.log(rej)
+//           )
+//           .catch((err) => console.error(err))
+//           .finally(() => {
+//             run();
+//             count--;
 
-    run();
-  });
-}
+//             if (!count) res(result);
+//           });
+//       }
+//     }
+
+//     run();
+//   });
+// }

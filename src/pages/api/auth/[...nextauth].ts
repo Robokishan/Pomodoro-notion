@@ -1,4 +1,4 @@
-import { db, firebaseConfig } from "@/utils/firebaseutils";
+import { db } from "@/utils/firebaseutils";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FirestoreAdapter from "../../../Adapters/Firestore";
