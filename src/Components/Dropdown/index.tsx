@@ -45,7 +45,7 @@ export default function Dropdown({ menuList }: DropdownProps) {
         ${
           show
             ? "scale-100 transform opacity-100"
-            : "scale-95 transform opacity-0"
+            : "pointer-events-none scale-95 transform opacity-0"
         }
         
         `}

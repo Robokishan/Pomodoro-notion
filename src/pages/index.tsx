@@ -2,7 +2,7 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import Footer from "../Components/Footer";

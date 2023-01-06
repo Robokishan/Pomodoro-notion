@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { GITHUB_URL, PORTFOLIO_URL } from "@/utils/constants";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { BASE_URL, GITHUB_URL, PORTFOLIO_URL } from "@/utils/constants";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import Dropdown, { MenuType } from "../Dropdown";
 import NotionConnectModal from "../NotionModifyModal";
-import Link from "next/link";
 
 export default function Header({ imgSrc }: { imgSrc?: string }) {
   const { data: session } = useSession();
