@@ -102,9 +102,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
     },
     async linkAccount(data) {
       const accountData = data;
-      await addDoc(accountCollection, {
-        accountData,
-      });
+      await addDoc(accountCollection, accountData);
     },
 
     async unlinkAccount({ providerAccountId, provider }) {
@@ -200,11 +198,11 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
     },
     async createVerificationToken(data) {
       // need test
+
       const verificationTokenRef = await addDoc(
         verificationTokenCollection,
         data
       );
-
       const verificationToken = {
         id: verificationTokenRef.id,
         ...data,

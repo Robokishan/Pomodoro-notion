@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 export default function GoogleButton() {
   return (
     <button
-      onClick={() => signIn("google", { callbackUrl: "/" })}
+      onClick={() => signIn("google")}
       className="mt-3 
     rounded-sm
       bg-blue-500 
