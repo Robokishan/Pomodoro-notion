@@ -1,3 +1,5 @@
+import { number } from "zod";
+
 export type TimerLabelType = "Session" | "Break";
 
 export interface IAppState {
@@ -10,6 +12,7 @@ export interface IAppState {
   project?: { label: string; value: string } | null;
   databaseId?: string;
   shouldTickSound?: boolean;
+  tickVolume: number;
 }
 
 export const DEFAULT_SESSION_TIMER = 45;
@@ -23,6 +26,7 @@ const timerInit = {
 
 const soundInit = {
   shouldTickSound: false,
+  tickVolume: 0.4,
 };
 
 const session = {
@@ -59,6 +63,7 @@ export enum actionTypes {
   INCREASE_SESSION_VALUE = "INCREASE_SESSION_VALUE",
   DECREASE_SESSION_VALUE = "DECREASE_SESSION_VALUE",
   CHANGE_TICKING_SOUND = "CHANGE_TICKING_SOUND",
+  CHANGE_TICK_VOLUME = "CHANGE_TICK_VOLUME",
 }
 
 type SET_PROJECTID = {
@@ -107,6 +112,10 @@ export type IAction =
   | {
       type: actionTypes.DECREASE_SESSION_VALUE;
       payload: { sessionValue: number; timerValue: number };
+    }
+  | {
+      type: actionTypes.CHANGE_TICK_VOLUME;
+      payload: number;
     };
 
 const reducer = (state = initialState, action: IAction): IAppState => {
@@ -189,6 +198,11 @@ const reducer = (state = initialState, action: IAction): IAppState => {
       return {
         ...state,
         shouldTickSound: action.payload,
+      };
+    case actionTypes.CHANGE_TICK_VOLUME:
+      return {
+        ...state,
+        tickVolume: action.payload,
       };
     default:
       return state;

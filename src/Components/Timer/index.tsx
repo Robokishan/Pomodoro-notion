@@ -1,11 +1,13 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { actionTypes } from "@/utils/Context/PomoContext/reducer";
 import useSyncPomo from "../../hooks/useSyncPomo";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import Break from "../Break";
 import Controls from "../Controls";
 import Session from "../Session";
+import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
+import SoundLevel from "../Noises/NoiseCard/SoundLevel";
 
 type Props = {
   projectName: string;
@@ -16,6 +18,8 @@ export default function Timer({ projectName }: Props) {
 
   const { clockifiedValue, togglePlayPause, resetTimer, restartPomo } =
     useSyncPomo();
+
+  const [showPopover, setPopover] = useState(true);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetTimer(false), [project?.value]);
@@ -102,6 +106,17 @@ export default function Timer({ projectName }: Props) {
             Ticking
           </span>
         </label>
+        <div className="relative mx-3 flex items-center ">
+          <button
+            onClick={() => setPopover((prev) => !prev)}
+            data-popover-target="popover-default"
+            type="button"
+            className="cursor-pointer text-center text-sm font-medium focus:outline-none"
+          >
+            <SpeakerWaveIcon className=" h-6 w-6 text-slate-700 hover:text-slate-400 active:text-slate-900" />
+          </button>
+          <PopOver visible={showPopover} />
+        </div>
       </div>
     </div>
   );
@@ -121,6 +136,46 @@ function Container({
       </span>
       <div className="flex items-center justify-between gap-2	text-center">
         {children}
+      </div>
+    </div>
+  );
+}
+
+function PopOver({ visible } = { visible: false }) {
+  const [{ tickVolume }, dispatch] = usePomoState();
+
+  const [volume, setVolume] = useState(tickVolume);
+
+  useEffect(() => {
+    // reason for this is context is slow i guess slow update to dom
+    dispatch({
+      type: actionTypes.CHANGE_TICK_VOLUME,
+      payload: volume,
+    });
+  }, [dispatch, volume]);
+
+  return (
+    <div
+      id="volumebar-popover"
+      className={`${
+        visible
+          ? "scale-100 transform opacity-100"
+          : "pointer-events-none scale-95 transform opacity-0"
+      } absolute -left-20 top-8 w-52 rounded-lg border border-slate-300 bg-white p-1 text-sm font-light text-slate-500 shadow-2xl transition duration-75 ease-in`}
+    >
+      <div className="relative">
+        <div
+          className="absolute -top-[9px] left-[41%] z-0 h-2 w-2 rotate-45 rounded-tl-sm border-t border-l
+         border-slate-300  bg-white"
+        ></div>
+      </div>
+      <div className="flex items-center gap-3   bg-white px-2 py-1">
+        <div className="w-6">{Math.floor(volume * 100)}</div>
+        <SoundLevel
+          defaultValue={volume * 100}
+          value="Tickvolume"
+          handleChange={setVolume}
+        />
       </div>
     </div>
   );

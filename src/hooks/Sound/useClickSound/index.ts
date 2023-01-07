@@ -5,14 +5,14 @@ import tickingSlow from "@/public/sounds/ticking-slow.mp3";
 import { usePomoState } from "@/utils/Context/PomoContext/Context";
 
 export default function useClickSound() {
-  const [{ shouldTickSound }] = usePomoState();
+  const [{ shouldTickSound, tickVolume }] = usePomoState();
   const [clickPlay] = useSound(click, {
     volume: 0.4,
   });
   const [tickingFastPlay, { stop: tickingFastStop }] = useSound(tickingFast);
 
   const [tickingSlowPlay, { stop: tickingSlowStop }] = useSound(tickingSlow, {
-    volume: shouldTickSound ? 0.3 : 0,
+    volume: shouldTickSound ? tickVolume : 0,
     loop: true,
   });
 
