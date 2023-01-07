@@ -1,21 +1,16 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
-import useInterval from "../../hooks/Pomodoro/Time/useInterval";
 import useAlert from "../../hooks/Sound/useClickSound";
-import { actionTypes } from "../../utils/Context/PomoContext/reducer";
+import useHoldPress from "../../hooks/useHoldPress";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
+import { actionTypes } from "../../utils/Context/PomoContext/reducer";
 import SmallButton from "../SmallButton";
 
 export default function Session() {
   const { clickPlay } = useAlert();
   const [{ sessionValue, busyIndicator }] = usePomoState();
   const [, dispatch] = usePomoState();
-  const [mouseDown, setMouseDown] = useState({
-    increase: false,
-    decrease: false,
-  });
 
-  const handleDecrement = () => {
+  function handleDecrement() {
     clickPlay();
     dispatch({
       type: actionTypes.DECREASE_SESSION_VALUE,
@@ -24,8 +19,9 @@ export default function Session() {
         timerValue: (sessionValue - 1) * 60,
       },
     });
-  };
-  const handleIncrement = () => {
+  }
+
+  function handleIncrement() {
     clickPlay();
     dispatch({
       type: actionTypes.INCREASE_SESSION_VALUE,
@@ -34,40 +30,17 @@ export default function Session() {
         timerValue: (sessionValue + 1) * 60,
       },
     });
-  };
+  }
+
   const decreaseDisabled = busyIndicator || sessionValue <= 1;
   const increaseDisabled = busyIndicator || sessionValue > 59;
 
-  useInterval(
-    () => {
-      if (mouseDown.increase && !increaseDisabled) handleIncrement();
-      if (mouseDown.decrease && !decreaseDisabled) handleDecrement();
-    },
-    (mouseDown.increase && !increaseDisabled) ||
-      (mouseDown.decrease && !decreaseDisabled)
-      ? 100
-      : null
-  );
+  const increamentCallbacks = useHoldPress(handleIncrement, increaseDisabled);
+  const decreamentCallbacks = useHoldPress(handleDecrement, decreaseDisabled);
 
-  useEffect(() => {
-    if (increaseDisabled) {
-      setMouseDown((prev) => ({ ...prev, increase: false }));
-    } else if (decreaseDisabled) {
-      setMouseDown((prev) => ({ ...prev, decrease: false }));
-    }
-  }, [increaseDisabled, decreaseDisabled]);
   return (
     <>
-      <SmallButton
-        onMouseDown={() => {
-          setMouseDown((prev) => ({ ...prev, decrease: true }));
-        }}
-        onMouseUp={() => {
-          setMouseDown((prev) => ({ ...prev, decrease: false }));
-        }}
-        disabled={decreaseDisabled}
-        onClick={handleDecrement}
-      >
+      <SmallButton {...decreamentCallbacks}>
         <MinusIcon
           className={`h-5 w-5 ${decreaseDisabled && "fill-gray-200"}`}
         />
@@ -78,14 +51,7 @@ export default function Session() {
       >
         {sessionValue}
       </p>
-      <SmallButton
-        onMouseDown={() =>
-          setMouseDown((prev) => ({ ...prev, increase: true }))
-        }
-        onMouseUp={() => setMouseDown((prev) => ({ ...prev, increase: false }))}
-        disabled={increaseDisabled}
-        onClick={handleIncrement}
-      >
+      <SmallButton {...increamentCallbacks}>
         <PlusIcon
           className={`h-5 w-5 ${increaseDisabled && "fill-gray-200"}`}
         />

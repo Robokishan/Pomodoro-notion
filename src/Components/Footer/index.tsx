@@ -1,4 +1,3 @@
-import { BASE_URL } from "@/utils/constants";
 import Link from "next/link";
 
 export default function Footer() {
