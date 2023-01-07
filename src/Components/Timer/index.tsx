@@ -1,25 +1,33 @@
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { actionTypes } from "@/utils/Context/PomoContext/reducer";
 import useSyncPomo from "../../hooks/useSyncPomo";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import Break from "../Break";
 import Controls from "../Controls";
 import Session from "../Session";
-import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
+  SpeakerWaveIcon,
+} from "@heroicons/react/24/outline";
 import SoundLevel from "../Noises/NoiseCard/SoundLevel";
+import OutsideClickHandler from "react-outside-click-handler";
 
 type Props = {
   projectName: string;
 };
 
 export default function Timer({ projectName }: Props) {
+  const timerScreen = useFullScreenHandle();
+
   const [{ timerLabel, project, shouldTickSound }, dispatch] = usePomoState();
 
   const { clockifiedValue, togglePlayPause, resetTimer, restartPomo } =
     useSyncPomo();
 
-  const [showPopover, setPopover] = useState(true);
+  const [showPopover, setPopover] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetTimer(false), [project?.value]);
@@ -106,18 +114,51 @@ export default function Timer({ projectName }: Props) {
             Ticking
           </span>
         </label>
-        <div className="relative mx-3 flex items-center ">
-          <button
-            onClick={() => setPopover((prev) => !prev)}
-            data-popover-target="popover-default"
-            type="button"
-            className="cursor-pointer text-center text-sm font-medium focus:outline-none"
-          >
-            <SpeakerWaveIcon className=" h-6 w-6 text-slate-700 hover:text-slate-400 active:text-slate-900" />
-          </button>
-          <PopOver visible={showPopover} />
-        </div>
+        <OutsideClickHandler onOutsideClick={() => setPopover(false)}>
+          <div className="relative mx-3 flex items-center ">
+            <button
+              onClick={() => setPopover((prev) => !prev)}
+              data-popover-target="popover-default"
+              type="button"
+              className="cursor-pointer text-center text-sm font-medium focus:outline-none"
+            >
+              <SpeakerWaveIcon className=" h-6 w-6 text-slate-700 hover:text-slate-400 active:text-slate-900" />
+            </button>
+            <PopOver visible={showPopover} />
+          </div>
+        </OutsideClickHandler>
+        <button onClick={timerScreen.enter} className="mx-2">
+          <ArrowsPointingOutIcon className="h-5 w-5" />
+        </button>
       </div>
+
+      <FullScreen handle={timerScreen}>
+        <div className={`${timerScreen.active ? "block" : "hidden"} `}>
+          <div className="flex h-screen w-screen flex-col items-center justify-center">
+            <h3 className="text-xl">{projectName}</h3>
+            <h4 className="my-5 text-4xl">
+              <div className="flex items-baseline gap-3">
+                {timerLabel}
+                <button className="h-6 w-6" onClick={timerScreen.exit}>
+                  <ArrowsPointingInIcon className="h-6 w-6" />
+                </button>
+              </div>
+            </h4>
+            <h1
+              id="time-left"
+              className="relative z-10 m-0
+              mb-3
+            font-quicksand 
+            text-9xl
+            font-extralight
+            text-gray-500
+        "
+            >
+              {clockifiedValue}
+            </h1>
+          </div>
+        </div>
+      </FullScreen>
     </div>
   );
 }
