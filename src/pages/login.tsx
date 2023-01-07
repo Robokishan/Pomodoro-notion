@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { useSession, signOut } from "next-auth/react";
 import Footer from "../Components/Footer";
