@@ -2,6 +2,7 @@
 // save project timeline on pause
 
 import { useRef } from "react";
+import { toast } from "react-toastify";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import { TimerLabelType } from "../../utils/Context/PomoContext/reducer";
 import usePomoDoro from "../Pomodoro/usePomoDoro";
@@ -71,9 +72,16 @@ export default function useSyncPomo() {
         getSessionInSecond() - timerValue - elapsedTime.current
       )
         .then(() => {
+          toast.success(`Timesheet added ${project.label}`, {
+            autoClose: false,
+          });
           setTimeout(refetch, 3000); //refetch after 3 sec
         })
-        .catch();
+        .catch(() =>
+          toast.error(`Timesheet upload error ${project.label}`, {
+            autoClose: false,
+          })
+        );
       // even if api fails reset elapsed timer
       elapsedTime.current =
         timerValue == 0 ? 0 : getSessionInSecond() - timerValue; //if timer value is having some value then delete session time from there

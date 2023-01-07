@@ -64,7 +64,7 @@ export const usePomoClient = (): Return => {
   }, [mutate]);
 
   async function addTimesheet(projectId: string, timerValue: number) {
-    pushTimesheet({
+    await pushTimesheet({
       projectId,
       userId,
       timerValue,
