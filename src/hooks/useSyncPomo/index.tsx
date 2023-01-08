@@ -9,6 +9,7 @@ import usePomoDoro from "../Pomodoro/usePomoDoro";
 import useClickSound from "../Sound/useClickSound";
 import useNotificationSound from "../Sound/useNotificationSound";
 import { usePomoClient } from "../Storage/usePomoClient";
+import useNotification from "../useNotification";
 
 export default function useSyncPomo() {
   const [{ project, databaseId, timerValue, sessionValue }] = usePomoState();
@@ -21,6 +22,9 @@ export default function useSyncPomo() {
     });
 
   const [refetch, addTimesheet] = usePomoClient();
+
+  const [showNotification] = useNotification();
+
   const {
     tickingSlow: { play: tickingSlowPlay, stop: tickingSlowStop },
   } = useClickSound();
@@ -42,7 +46,9 @@ export default function useSyncPomo() {
   }
 
   // this will be excecuted when sessions switch happens during running pomo
+
   function onEnd(type: TimerLabelType) {
+    showNotification(type);
     if (type == "Session") {
       saveProjectTime();
       //when session ends save session time
