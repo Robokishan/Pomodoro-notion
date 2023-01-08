@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useProjectState } from "../../utils/Context/ProjectContext/Context";
 import { actionTypes } from "../../utils/Context/ProjectContext/reducer";
 import { useUserState } from "../../utils/Context/UserContext/Context";
@@ -10,16 +10,19 @@ import {
 
 type Return = [
   () => Promise<void>,
-  (projectId: string, databaseId: string, timerValue: number) => Promise<void>
+  (projectId: string, databaseId: string, timerValue: number) => Promise<void>,
+  boolean
 ];
 
 export const usePomoClient = (): Return => {
   const [{ userId, startDate, endDate }] = useUserState();
   const [, dispatch] = useProjectState();
+  const [loading, setLoading] = useState(false);
 
   const mutate = useCallback(async () => {
     if (startDate && endDate && userId) {
       try {
+        setLoading(true);
         const projects = await getTimesheets({
           startDate: startDate,
           endDate: endDate,
@@ -55,6 +58,8 @@ export const usePomoClient = (): Return => {
         });
       } catch (e) {
         console.error("ResponseError", e);
+      } finally {
+        setLoading(false);
       }
     }
   }, [startDate, endDate, userId, dispatch]);
@@ -76,5 +81,5 @@ export const usePomoClient = (): Return => {
     });
   }
 
-  return [mutate, addTimesheet];
+  return [mutate, addTimesheet, loading];
 };

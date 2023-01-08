@@ -9,7 +9,7 @@ import useFormattedData from "../../hooks/useFormattedData";
 export default function TimesheetList() {
   const [, projectTimesheets] = useFormattedData();
   const [disabledButtons, setDisabledButtons] = useState<string[]>([]);
-  const [mutate] = usePomoClient();
+  const [mutate, , isLoading] = usePomoClient();
   const [totalTime, setTotalTime] = useState(0);
   const [{ userId }] = useUserState();
   const prefTimeout = useRef<NodeJS.Timeout>();
@@ -24,7 +24,16 @@ export default function TimesheetList() {
 
   return (
     <div className="mb-10 mt-10 rounded-md bg-white p-5 shadow-2xl">
-      <h1 className="text-center text-xl text-gray-400">Timesheets</h1>
+      <span className="relative flex h-3 w-3">
+        {isLoading && (
+          <>
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-sky-500"></span>
+          </>
+        )}
+      </span>
+
+      <h1 className="mr-5 text-center text-xl text-gray-400">Timesheets</h1>
       <hr className="my-3 h-px border-0 bg-gray-200 " />
       <div className="max-h-96 overflow-auto ">
         <table className="w-full table-auto  ">

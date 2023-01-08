@@ -1,9 +1,7 @@
-import { actionTypes } from "../../utils/Context/PomoContext/reducer";
-import { usePomoState } from "../../utils/Context/PomoContext/Context";
-import Piechart, { PieData } from "../PieChart";
-import Timer from "../Timer";
-import TimesheetList from "../TimesheetList";
+import Analytics from "../Analytics";
 import Noises from "../Noises";
+import { PieData } from "../PieChart";
+import Timer from "../Timer";
 
 export default function Views({
   activeTab,
@@ -14,24 +12,6 @@ export default function Views({
   pieData: PieData[];
   projectName?: string;
 }) {
-  const [, dispatch] = usePomoState();
-
-  const onProjectSelect = (proj: { label: string; value: string } | null) => {
-    if (!proj)
-      dispatch({
-        type: actionTypes.RESET_TIMERS,
-      });
-
-    dispatch({
-      type: actionTypes.SET_PROJECTID,
-      payload: proj,
-    });
-    dispatch({
-      type: actionTypes.FROZE_POMODORO,
-      payload: !proj,
-    });
-  };
-
   return (
     <div className="relative w-full ">
       <div
@@ -39,8 +19,7 @@ export default function Views({
           activeTab === "analytics" ? "visible" : "invisible"
         } absolute w-[100%]`}
       >
-        <Piechart onProjectSelect={onProjectSelect} data={pieData} />
-        <TimesheetList />
+        <Analytics pieData={pieData} />
       </div>
 
       <div
