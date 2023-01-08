@@ -2,6 +2,8 @@
 <img height=100 src="https://raw.githubusercontent.com/Robokishan/Pomodoro-notion/master/public/icon-192x192.png"/>
 
 
+Visit: https://pomodoro.kishanjoshi.dev/about
+
 Purpose of this app to demonstrate how to use notion apis and to develop productivity app for notion Database
 
 
