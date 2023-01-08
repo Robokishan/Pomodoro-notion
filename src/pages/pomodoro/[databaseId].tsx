@@ -44,6 +44,7 @@ export const getServerSideProps = async ({
         database,
         db,
         tab: (query?.tab as string) || null,
+        databaseId: query.databaseId as string,
       },
     };
   } catch (error) {
@@ -85,6 +86,7 @@ export default function Pages({
   db,
   tab,
   error,
+  databaseId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [selectedProperties, setProperties] = useState<
@@ -124,6 +126,14 @@ export default function Pages({
       }),
     [userId]
   );
+
+  useEffect(() => {
+    if (databaseId)
+      dispatch({
+        type: actionTypes.SET_DATABASEID,
+        payload: databaseId,
+      });
+  }, [databaseId]);
 
   useEffect(() => {
     if (database?.results) {

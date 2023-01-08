@@ -32,12 +32,17 @@ export default async function handler(
         })
       );
     } else if (method == "POST") {
-      const { projectId, timerValue, timestamp } = req.body;
-      if (projectId && (timerValue != null || timerValue != undefined)) {
+      const { projectId, databaseId, timerValue, timestamp } = req.body;
+      if (
+        projectId &&
+        databaseId &&
+        (timerValue != null || timerValue != undefined)
+      ) {
         res.status(200).json({
           message: "Timesheet created",
           id: await insertTimesheet({
             projectId,
+            databaseId,
             userId,
             timerValue,
             timestamp,

@@ -4,10 +4,12 @@ import PomodoroClient from "../apis/PomoCSR";
 
 export const pushTimesheet = async ({
   projectId,
+  databaseId,
   userId,
   timerValue,
 }: {
   projectId: string;
+  databaseId: string;
   userId: string;
   timerValue: number;
 }) => {
@@ -15,6 +17,7 @@ export const pushTimesheet = async ({
     POMO_TSH_APIS.TIMESHEET,
     {
       projectId,
+      databaseId,
       timerValue,
     },
     {

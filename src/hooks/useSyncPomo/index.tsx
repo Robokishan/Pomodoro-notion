@@ -11,7 +11,7 @@ import useNotificationSound from "../Sound/useNotificationSound";
 import { usePomoClient } from "../Storage/usePomoClient";
 
 export default function useSyncPomo() {
-  const [{ project, timerValue, sessionValue }] = usePomoState();
+  const [{ project, databaseId, timerValue, sessionValue }] = usePomoState();
   const { clockifiedValue, handlePlayPause, resetTimer, restartPomo } =
     usePomoDoro({
       onEnd,
@@ -69,6 +69,7 @@ export default function useSyncPomo() {
     if (project?.value) {
       addTimesheet(
         project.value,
+        databaseId as string,
         getSessionInSecond() - timerValue - elapsedTime.current
       )
         .then(() => {

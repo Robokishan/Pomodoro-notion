@@ -1,5 +1,3 @@
-import { number } from "zod";
-
 export type TimerLabelType = "Session" | "Break";
 
 export interface IAppState {

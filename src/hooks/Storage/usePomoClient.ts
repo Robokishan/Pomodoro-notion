@@ -10,7 +10,7 @@ import {
 
 type Return = [
   () => Promise<void>,
-  (projectId: string, timerValue: number) => Promise<void>
+  (projectId: string, databaseId: string, timerValue: number) => Promise<void>
 ];
 
 export const usePomoClient = (): Return => {
@@ -63,9 +63,14 @@ export const usePomoClient = (): Return => {
     mutate();
   }, [mutate]);
 
-  async function addTimesheet(projectId: string, timerValue: number) {
+  async function addTimesheet(
+    projectId: string,
+    databaseId: string,
+    timerValue: number
+  ) {
     await pushTimesheet({
       projectId,
+      databaseId,
       userId,
       timerValue,
     });
