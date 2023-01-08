@@ -74,6 +74,14 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
         },
       },
       {
+        label: "About app",
+        value: "aboutapp",
+        component: {
+          type: "link",
+          href: "/about",
+        },
+      },
+      {
         label: "About me",
         value: "aboutme",
         component: {
