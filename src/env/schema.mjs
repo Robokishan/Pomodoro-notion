@@ -13,6 +13,11 @@ export const serverSchema = z.object({
   FIREBASE_STORAGE_BUCKET: z.string(),
   FIREBASE_MESSAGING_SENDER_ID: z.string(),
   FIREBASE_APP_ID: z.string(),
+  SMTP_SERVER: z.string(),
+  SMTP_PORT: z.string(),
+  SMTP_USERNAME: z.string(),
+  SMTP_PASSWORD: z.string(),
+  REPORT_EMAIL: z.string(),
 });
 
 /**
