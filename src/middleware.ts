@@ -11,7 +11,7 @@ const anonymousRoutes = [
 
 const publicUrls = ["/privacy", "/terms", "/about"];
 
-const ignoredApiRoutes = ["/api/auth"];
+const ignoredApiRoutes = ["/api"];
 
 //https://stackoverflow.com/a/73845472/4919370
 
