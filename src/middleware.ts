@@ -9,7 +9,7 @@ const anonymousRoutes = [
   "/auth/verify-request",
 ]; // The whitelisted routes
 
-const publicUrls = ["/privacy", "/terms", "/about"];
+const publicUrls = ["/privacy", "/terms", "/about", "/_offline"];
 
 const ignoredApiRoutes = ["/api/auth"];
 
