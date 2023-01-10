@@ -1,6 +1,6 @@
 interface SmallButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  disabled: boolean;
+  disabled?: boolean;
   children: JSX.Element | React.ReactNode;
 }
 

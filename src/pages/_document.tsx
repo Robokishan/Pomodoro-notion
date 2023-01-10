@@ -12,6 +12,7 @@ class MyDocument extends Document {
         <body>
           <Main />
           <div id="note"></div>
+          <div id="popup"></div>
           <NextScript />
         </body>
       </Html>

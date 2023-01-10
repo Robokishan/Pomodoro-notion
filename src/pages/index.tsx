@@ -1,10 +1,12 @@
+import { useProjectState } from "@/utils/Context/ProjectContext/Context";
+import { actionTypes } from "@/utils/Context/ProjectContext/reducer";
 import { trpc } from "@/utils/trpc";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ContentLoader from "react-content-loader";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import NotionConnectModal from "../Components/NotionConnectModal";
-import ContentLoader from "react-content-loader";
 
 function Home() {
   const [showModal, setModal] = useState(false);
@@ -12,6 +14,16 @@ function Home() {
   const { data, isFetching } = trpc.private.getDatabases.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
+  const [, dispatch] = useProjectState();
+
+  useEffect(() => {
+    if (data?.databases.results)
+      dispatch({
+        type: actionTypes.UPDATE_NOTION_DATABASES,
+        payload: data?.databases.results,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <>
