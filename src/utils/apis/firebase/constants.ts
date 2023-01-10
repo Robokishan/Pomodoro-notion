@@ -5,4 +5,5 @@ export enum FIREBASE_COLLECTIONS {
 
 export enum POMO_TSH_APIS {
   TIMESHEET = "/api/pomo/timesheet",
+  TIMESHEET_EXPORT = "/api/pomo/timesheet/export",
 }

@@ -12,7 +12,6 @@ import {
 } from "firebase/firestore";
 import { FIREBASE_COLLECTIONS } from "./constants";
 import { serverTimestamp, Timestamp } from "firebase/firestore";
-import { AdapterCollections } from "../../../Adapters/Firestore";
 
 export const getTimesheets = async (
   userId: string,

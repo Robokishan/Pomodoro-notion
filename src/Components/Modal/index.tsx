@@ -8,6 +8,7 @@ interface ModalProps {
   title: string;
   description: string;
   confirmText: string;
+  children?: JSX.Element | React.ReactNode;
 }
 
 export default function Modal({
@@ -17,6 +18,7 @@ export default function Modal({
   description,
   icon,
   confirmText,
+  children,
 }: ModalProps) {
   return (
     <>
@@ -40,6 +42,7 @@ export default function Modal({
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">{description}</p>
                     </div>
+                    {children}
                   </div>
                 </div>
               </div>
