@@ -64,9 +64,9 @@ export default function useSyncPomo() {
 
   const getSessionInSecond = () => sessionValue * 60;
 
-  function onReset(wasRunning: boolean) {
+  function onReset(wasRunning: boolean, type: TimerLabelType) {
     tickingSlowStop();
-    if (wasRunning) saveProjectTime(); //only save project time if it was running
+    if (wasRunning && type == "Session") saveProjectTime(); //only save project time if it was running
     elapsedTime.current = 0; //reset whatever time spent on session when reset pomodoro
   }
 

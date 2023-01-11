@@ -27,7 +27,7 @@ export default function usePomoDoro({
   onPomoPause?: (type: TimerLabelType) => void;
   onStart?: () => void;
   onTick?: () => void;
-  onReset?: (wasRunning: boolean) => void;
+  onReset?: (wasRunning: boolean, type: TimerLabelType) => void;
 }) {
   const [{ timerValue }] = usePomoState();
   const [, isRunning, toggleTimer, reset] = useTimer(
@@ -96,7 +96,7 @@ export default function usePomoDoro({
   }
 
   function onTimerReset(wasRunning: boolean) {
-    if (onReset) onReset(wasRunning);
+    if (onReset) onReset(wasRunning, timerLabel);
     dispatch({
       type: actionTypes.TOGGLE_ISBUSY_INDICATOR,
       payload: {
