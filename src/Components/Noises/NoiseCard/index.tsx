@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSound from "use-sound";
 import SoundLevel from "./SoundLevel";
 
@@ -19,16 +19,24 @@ export default function NoiseCard({
 }: NoiseCardProps) {
   const [volume, setVolume] = useState(defaultVolume);
   const [show, setshow] = useState(false);
+  const [isEnabled, setEnable] = useState(false);
   const [play, { stop }] = useSound(audio, {
     volume,
     loop: true,
+    onload() {
+      // check if howler is loaded
+      setEnable(true);
+    },
   });
+
+  // stop on unmount
+  useEffect(() => stop, [stop]);
 
   return (
     <div
       onClick={(e) => {
         e.preventDefault();
-        if (!show) {
+        if (!show && isEnabled) {
           play();
           setshow(true);
         } else {
@@ -36,16 +44,21 @@ export default function NoiseCard({
           setshow(false);
         }
       }}
-      className="flex h-28 w-28 cursor-pointer flex-col items-center rounded-xl bg-gradient-to-r from-slate-50 via-slate-100
+      className={`flex h-28 w-28 cursor-pointer flex-col items-center rounded-xl bg-gradient-to-r from-slate-50 via-slate-100
       to-slate-50
       p-3	
     align-top text-slate-50 shadow-md 
-    "
+  
+    `}
     >
       {Icon ? (
         <div
           title={label}
-          className="h-[56px] w-[56px] fill-slate-400 stroke-slate-400 "
+          className={`h-[56px] w-[56px]    ${
+            isEnabled
+              ? "fill-slate-400 stroke-slate-400"
+              : "fill-slate-200 stroke-slate-200"
+          }`}
         >
           <Icon />
         </div>
@@ -54,7 +67,9 @@ export default function NoiseCard({
           <span>{label}</span>
         </div>
       )}
-      <div className={`w-full ${!show && "opacity-30"}`}>
+      <div
+        className={`w-full ${isEnabled ? !show && "opacity-30" : "opacity-10"}`}
+      >
         <SoundLevel
           disabled={!show}
           defaultValue={volume * 100}
