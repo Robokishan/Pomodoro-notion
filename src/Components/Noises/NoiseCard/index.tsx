@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useNoisestate } from "@/utils/Context/NoiseContext/Context";
+import { actionTypes } from "@/utils/Context/NoiseContext/reducer";
+import React, { useCallback, useEffect, useState } from "react";
 import useSound from "use-sound";
 import SoundLevel from "./SoundLevel";
 
@@ -20,6 +22,9 @@ export default function NoiseCard({
   const [volume, setVolume] = useState(defaultVolume);
   const [show, setshow] = useState(false);
   const [isEnabled, setEnable] = useState(false);
+
+  const [{ noisesRunning }, dispatch] = useNoisestate();
+
   const [play, { stop }] = useSound(audio, {
     volume,
     loop: true,
@@ -29,19 +34,47 @@ export default function NoiseCard({
     },
   });
 
-  // stop on unmount
-  useEffect(() => stop, [stop]);
+  const playSound = useCallback(() => {
+    play();
+    setshow(true);
+  }, [play]);
+
+  const stopSound = useCallback(() => {
+    stop();
+    setshow(false);
+  }, [stop]);
+
+  useEffect(() => {
+    return () => {
+      // stop on unmount
+      stopSound();
+    };
+  }, [stopSound]);
+
+  useEffect(() => {
+    if (!noisesRunning.includes(value)) {
+      //stop noise
+      stopSound();
+    } else if (noisesRunning.includes(value) && !show) {
+      // play noise
+      playSound();
+    }
+  }, [dispatch, noisesRunning, playSound, show, stopSound, value]);
 
   return (
     <div
       onClick={(e) => {
         e.preventDefault();
         if (!show && isEnabled) {
-          play();
-          setshow(true);
+          dispatch({
+            type: actionTypes.ADD_NOISE_RUNNING,
+            payload: value,
+          });
         } else {
-          stop();
-          setshow(false);
+          dispatch({
+            type: actionTypes.REMOVE_NOISE_RUNNING,
+            payload: value,
+          });
         }
       }}
       className={`flex h-28 w-28 cursor-pointer flex-col items-center rounded-xl bg-gradient-to-r from-slate-50 via-slate-100
@@ -67,9 +100,7 @@ export default function NoiseCard({
           <span>{label}</span>
         </div>
       )}
-      <div
-        className={`w-full ${isEnabled ? !show && "opacity-30" : "opacity-10"}`}
-      >
+      <div className={`w-full ${!show && "opacity-30"}`}>
         <SoundLevel
           disabled={!show}
           defaultValue={volume * 100}

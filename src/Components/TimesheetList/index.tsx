@@ -62,7 +62,7 @@ export default function TimesheetList() {
                   key={proj.timesheetId}
                 >
                   <td className="whitespace-nowrap p-4 pl-8	underline">
-                    <Link href={proj.href}>
+                    <Link href={proj.href ?? ""}>
                       <a>{proj.projectName}</a>
                     </Link>
                   </td>

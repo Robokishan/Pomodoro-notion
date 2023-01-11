@@ -13,7 +13,7 @@ type FilteredTimesheetTypes = {
   timerValue: number;
   createdAt: string;
   timesheetId: string;
-  href: string;
+  href?: string;
 }[];
 
 export default function useFormattedData(): [
