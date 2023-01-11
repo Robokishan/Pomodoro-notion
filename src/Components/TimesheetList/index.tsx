@@ -11,7 +11,7 @@ export default function TimesheetList() {
   const [disabledButtons, setDisabledButtons] = useState<string[]>([]);
   const [mutate, , isLoading] = usePomoClient();
   const [totalTime, setTotalTime] = useState(0);
-  const [{ userId }] = useUserState();
+  const [{ userId, startDate, endDate }] = useUserState();
   const prefTimeout = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -21,6 +21,12 @@ export default function TimesheetList() {
       setTotalTime(totalTime);
     } else setTotalTime(0);
   }, [projectTimesheets]);
+
+  function diff_hours(dt2: number, dt1: number) {
+    let diff = dt2 - dt1;
+    diff /= 60 * 60;
+    return Math.abs(Math.round(diff));
+  }
 
   return (
     <div className="mb-10 mt-10 rounded-md bg-white p-5 shadow-2xl">
@@ -114,8 +120,10 @@ export default function TimesheetList() {
         </table>
       </div>
       <div className="mt-5">
-        <span>Total:{` `}</span>
-        <span> {convertToMMSS(totalTime, true)}</span>
+        <span>{`Total: ${diff_hours(startDate, endDate)} Hours`}</span>
+        <div>
+          <span>{`Spent: ${convertToMMSS(totalTime, true)} Hours`}</span>
+        </div>
       </div>
     </div>
   );
