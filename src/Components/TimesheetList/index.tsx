@@ -1,5 +1,6 @@
 import { useUserState } from "@/utils/Context/UserContext/Context";
 import { deleteTimesheet } from "@/utils/timesheetapis/timesheet";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { convertToMMSS } from "../../hooks/Pomodoro/Time/useTime";
@@ -60,8 +61,10 @@ export default function TimesheetList() {
                   className="border-b border-slate-100 text-center"
                   key={proj.timesheetId}
                 >
-                  <td className="whitespace-nowrap p-4 pl-8	">
-                    <span>{proj.projectName}</span>
+                  <td className="whitespace-nowrap p-4 pl-8	underline">
+                    <Link href={proj.href}>
+                      <a>{proj.projectName}</a>
+                    </Link>
                   </td>
                   <td>
                     <span className="mx-2 whitespace-nowrap">

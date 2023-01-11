@@ -13,6 +13,7 @@ type FilteredTimesheetTypes = {
   timerValue: number;
   createdAt: string;
   timesheetId: string;
+  href: string;
 }[];
 
 export default function useFormattedData(): [
@@ -54,13 +55,14 @@ export default function useFormattedData(): [
               return {
                 ...ts,
                 projectName: getProjectTitle(pr),
+                href: pr.url,
               };
             else return null;
           })
           .filter(notEmpty)
       );
     }
-  }, [notionProjects, projectAnalysis]);
+  }, [notionProjects, projectAnalysis, projectTimesheets]);
 
   return [filteredData, filteredTimesheets];
 }

@@ -39,6 +39,9 @@ export default withPWA(
         },
       ],
     },
+    experimental: {
+      scrollRestoration: true,
+    },
     webpack(config, options) {
       const { isServer } = options;
       config.module.rules.push(

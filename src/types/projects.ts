@@ -16,6 +16,7 @@ export type ProjectTimeSheetsType = {
   timerValue: number;
   createdAt: string;
   timesheetId: string;
+  href?: string;
 }[];
 
 export type ProjectAnalytics = Record<string, number>;
