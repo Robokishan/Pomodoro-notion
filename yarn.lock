@@ -2122,6 +2122,11 @@
   resolved "https://registry.yarnpkg.com/@types/chroma-js/-/chroma-js-2.1.4.tgz#52e3a8453000cdb9ad76357c2c47dbed702d136f"
   integrity sha512-l9hWzP7cp7yleJUI7P2acmpllTJNYf5uU6wh50JzSIZt3fFHe+w2FM6w9oZGBTYzjjm2qHdnQvI+fF/JF/E5jQ==
 
+"@types/dom-screen-wake-lock@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/dom-screen-wake-lock/-/dom-screen-wake-lock-1.0.0.tgz#c06e415fca0afb5a6e727b900f3cb8ba3993d130"
+  integrity sha512-3o5jkfJsuhFcKj2EZ3PiEoiQQbB3J/nffsXJBKtyubkBHsX2siS6b4uij3ukr5xgDHsF4BaT9fHo8DneAw/YxA==
+
 "@types/estree@0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"

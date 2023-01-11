@@ -21,7 +21,7 @@ function defineNextConfig(config) {
 
 export default withPWA(
   defineNextConfig({
-    reactStrictMode: true,
+    // reactStrictMode: true,
     swcMinify: true,
     images: {
       remotePatterns: [

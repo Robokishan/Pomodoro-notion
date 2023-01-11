@@ -37,6 +37,7 @@
   "devDependencies": {
     "@svgr/webpack": "^6.5.1",
     "@types/chroma-js": "^2.1.4",
+    "@types/dom-screen-wake-lock": "^1.0.0",
     "@types/next-pwa": "^5.6.1",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",

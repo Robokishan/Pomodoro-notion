@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { actionTypes } from "@/utils/Context/PomoContext/reducer";
 import useSyncPomo from "../../hooks/useSyncPomo";
@@ -28,6 +28,30 @@ export default function Timer({ projectName }: Props) {
     useSyncPomo();
 
   const [showPopover, setPopover] = useState(false);
+
+  // prevent screen lock when timer is in focus
+  const wakeLock = useRef<WakeLockSentinel>();
+
+  const lockScreen = async () => {
+    if ("wakeLock" in navigator) {
+      try {
+        wakeLock.current = await navigator.wakeLock.request("screen");
+      } catch (error) {
+        // Wake lock was not allowed.
+        // alert(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    // requestWakeLock
+    if (!wakeLock.current) lockScreen();
+    return () => {
+      if (wakeLock.current) {
+        wakeLock.current.release();
+      }
+    };
+  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetTimer(false), [project?.value]);
