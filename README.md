@@ -27,5 +27,8 @@ But i wanted to make much more than that. I wanted to leverage notion apis and b
 
 Pleas raise a PR if you would like to add more features in it. Sign in with google is just to make authentication i am not collecting any of your data or running any analytics. **If i feel that this free version of app is being used for any kind of abuse i will stop the app right away.**  Feel free to contact me incase you want some feature to be developed or want to discuss some ideas. ping me on hi@kishanjoshi.dev.
 
+### Support
+<a href="https://www.buymeacoffee.com/robokishan" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 
 
