@@ -73,7 +73,7 @@ export default function TimesheetList() {
                   </td>
                   <td>
                     <span className="mx-2">
-                      {convertToMMSS(proj.timerValue, true)}
+                      {convertToMMSS(proj.timerValue, true, true)}
                     </span>
                   </td>
                   <td>
@@ -125,7 +125,7 @@ export default function TimesheetList() {
       <div className="mt-5">
         <span>{`Total: ${diff_hours(startDate, endDate)} Hours`}</span>
         <div>
-          <span>{`Spent: ${convertToMMSS(totalTime, true)} Hours`}</span>
+          <span>{`Spent: ${convertToMMSS(totalTime, true, true)} Hours`}</span>
         </div>
       </div>
     </div>
