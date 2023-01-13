@@ -48,7 +48,7 @@ export default function useSyncPomo() {
   // this will be excecuted when sessions switch happens during running pomo
 
   function onEnd(type: TimerLabelType) {
-    showNotification(type);
+    showNotification(`${type} Completed`, "Pomo Complete");
     if (type == "Session") {
       saveProjectTime();
       //when session ends save session time

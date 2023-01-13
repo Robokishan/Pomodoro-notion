@@ -3,6 +3,8 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { toast } from "react-toastify";
+import useNotification from "../../hooks/useNotification";
 import Dropdown, { MenuType } from "../Dropdown";
 import NotionConnectModal from "../NotionModifyModal";
 
@@ -10,6 +12,8 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
   const { data: session } = useSession();
 
   const [showModal, setModal] = useState(false);
+
+  const [notify] = useNotification();
 
   const menuList: MenuType[] = useMemo(
     (): MenuType[] => [
@@ -30,6 +34,22 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
           type: "button",
           onClick() {
             setModal(true);
+          },
+        },
+      },
+      {
+        label: "Test Desktop Notification",
+        value: "testdesktopnotification",
+        component: {
+          type: "button",
+          onClick() {
+            notify("Desktop Notification Works!", "Test").then(
+              (b) =>
+                b != true &&
+                toast.warn(
+                  "Please allow Desktop notification If you want to see Desktop notifications!" // desktop notification not allowed
+                )
+            );
           },
         },
       },
