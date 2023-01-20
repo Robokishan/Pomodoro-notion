@@ -38,6 +38,24 @@ export const usePomoClient = (): Return => {
           userId,
         });
 
+        console.log("******");
+        projects.forEach((p) => {
+          console.log(
+            p.projectId,
+            p.startTime,
+            typeof p.createdAt == "object" ? p.createdAt.seconds : p.createdAt,
+            p.createdAt,
+            Math.abs(
+              (typeof p.createdAt == "object"
+                ? p.createdAt.seconds
+                : p.createdAt) -
+                p.startTime -
+                p.timerValue
+            )
+          );
+        });
+        console.log("******");
+
         const timesheets: ProjectTimeSheetsType[] = projects.map((p) => ({
           projectId: p.projectId,
           timerValue: p.timerValue,
