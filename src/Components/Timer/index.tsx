@@ -14,6 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import SoundLevel from "../Noises/NoiseCard/SoundLevel";
 import OutsideClickHandler from "react-outside-click-handler";
+import WakeLockNote from "./WakeLockNote";
 
 type Props = {
   projectName: string;
@@ -28,6 +29,7 @@ export default function Timer({ projectName }: Props) {
     useSyncPomo();
 
   const [showPopover, setPopover] = useState(false);
+  const [showNote, setNote] = useState<null | "success" | "error">();
 
   // prevent screen lock when timer is in focus
   const wakeLock = useRef<WakeLockSentinel>();
@@ -36,7 +38,12 @@ export default function Timer({ projectName }: Props) {
     if ("wakeLock" in navigator) {
       try {
         wakeLock.current = await navigator.wakeLock.request("screen");
+        setNote("success");
+        setTimeout(() => {
+          setNote(null);
+        }, 5000);
       } catch (error) {
+        setNote("error");
         // Wake lock was not allowed.
         // alert(error);
       }
@@ -155,7 +162,9 @@ export default function Timer({ projectName }: Props) {
           <ArrowsPointingOutIcon className="h-5 w-5" />
         </button>
       </div>
-
+      {showNote && (
+        <WakeLockNote onCloseClick={() => setNote(null)} type={showNote} />
+      )}
       <FullScreen handle={timerScreen}>
         <div className={`${timerScreen.active ? "block" : "hidden"} `}>
           <div className="flex h-screen w-screen flex-col items-center justify-center">
