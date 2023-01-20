@@ -21,7 +21,7 @@ type Return = [
   boolean
 ];
 
-const allowedOffset = 2 * 60; //allow to have 2 seconds of offset if something goes wrong other than that everything is problem
+const allowedOffset = 2; //allow to have 2 seconds of offset if something goes wrong other than that everything is problem
 
 export const usePomoClient = (): Return => {
   const [{ userId, startDate, endDate }] = useUserState();
@@ -37,6 +37,23 @@ export const usePomoClient = (): Return => {
           endDate: endDate,
           userId,
         });
+        console.log("******");
+        projects.forEach((p) => {
+          console.log(
+            p.projectId,
+            p.startTime,
+            typeof p.createdAt == "object" ? p.createdAt.seconds : p.createdAt,
+            p.createdAt,
+            Math.abs(
+              (typeof p.createdAt == "object"
+                ? p.createdAt.seconds
+                : p.createdAt) -
+                p.startTime -
+                p.timerValue
+            )
+          );
+        });
+        console.log("******");
 
         const timesheets: ProjectTimeSheetsType[] = projects.map((p) => ({
           projectId: p.projectId,
