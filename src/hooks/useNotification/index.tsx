@@ -25,6 +25,12 @@ export default function useNotification(): [
     if (Notification.permission != "granted") await notificationRequest();
     if (Notification.permission == "granted") {
       notification.current = new Notification(title, options);
+
+      // focus window on notification click
+      notification.current.onclick = function () {
+        window.focus();
+        this.close();
+      };
     }
     return Notification.permission == "granted";
   }
