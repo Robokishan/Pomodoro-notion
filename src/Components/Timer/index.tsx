@@ -55,12 +55,23 @@ export default function Timer({ projectName }: Props) {
     }
   };
 
+  function focusLock() {
+    if (wakeLock.current?.released) {
+      lockScreen();
+    }
+  }
+
   useEffect(() => {
     // requestWakeLock
     if (!wakeLock.current) lockScreen();
+
+    //regain lock after focus loose
+    window.addEventListener("focus", focusLock);
+
     return () => {
       if (wakeLock.current) {
-        wakeLock.current.release();
+        window.removeEventListener("focus", focusLock); //remove focus event
+        wakeLock.current.release(); //release onunmount
         wakeLock.current = undefined; //reset state of the wakelock.current to undefined in order to avoid problems
       }
     };
