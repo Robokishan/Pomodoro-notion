@@ -61,6 +61,11 @@ export default function useSyncPomo() {
       bellRingPlay();
     } else {
       alarmWoodPlay();
+      //reset start time when noise to session happens
+      pomoDispatch({
+        type: actionTypes.SET_START_TIME,
+        payload: Math.round(new Date().getTime() / 1000),
+      });
     }
   }
 
