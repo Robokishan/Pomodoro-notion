@@ -60,7 +60,7 @@ export default function Timer({ projectName }: Props) {
       // aqiure wakeLock after sometime since there is some issue when we acquire immedietly
       setTimeout(() => {
         if (document.hasFocus()) lockScreen();
-      }, 1000);
+      }, 10);
     }
   }
 
