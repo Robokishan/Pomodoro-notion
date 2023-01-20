@@ -71,17 +71,11 @@ export default function TimesheetList() {
                   <td>
                     <span
                       title={`${
-                        proj.startTime.approx == true
-                          ? "Approx value"
-                          : proj.susp == true
-                          ? "Suspicious value"
-                          : null
+                        proj.startTime.approx == true ? "Approx value" : null
                       }`}
                       className={`mx-2 whitespace-nowrap ${
                         proj.startTime.approx == true
                           ? "cursor-pointer text-orange-500" //if approximate value then show orange
-                          : proj.susp == true
-                          ? "cursor-pointer text-blue-400" //if susp value then show blue
                           : null
                       }`}
                     >
@@ -89,12 +83,26 @@ export default function TimesheetList() {
                     </span>
                   </td>
                   <td>
-                    <span className="mx-2 whitespace-nowrap">
+                    <span
+                      title={`${proj.susp == true ? "Suspicious value" : null}`}
+                      className={`mx-2 whitespace-nowrap ${
+                        proj.susp == true
+                          ? "cursor-pointer text-blue-400" //if susp value then show blue
+                          : null
+                      }`}
+                    >
                       {proj.createdAt}
                     </span>
                   </td>
                   <td>
-                    <span className="mx-2">
+                    <span
+                      title={`${proj.susp == true ? "Suspicious value" : null}`}
+                      className={`mx-2 ${
+                        proj.susp == true
+                          ? "cursor-pointer text-blue-400" //if susp value then show blue
+                          : null
+                      }`}
+                    >
                       {convertToMMSS(proj.timerValue, true, true)}
                     </span>
                   </td>
