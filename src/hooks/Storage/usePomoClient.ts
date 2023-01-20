@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
+import { ProjectTimeSheetsType } from "../../types/projects";
 import { useProjectState } from "../../utils/Context/ProjectContext/Context";
 import { actionTypes } from "../../utils/Context/ProjectContext/reducer";
 import { useUserState } from "../../utils/Context/UserContext/Context";
@@ -10,9 +11,16 @@ import {
 
 type Return = [
   () => Promise<void>,
-  (projectId: string, databaseId: string, timerValue: number) => Promise<void>,
+  (
+    projectId: string,
+    databaseId: string,
+    timerValue: number,
+    startTime: number
+  ) => Promise<void>,
   boolean
 ];
+
+const allowedOffset = 2;
 
 export const usePomoClient = (): Return => {
   const [{ userId, startDate, endDate }] = useUserState();
@@ -29,15 +37,32 @@ export const usePomoClient = (): Return => {
           userId,
         });
 
-        const timesheets = projects.map((p) => ({
+        const timesheets: ProjectTimeSheetsType[] = projects.map((p) => ({
           projectId: p.projectId,
           timerValue: p.timerValue,
+          susp: p.startTime //this is to check wether this is suspicious value or not it is caused by when phone goes to sleep or something went wrong with the timer
+            ? Math.abs(p.createdAt.seconds - p.startTime - p.timerValue) >
+              allowedOffset
+            : false,
+          startTime: {
+            value: p.startTime
+              ? format(
+                  new Date(p.startTime * 1000),
+                  "yyyy-MM-dd hh:mm:ss aaaaa'm'"
+                )
+              : format(
+                  new Date((p.createdAt?.seconds - p.timerValue) * 1000), //if start time not available then calculate approx start time value
+                  "yyyy-MM-dd hh:mm:ss aaaaa'm'"
+                ),
+            approx: !p.startTime, //flag to show wether this is approx value or not
+          },
           createdAt: format(
             new Date(p.createdAt?.seconds * 1000),
             "yyyy-MM-dd hh:mm:ss aaaaa'm'"
           ),
           timesheetId: p.timesheetId,
         }));
+
         dispatch({
           type: actionTypes.UPDATE_PROJECT_TIMESHEETS,
           payload: timesheets,
@@ -71,13 +96,15 @@ export const usePomoClient = (): Return => {
   async function addTimesheet(
     projectId: string,
     databaseId: string,
-    timerValue: number
+    timerValue: number,
+    startTime: number
   ) {
     await pushTimesheet({
       projectId,
       databaseId,
       userId,
       timerValue,
+      startTime,
     });
   }
 

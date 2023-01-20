@@ -4,7 +4,10 @@
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
-import { TimerLabelType } from "../../utils/Context/PomoContext/reducer";
+import {
+  actionTypes,
+  TimerLabelType,
+} from "../../utils/Context/PomoContext/reducer";
 import usePomoDoro from "../Pomodoro/usePomoDoro";
 import useClickSound from "../Sound/useClickSound";
 import useNotificationSound from "../Sound/useNotificationSound";
@@ -12,7 +15,10 @@ import { usePomoClient } from "../Storage/usePomoClient";
 import useNotification from "../useNotification";
 
 export default function useSyncPomo() {
-  const [{ project, databaseId, timerValue, sessionValue }] = usePomoState();
+  const [
+    { project, databaseId, startTime, timerValue, sessionValue },
+    pomoDispatch,
+  ] = usePomoState();
   const { clockifiedValue, handlePlayPause, resetTimer, restartPomo } =
     usePomoDoro({
       onEnd,
@@ -60,6 +66,10 @@ export default function useSyncPomo() {
 
   function onStart() {
     setTimeout(tickingSlowPlay, 1000);
+    pomoDispatch({
+      type: actionTypes.SET_START_TIME,
+      payload: Math.round(new Date().getTime() / 1000),
+    });
   }
 
   const getSessionInSecond = () => sessionValue * 60;
@@ -76,7 +86,8 @@ export default function useSyncPomo() {
       addTimesheet(
         project.value,
         databaseId as string,
-        getSessionInSecond() - timerValue - elapsedTime.current
+        getSessionInSecond() - timerValue - elapsedTime.current,
+        startTime
       )
         .then(() => {
           toast.success(`Timesheet added ${project.label}`, {

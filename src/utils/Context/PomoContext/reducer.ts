@@ -11,6 +11,7 @@ export interface IAppState {
   databaseId?: string;
   shouldTickSound?: boolean;
   tickVolume: number;
+  startTime: number; //when session is started
 }
 
 export const DEFAULT_SESSION_TIMER = 45;
@@ -20,6 +21,7 @@ export const DEFAULT_TIMER_VALUE = DEFAULT_SESSION_TIMER * 60;
 const timerInit = {
   breakValue: DEFAULT_BREAK_TIEMR,
   sessionValue: DEFAULT_SESSION_TIMER,
+  startTime: 0,
 };
 
 const soundInit = {
@@ -62,6 +64,7 @@ export enum actionTypes {
   DECREASE_SESSION_VALUE = "DECREASE_SESSION_VALUE",
   CHANGE_TICKING_SOUND = "CHANGE_TICKING_SOUND",
   CHANGE_TICK_VOLUME = "CHANGE_TICK_VOLUME",
+  SET_START_TIME = "SET_START_TIME",
 }
 
 type SET_PROJECTID = {
@@ -70,6 +73,11 @@ type SET_PROJECTID = {
     label: string;
     value: string;
   } | null;
+};
+
+type SET_START_TIME = {
+  type: actionTypes.SET_START_TIME;
+  payload: number;
 };
 
 type SET_DATABASEID = {
@@ -114,7 +122,8 @@ export type IAction =
   | {
       type: actionTypes.CHANGE_TICK_VOLUME;
       payload: number;
-    };
+    }
+  | SET_START_TIME;
 
 const reducer = (state = initialState, action: IAction): IAppState => {
   switch (action.type) {
@@ -201,6 +210,11 @@ const reducer = (state = initialState, action: IAction): IAppState => {
       return {
         ...state,
         tickVolume: action.payload,
+      };
+    case actionTypes.SET_START_TIME:
+      return {
+        ...state,
+        startTime: action.payload,
       };
     default:
       return state;

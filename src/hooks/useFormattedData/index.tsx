@@ -5,24 +5,25 @@ import { useEffect, useState } from "react";
 import { PieData } from "../../Components/PieChart";
 
 import { notEmpty } from "../../types/notEmpty";
+import { ProjectTimeSheetsType } from "../../types/projects";
 import { convertToMMSS } from "../Pomodoro/Time/useTime";
 
-type FilteredTimesheetTypes = {
+interface FilteredTimesheetTypes extends ProjectTimeSheetsType {
   projectName: string;
   projectId: string;
   timerValue: number;
-  createdAt: string;
   timesheetId: string;
   href?: string;
-}[];
+}
 
 export default function useFormattedData(): [
   PieData[],
-  FilteredTimesheetTypes
+  FilteredTimesheetTypes[]
 ] {
   const [filteredData, setFileredData] = useState<PieData[]>([]);
-  const [filteredTimesheets, setFileredTimesheets] =
-    useState<FilteredTimesheetTypes>([]);
+  const [filteredTimesheets, setFileredTimesheets] = useState<
+    FilteredTimesheetTypes[]
+  >([]);
 
   const [{ projectAnalysis, projectTimesheets, notionProjects }] =
     useProjectState();

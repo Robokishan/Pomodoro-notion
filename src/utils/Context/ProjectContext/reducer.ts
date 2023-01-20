@@ -7,7 +7,7 @@ import {
 type NOTION_PROJECTS = Result[];
 
 export interface IAppState {
-  projectTimesheets: ProjectTimeSheetsType;
+  projectTimesheets: ProjectTimeSheetsType[];
   projectAnalysis: ProjectAnalytics;
   notionProjects: NOTION_PROJECTS;
 }
@@ -31,7 +31,7 @@ type UPDATE_PROJECT_ANALYSIS = {
 
 type UPDATE_PROJECT_TIMESHEETS = {
   type: actionTypes.UPDATE_PROJECT_TIMESHEETS;
-  payload: ProjectTimeSheetsType;
+  payload: ProjectTimeSheetsType[];
 };
 
 type UPDATE_NOTION_PROJECTS = {

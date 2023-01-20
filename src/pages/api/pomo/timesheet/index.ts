@@ -32,11 +32,13 @@ export default async function handler(
         })
       );
     } else if (method == "POST") {
-      const { projectId, databaseId, timerValue, timestamp } = req.body;
+      const { projectId, databaseId, timerValue, timestamp, startTime } =
+        req.body;
       if (
         projectId &&
         databaseId &&
-        (timerValue != null || timerValue != undefined)
+        (timerValue != null || timerValue != undefined) &&
+        startTime
       ) {
         res.status(200).json({
           message: "Timesheet created",
@@ -46,6 +48,7 @@ export default async function handler(
             userId,
             timerValue,
             timestamp,
+            startTime,
           }),
         });
       } else {

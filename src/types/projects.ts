@@ -4,6 +4,7 @@ export interface ProjectLists {
   timerValue: number;
   timesheetId: string;
   userId: string;
+  startTime?: number;
 }
 
 export interface CreatedAt {
@@ -11,12 +12,14 @@ export interface CreatedAt {
   nanoseconds: number;
 }
 
-export type ProjectTimeSheetsType = {
-  projectId: string;
-  timerValue: number;
+export interface ProjectTimeSheetsType
+  extends Omit<ProjectLists, "startTime" | "userId" | "createdAt"> {
   createdAt: string;
-  timesheetId: string;
-  href?: string;
-}[];
+  startTime: {
+    value: string;
+    approx: boolean;
+  };
+  susp: boolean;
+}
 
 export type ProjectAnalytics = Record<string, number>;

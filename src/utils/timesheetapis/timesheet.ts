@@ -7,11 +7,13 @@ export const pushTimesheet = async ({
   databaseId,
   userId,
   timerValue,
+  startTime,
 }: {
   projectId: string;
   databaseId: string;
   userId: string;
   timerValue: number;
+  startTime: number;
 }) => {
   await PomodoroClient.post(
     POMO_TSH_APIS.TIMESHEET,
@@ -19,6 +21,7 @@ export const pushTimesheet = async ({
       projectId,
       databaseId,
       timerValue,
+      startTime,
     },
     {
       params: {
