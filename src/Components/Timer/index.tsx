@@ -29,7 +29,9 @@ export default function Timer({ projectName }: Props) {
     useSyncPomo();
 
   const [showPopover, setPopover] = useState(false);
-  const [showNote, setNote] = useState<null | "success" | "error">();
+  const [showNote, setNote] = useState<
+    null | "success" | "error" | "warning"
+  >();
 
   // prevent screen lock when timer is in focus
   const wakeLock = useRef<WakeLockSentinel>();
@@ -38,6 +40,9 @@ export default function Timer({ projectName }: Props) {
     if ("wakeLock" in navigator) {
       try {
         wakeLock.current = await navigator.wakeLock.request("screen");
+        wakeLock.current.onrelease = () => {
+          setNote("warning");
+        };
         setNote("success");
         setTimeout(() => {
           setNote(null);
@@ -56,6 +61,7 @@ export default function Timer({ projectName }: Props) {
     return () => {
       if (wakeLock.current) {
         wakeLock.current.release();
+        wakeLock.current = undefined; //reset state of the wakelock.current to undefined in order to avoid problems
       }
     };
   }, []);
