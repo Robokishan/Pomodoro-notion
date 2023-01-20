@@ -32,8 +32,14 @@ export default async function handler(
         })
       );
     } else if (method == "POST") {
-      const { projectId, databaseId, timerValue, timestamp, startTime } =
-        req.body;
+      const {
+        projectId,
+        databaseId,
+        timerValue,
+        timestamp,
+        startTime,
+        endTime,
+      } = req.body;
       if (
         projectId &&
         databaseId &&
@@ -49,6 +55,7 @@ export default async function handler(
             timerValue,
             timestamp,
             startTime,
+            endTime,
           }),
         });
       } else {

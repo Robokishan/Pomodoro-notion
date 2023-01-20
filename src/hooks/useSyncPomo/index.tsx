@@ -92,7 +92,8 @@ export default function useSyncPomo() {
         project.value,
         databaseId as string,
         getSessionInSecond() - timerValue - elapsedTime.current,
-        startTime
+        startTime,
+        Math.floor(new Date().getTime() / 1000)
       )
         .then(() => {
           toast.success(`Timesheet added ${project.label}`, {

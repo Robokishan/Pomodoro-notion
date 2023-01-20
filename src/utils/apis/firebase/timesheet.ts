@@ -80,6 +80,7 @@ export const insertTimesheet = async ({
   timerValue,
   timestamp,
   startTime,
+  endTime,
 }: {
   projectId: string;
   databaseId: string;
@@ -87,6 +88,7 @@ export const insertTimesheet = async ({
   timerValue: number;
   timestamp: number;
   startTime: number;
+  endTime?: number;
 }) => {
   const tid = await addDoc(collection(db, FIREBASE_COLLECTIONS.TIMESHEET), {
     projectId,
@@ -94,9 +96,10 @@ export const insertTimesheet = async ({
     userId,
     timerValue,
     startTime,
-    createdAt: timestamp
-      ? Timestamp.fromDate(new Date(timestamp * 1000))
-      : serverTimestamp(),
+    createdAt:
+      !endTime && timestamp
+        ? Timestamp.fromDate(new Date(timestamp * 1000))
+        : serverTimestamp(),
   });
   return tid.id;
 };

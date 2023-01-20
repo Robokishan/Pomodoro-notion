@@ -15,7 +15,8 @@ type Return = [
     projectId: string,
     databaseId: string,
     timerValue: number,
-    startTime: number
+    startTime: number,
+    endTime: number
   ) => Promise<void>,
   boolean
 ];
@@ -41,8 +42,13 @@ export const usePomoClient = (): Return => {
           projectId: p.projectId,
           timerValue: p.timerValue,
           susp: p.startTime //this is to check wether this is suspicious value or not it is caused by when phone goes to sleep or something went wrong with the timer
-            ? Math.abs(p.createdAt.seconds - p.startTime - p.timerValue) >
-              allowedOffset
+            ? Math.abs(
+                (typeof p.createdAt == "object"
+                  ? p.createdAt.seconds
+                  : p.createdAt) -
+                  p.startTime -
+                  p.timerValue
+              ) > allowedOffset
             : false,
           startTime: {
             value: p.startTime
@@ -51,13 +57,23 @@ export const usePomoClient = (): Return => {
                   "yyyy-MM-dd hh:mm:ss aaaaa'm'"
                 )
               : format(
-                  new Date((p.createdAt?.seconds - p.timerValue) * 1000), //if start time not available then calculate approx start time value
+                  new Date(
+                    ((typeof p.createdAt == "object"
+                      ? p.createdAt.seconds
+                      : p.createdAt) -
+                      p.timerValue) *
+                      1000
+                  ), //if start time not available then calculate approx start time value
                   "yyyy-MM-dd hh:mm:ss aaaaa'm'"
                 ),
             approx: !p.startTime, //flag to show wether this is approx value or not
           },
           createdAt: format(
-            new Date(p.createdAt?.seconds * 1000),
+            new Date(
+              (typeof p.createdAt == "object"
+                ? p.createdAt.seconds
+                : p.createdAt) * 1000
+            ),
             "yyyy-MM-dd hh:mm:ss aaaaa'm'"
           ),
           timesheetId: p.timesheetId,
@@ -97,7 +113,8 @@ export const usePomoClient = (): Return => {
     projectId: string,
     databaseId: string,
     timerValue: number,
-    startTime: number
+    startTime: number,
+    endTime: number
   ) {
     await pushTimesheet({
       projectId,
@@ -105,6 +122,7 @@ export const usePomoClient = (): Return => {
       userId,
       timerValue,
       startTime,
+      endTime,
     });
   }
 
