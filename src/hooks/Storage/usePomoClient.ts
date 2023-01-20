@@ -20,7 +20,7 @@ type Return = [
   boolean
 ];
 
-const allowedOffset = 2;
+const allowedOffset = 2; //allow to have 2 seconds of offset if something goes wrong other than that everything is problem
 
 export const usePomoClient = (): Return => {
   const [{ userId, startDate, endDate }] = useUserState();
