@@ -155,7 +155,7 @@ export default async function handler(
           attachments,
         });
 
-        res.status(200).json({ message: `email will be sent on ${userEmail}` });
+        res.status(200).json({ message: `Email will be sent on ${userEmail}` });
       } else {
         res.status(403).end({
           message: `Only Excel allowed`,
