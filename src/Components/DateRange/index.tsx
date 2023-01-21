@@ -58,10 +58,17 @@ export default function DateRange({
       range.selection?.startDate &&
       range.selection?.endDate
     ) {
+      const startDate = startOfDay(range.selection.startDate);
+      const endDate = endOfDay(
+        range.selection.endDate > endOfDay(new Date())
+          ? new Date()
+          : range.selection.endDate
+      );
+
       const selection: ReturnType<typeof getTodayRange> = {
         key: range.selection.key as string,
-        startDate: startOfDay(range.selection.startDate),
-        endDate: endOfDay(range.selection.endDate),
+        startDate: startDate,
+        endDate: endDate,
       };
 
       setCalendarDates([selection]);
