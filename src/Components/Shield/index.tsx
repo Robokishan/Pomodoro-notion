@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import NextNProgress from "nextjs-progressbar";
 import { PomoStateProvider } from "../../utils/Context/PomoContext/Context";
 import reducer, { initialState } from "../../utils/Context/PomoContext/reducer";
@@ -13,12 +13,22 @@ import { UserStateProvider } from "../../utils/Context/UserContext/Context";
 import { ProjectStateProvider } from "../../utils/Context/ProjectContext/Context";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSession } from "next-auth/react";
+import Router from "next/router";
 
 interface Props {
   children: JSX.Element | React.ReactNode;
 }
 
-export default function index({ children }: Props) {
+export default function Shield({ children }: Props) {
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (!session && status != "loading") {
+      Router.push("/login");
+    }
+  }, [session, status]);
+
   return (
     <ProjectStateProvider reducer={preducer} initialState={projInitial}>
       <UserStateProvider reducer={ureducer} initialState={userInitial}>
