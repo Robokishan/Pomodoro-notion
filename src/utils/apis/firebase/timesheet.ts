@@ -78,7 +78,6 @@ export const insertTimesheet = async ({
   databaseId,
   userId,
   timerValue,
-  timestamp,
   startTime,
   endTime,
 }: {
@@ -86,7 +85,6 @@ export const insertTimesheet = async ({
   databaseId: string;
   userId: string;
   timerValue: number;
-  timestamp: number;
   startTime: number;
   endTime?: number;
 }) => {
@@ -96,10 +94,9 @@ export const insertTimesheet = async ({
     userId,
     timerValue,
     startTime,
-    createdAt:
-      !endTime && timestamp
-        ? Timestamp.fromDate(new Date(timestamp * 1000))
-        : serverTimestamp(),
+    createdAt: endTime
+      ? Timestamp.fromDate(new Date(endTime * 1000))
+      : serverTimestamp(),
   });
   return tid.id;
 };

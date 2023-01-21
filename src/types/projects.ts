@@ -1,5 +1,5 @@
 export interface ProjectLists {
-  createdAt: CreatedAt | number;
+  createdAt: CreatedAt;
   projectId: string;
   timerValue: number;
   timesheetId: string;
