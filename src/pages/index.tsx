@@ -29,10 +29,6 @@ export const getServerSideProps = async ({
     };
   } catch (error) {
     return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
       props: {
         error: "Something went wrong",
       },
