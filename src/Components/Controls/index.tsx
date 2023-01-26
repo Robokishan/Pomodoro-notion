@@ -28,6 +28,10 @@ export default function Controls({
       <BigButton
         disabled={state.frozePomodoro}
         onClick={() => {
+          console.log(
+            "start/pause at",
+            Math.floor(new Date().getTime() / 1000)
+          );
           clickPlay();
           handlePlayPause();
         }}
@@ -44,6 +48,7 @@ export default function Controls({
       </BigButton>
       <BigButton
         onClick={() => {
+          console.log("stopped at", Math.floor(new Date().getTime() / 1000));
           clickPlay();
           handleRestart();
         }}
@@ -52,6 +57,7 @@ export default function Controls({
       </BigButton>
       <BigButton
         onClick={() => {
+          console.log("reset at", Math.floor(new Date().getTime() / 1000));
           clickPlay();
           handleReset();
         }}
