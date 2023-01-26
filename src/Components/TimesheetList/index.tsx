@@ -70,9 +70,9 @@ export default function TimesheetList() {
                   </td>
                   <td>
                     <span
-                      title={`${
-                        proj.startTime.approx == true ? "Approx value" : null
-                      }`}
+                      {...(proj.startTime.approx == true
+                        ? { title: "Approx value" }
+                        : {})}
                       className={`mx-2 whitespace-nowrap ${
                         proj.startTime.approx == true
                           ? "cursor-pointer text-orange-500" //if approximate value then show orange
@@ -84,10 +84,12 @@ export default function TimesheetList() {
                   </td>
                   <td>
                     <span
-                      title={`${proj.susp == true ? "Suspicious value" : null}`}
+                      {...(proj.susp == true
+                        ? { title: "Suspicious value" }
+                        : {})}
                       className={`mx-2 whitespace-nowrap ${
                         proj.susp == true
-                          ? "cursor-pointer text-blue-400" //if susp value then show blue
+                          ? null // "cursor-pointer text-blue-400" //if susp value then show blue
                           : null
                       }`}
                     >
@@ -96,10 +98,12 @@ export default function TimesheetList() {
                   </td>
                   <td>
                     <span
-                      title={`${proj.susp == true ? "Suspicious value" : null}`}
+                      {...(proj.susp == true
+                        ? { title: "Suspicious value" }
+                        : {})}
                       className={`mx-2 ${
                         proj.susp == true
-                          ? "cursor-pointer text-blue-400" //if susp value then show blue
+                          ? null //"cursor-pointer text-blue-400" //if susp value then show blue
                           : null
                       }`}
                     >
