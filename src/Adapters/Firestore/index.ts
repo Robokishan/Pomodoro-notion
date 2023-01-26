@@ -82,7 +82,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       const userRef = await getDoc(
         doc(db, AdapterCollections.USER, account.userId as string)
       );
-      if (!userRef.exists) return null;
+      if (!userRef.exists()) return null;
       const userData = userRef.data();
 
       const user = {
@@ -93,7 +93,9 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
     },
     async updateUser(data) {
       const { id, ...userData } = data;
-      await setDoc(doc(db, AdapterCollections.USER, id as string), userData);
+      await setDoc(doc(db, AdapterCollections.USER, id as string), userData, {
+        merge: true,
+      });
       const user = data as AdapterUser;
       return user;
     },
@@ -143,7 +145,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       const userRef = await getDoc(
         doc(db, AdapterCollections.USER, sessionData.userId as string)
       );
-      if (!userRef.exists) return null;
+      if (!userRef.exists()) return null;
       const userData = userRef.data();
 
       const user = {
@@ -171,7 +173,8 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       if (!sessionRef) return;
       await setDoc(
         doc(db, AdapterCollections.SESSION, sessionRef.id),
-        sessionData
+        sessionData,
+        { merge: true }
       );
       return data as AdapterSession;
     },
@@ -195,6 +198,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
         await deleteDoc(doc(db, AdapterCollections.SESSION, sessionRef.id)),
         await deleteDoc(doc(db, AdapterCollections.CUSTOM_TOKEN, sessionToken)),
       ]);
+      return;
     },
     async createVerificationToken(data) {
       // need test
