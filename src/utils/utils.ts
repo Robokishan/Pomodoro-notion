@@ -1,3 +1,5 @@
+import packageJSON from "../../package.json";
+
 export function generateUUID() {
   // Public Domain/MIT
   let d = new Date().getTime(); //Timestamp
@@ -23,3 +25,5 @@ export function generateUUID() {
 
 export const sleep = (delay = 3000) =>
   new Promise((resolve) => setTimeout(resolve, delay));
+
+export const getAppVersion = () => packageJSON.version;

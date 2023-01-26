@@ -1,4 +1,5 @@
 import { GITHUB_URL, PORTFOLIO_URL } from "@/utils/constants";
+import { getAppVersion } from "@/utils/utils";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -134,6 +135,14 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
           onClick: () => {
             signOut();
           },
+        },
+      },
+      {
+        label: `version: ${getAppVersion()}`,
+        style: "text-slate-500",
+        value: "appversion",
+        component: {
+          type: "text",
         },
       },
     ],

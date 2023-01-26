@@ -12,7 +12,11 @@ type LinkType = {
   href: string;
 };
 
-type ComponentType = ButtonType | LinkType;
+type TextType = {
+  type: "text";
+};
+
+type ComponentType = ButtonType | LinkType | TextType;
 
 export interface MenuType {
   style?: string;
@@ -99,6 +103,16 @@ const Components = ({
             <span>{label}</span>
           </a>
         </Link>
+      );
+    case "text":
+      return (
+        <span
+          className={`hover block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 ${
+            style && style
+          }`}
+        >
+          {label}
+        </span>
       );
   }
 };
