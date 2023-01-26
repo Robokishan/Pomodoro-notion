@@ -89,7 +89,7 @@ export default function TimesheetList() {
                         : {})}
                       className={`mx-2 whitespace-nowrap ${
                         proj.susp == true
-                          ? null // "cursor-pointer text-blue-400" //if susp value then show blue
+                          ? "cursor-pointer text-blue-400" //if susp value then show blue
                           : null
                       }`}
                     >
@@ -103,7 +103,7 @@ export default function TimesheetList() {
                         : {})}
                       className={`mx-2 ${
                         proj.susp == true
-                          ? null //"cursor-pointer text-blue-400" //if susp value then show blue
+                          ? "cursor-pointer text-blue-400" //if susp value then show blue
                           : null
                       }`}
                     >
