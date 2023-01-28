@@ -38,20 +38,6 @@ export const usePomoClient = (): Return => {
           userId,
         });
 
-        projects.map((p) => {
-          console.log(
-            "projectId:",
-            p.projectId,
-            "startTime:",
-            p.startTime,
-            "createdAt:",
-            p.createdAt.seconds,
-            "diff",
-            Math.abs(p.createdAt.seconds - (p.startTime ?? 0)),
-            "timerValue",
-            p.timerValue
-          );
-        });
         const timesheets: ProjectTimeSheetsType[] = projects.map((p) => ({
           projectId: p.projectId,
           timerValue: p.timerValue,

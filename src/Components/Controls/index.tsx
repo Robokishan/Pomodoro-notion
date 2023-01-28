@@ -36,10 +36,6 @@ export default function Controls({
       <BigButton
         disabled={playPauseButtonDisabled}
         onClick={() => {
-          console.log(
-            "start/pause at",
-            Math.floor(new Date().getTime() / 1000)
-          );
           clickPlay();
           handlePlayPause();
         }}
@@ -57,7 +53,6 @@ export default function Controls({
       <BigButton
         disabled={checkMarkDisabled}
         onClick={() => {
-          console.log("stopped at", Math.floor(new Date().getTime() / 1000));
           clickPlay();
           handleRestart();
         }}
@@ -69,7 +64,6 @@ export default function Controls({
       <BigButton
         disabled={resetButtonDisabled}
         onClick={() => {
-          console.log("reset at", Math.floor(new Date().getTime() / 1000));
           clickPlay();
           handleReset();
         }}
