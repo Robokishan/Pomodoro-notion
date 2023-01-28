@@ -1,19 +1,20 @@
-import Head from "next/head";
-import React, { useEffect, useRef, useState } from "react";
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { actionTypes } from "@/utils/Context/PomoContext/reducer";
-import useSyncPomo from "../../hooks/useSyncPomo";
-import { usePomoState } from "../../utils/Context/PomoContext/Context";
-import Break from "../Break";
-import Controls from "../Controls";
-import Session from "../Session";
 import {
   ArrowsPointingInIcon,
   ArrowsPointingOutIcon,
   SpeakerWaveIcon,
 } from "@heroicons/react/24/outline";
-import SoundLevel from "../Noises/NoiseCard/SoundLevel";
+import Head from "next/head";
+import React, { useEffect, useRef, useState } from "react";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import OutsideClickHandler from "react-outside-click-handler";
+import useSyncPomo from "../../hooks/useSyncPomo";
+import useWindowActive from "../../hooks/useWindowActive";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
+import Break from "../Break";
+import Controls from "../Controls";
+import SoundLevel from "../Noises/NoiseCard/SoundLevel";
+import Session from "../Session";
 import WakeLockNote from "./WakeLockNote";
 
 type Props = {
@@ -27,6 +28,10 @@ export default function Timer({ projectName }: Props) {
 
   const { clockifiedValue, togglePlayPause, resetTimer, restartPomo } =
     useSyncPomo();
+
+  const isWindowActive = useWindowActive();
+
+  const [disableControls, setDisableControls] = useState(false);
 
   const [showPopover, setPopover] = useState(false);
   const [showNote, setNote] = useState<
@@ -50,35 +55,29 @@ export default function Timer({ projectName }: Props) {
       } catch (error) {
         setNote("error");
         // Wake lock was not allowed.
-        // alert(error);
+        // log for development only
+        if (process.env.NODE_ENV == "development") console.error(error);
       }
     }
   };
 
-  function focusLock() {
-    if (wakeLock.current?.released) {
-      // aqiure wakeLock after sometime since there is some issue when we acquire immedietly
-      setTimeout(() => {
-        if (document.hasFocus()) lockScreen();
-      }, 10);
-    }
-  }
-
   useEffect(() => {
     // requestWakeLock
-    if (!wakeLock.current) lockScreen();
+    if (isWindowActive) {
+      // timer #1 for lockscreen
+      setTimeout(() => {
+        // if wantLock current is undefined or wakelock is released then lockscreen
+        if (!wakeLock.current || wakeLock.current.released) lockScreen();
+      }, 1000); //make delay to make interface ready
 
-    //regain lock after focus loose
-    window.addEventListener("focus", focusLock);
-
-    return () => {
-      if (wakeLock.current) {
-        window.removeEventListener("focus", focusLock); //remove focus event
-        wakeLock.current.release(); //release onunmount
-        wakeLock.current = undefined; //reset state of the wakelock.current to undefined in order to avoid problems
-      }
-    };
-  }, []);
+      // timer #2 for controls
+      setTimeout(() => {
+        setDisableControls(false);
+      }, 2000); //make delay to make interface ready
+    } else {
+      setDisableControls(true);
+    }
+  }, [isWindowActive]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetTimer(false), [project?.value]);
@@ -114,9 +113,9 @@ export default function Timer({ projectName }: Props) {
       </h3>
       <h1
         id="time-left"
-        className="relative z-10 m-0
-        mb-3
-        font-quicksand 
+        className="font-quicksand relative z-10
+        m-0
+        mb-3 
         text-5xl
         font-extralight
         text-gray-500
@@ -138,6 +137,7 @@ export default function Timer({ projectName }: Props) {
         {clockifiedValue}
       </h1>
       <Controls
+        disableControls={disableControls}
         handleReset={resetTimer}
         handlePlayPause={togglePlayPause}
         handleRestart={restartPomo}
@@ -199,9 +199,9 @@ export default function Timer({ projectName }: Props) {
             </h4>
             <h1
               id="time-left"
-              className="relative z-10 m-0
-              mb-3
-            font-quicksand 
+              className="font-quicksand relative z-10
+              m-0
+            mb-3 
             text-9xl
             font-extralight
             text-gray-500
