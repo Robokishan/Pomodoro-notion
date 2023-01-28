@@ -16,7 +16,7 @@ export default function Views({
     <div className="relative w-full ">
       <div
         className={`${
-          activeTab === "analytics" ? "visible" : "invisible"
+          activeTab === "analytics" ? "block" : "hidden"
         } absolute w-[100%]`}
       >
         <Analytics pieData={pieData} />
@@ -24,15 +24,15 @@ export default function Views({
 
       <div
         className={`${
-          activeTab === "timer" ? "visible" : "invisible"
-        } absolute flex w-full items-center justify-center `}
+          activeTab === "timer" ? "flex" : "hidden"
+        } absolute  w-full items-center justify-center `}
       >
         <Timer projectName={projectName} />
       </div>
       <div
         className={`${
-          activeTab === "noise" ? "visible" : "invisible"
-        } absolute flex w-full items-center justify-center `}
+          activeTab === "noise" ? "flex" : "hidden"
+        } absolute  w-full items-center justify-center `}
       >
         <div className="w-full">
           <Noises />
