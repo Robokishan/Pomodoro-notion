@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
 import React from "react";
-import Select from "react-select";
+const Select = dynamic(() => import("react-select"), {
+  loading: () => <div>Loading...</div>,
+});
 
 type Props = {
   disabled: boolean;

@@ -1,16 +1,26 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import Line from "../../Components/Line";
 import NotionTags from "../../Components/NotionTags";
-import ProjectSelection from "../../Components/ProjectSelection";
+
+const ProjectSelection = dynamic(
+  () => import("../../Components/ProjectSelection"),
+  {
+    loading: () => <div>Loading...</div>,
+  }
+);
+
 import Tabs from "../../Components/Tabs";
-import Views from "../../Components/Views";
+const Views = dynamic(() => import("../../Components/Views"), {
+  loading: () => <div>Loading...</div>,
+});
 import useFormattedData from "../../hooks/useFormattedData";
-import { getSession } from "next-auth/react";
 import {
   queryDatabase,
   retrieveDatabase,

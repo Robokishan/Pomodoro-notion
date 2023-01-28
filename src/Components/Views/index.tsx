@@ -1,7 +1,15 @@
-import Analytics from "../Analytics";
-import Noises from "../Noises";
+import dynamic from "next/dynamic";
+const Noises = dynamic(() => import("../Noises"), {
+  loading: () => <div>Loading...</div>,
+});
+const Analytics = dynamic(() => import("../Analytics"), {
+  loading: () => <div>Loading...</div>,
+});
+const Timer = dynamic(() => import("../Timer"), {
+  loading: () => <div>Loading...</div>,
+});
+
 import { PieData } from "../PieChart";
-import Timer from "../Timer";
 
 export default function Views({
   activeTab,

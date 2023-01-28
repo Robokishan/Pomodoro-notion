@@ -37,7 +37,7 @@ function Tab({
   );
 }
 
-export default function index({ tabs, activeTab, setActiveTab }: Props) {
+export default function Tabs({ tabs, activeTab, setActiveTab }: Props) {
   return (
     <ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
       {tabs.map((tab, index) => (

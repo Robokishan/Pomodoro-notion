@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
 import React from "react";
-import MultiSelect from "../MultiSelect";
+const MultiSelect = dynamic(() => import("../MultiSelect"), {
+  loading: () => <div>Loading...</div>,
+});
 
 type Props = {
   options: Array<{ label: string; value: string; color: string }>;
