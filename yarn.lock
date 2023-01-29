@@ -2184,6 +2184,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.17.tgz#5c009e1d9c38f4a2a9d45c0b0c493fe6cdb4bcb5"
   integrity sha512-HJSUJmni4BeDHhfzn6nF0sVmd1SMezP7/4F0Lq+aXzmp2xm9O7WXrUtHW/CHlYVtZUbByEvWidHqRtcJXGF2Ng==
 
+"@types/nprogress@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@types/nprogress/-/nprogress-0.2.0.tgz#86c593682d4199212a0509cc3c4d562bbbd6e45f"
+  integrity sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -4452,13 +4457,6 @@ next-auth@^4.18.10:
     preact-render-to-string "^5.1.19"
     uuid "^8.3.2"
 
-next-progress@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/next-progress/-/next-progress-2.2.0.tgz#8b764c3c9b24834d251dfe508112314ec1c756bf"
-  integrity sha512-g6VBoaj2SfUhKiBSJW/7ju06Ks3r3mUK79HdrLJ7fmvnjeyHPViAKLQDsMN1QIoBcTqN1hR7A8sISiMfm01qmQ==
-  dependencies:
-    nprogress "^0.2.0"
-
 next-pwa@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/next-pwa/-/next-pwa-5.6.0.tgz#f7b1960c4fdd7be4253eb9b41b612ac773392bf4"
@@ -4522,6 +4520,15 @@ next@^12.2.5:
     "@next/swc-win32-arm64-msvc" "12.3.4"
     "@next/swc-win32-ia32-msvc" "12.3.4"
     "@next/swc-win32-x64-msvc" "12.3.4"
+
+nextjs-progressbar@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/nextjs-progressbar/-/nextjs-progressbar-0.0.16.tgz#d2c1e54ffc2c6d52b64282c0d764a44241fbc36e"
+  integrity sha512-GV0fD38EMD3vSDCmkq+tObmoup6QA91a6a9MxGuhJZuRk/9TNsrHGnIQQQ/sggkMkXuT4fBgF6jRjFwScDT3zA==
+  dependencies:
+    "@types/nprogress" "^0.2.0"
+    nprogress "^0.2.0"
+    prop-types "^15.8.1"
 
 node-fetch@2.6.7:
   version "2.6.7"

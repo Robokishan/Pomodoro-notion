@@ -15,7 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import NextProgress from "next-progress";
+import NextProgress from "nextjs-progressbar";
 
 interface Props {
   children: JSX.Element | React.ReactNode;
@@ -34,7 +34,14 @@ export default function Shield({ children }: Props) {
     <ProjectStateProvider reducer={preducer} initialState={projInitial}>
       <UserStateProvider reducer={ureducer} initialState={userInitial}>
         <PomoStateProvider reducer={reducer} initialState={initialState}>
-          <NextProgress color="#374151" options={{ showSpinner: false }} />
+          <NextProgress
+            color="#374151"
+            showOnShallow={false}
+            stopDelayMs={0}
+            options={{
+              showSpinner: false,
+            }}
+          />
 
           <ToastContainer hideProgressBar newestOnTop={true} />
 
