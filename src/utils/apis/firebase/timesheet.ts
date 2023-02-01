@@ -8,6 +8,7 @@ import {
   doc,
   deleteDoc,
   orderBy,
+  getDoc,
 } from "firebase/firestore";
 import { FIREBASE_COLLECTIONS } from "./constants";
 import { serverTimestamp, Timestamp } from "firebase/firestore";
@@ -26,6 +27,55 @@ export const getTimesheets = async (
     )
   );
   const timesheets = querySnapshot.docs.map((d) => ({
+    ...d.data(),
+    timesheetId: d.id,
+  }));
+  return timesheets;
+};
+
+export const getDatabaseTimesheetsByEmail = async (
+  email: string,
+  databaseId: string,
+  { startDate, endDate }: { startDate: number; endDate: number }
+) => {
+  const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.USERS, email));
+  if (!userDoc.exists()) return null;
+  const user = userDoc.data();
+  const timesheetSnapShot = await getDocs(
+    query(
+      collection(db, FIREBASE_COLLECTIONS.TIMESHEET),
+      where("userId", "==", user.id),
+      where("databaseId", "==", databaseId),
+      where("createdAt", ">", new Date(startDate * 1000)),
+      where("createdAt", "<", new Date(endDate * 1000)),
+      orderBy("createdAt")
+    )
+  );
+
+  const timesheets = timesheetSnapShot.docs.map((d) => ({
+    ...d.data(),
+    timesheetId: d.id,
+  }));
+  return timesheets;
+};
+
+export const getDatabaseTimesheetsById = async (
+  userId: string,
+  databaseId: string,
+  { startDate, endDate }: { startDate: number; endDate: number }
+): Promise<any> => {
+  const timesheetSnapShot = await getDocs(
+    query(
+      collection(db, FIREBASE_COLLECTIONS.TIMESHEET),
+      where("userId", "==", userId),
+      where("databaseId", "==", databaseId),
+      where("createdAt", ">", new Date(startDate * 1000)),
+      where("createdAt", "<", new Date(endDate * 1000)),
+      orderBy("createdAt")
+    )
+  );
+
+  const timesheets = timesheetSnapShot.docs.map((d) => ({
     ...d.data(),
     timesheetId: d.id,
   }));

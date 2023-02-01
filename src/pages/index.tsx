@@ -1,10 +1,12 @@
+import { useProjectState } from "@/utils/Context/ProjectContext/Context";
+import { actionTypes } from "@/utils/Context/ProjectContext/reducer";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import NotionConnectModal from "../Components/NotionConnectModal";
@@ -41,6 +43,18 @@ function Home({
   workspace,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [showModal, setModal] = useState(false);
+
+  const [, dispatch] = useProjectState();
+
+  useEffect(() => {
+    if (databases?.results)
+      dispatch({
+        type: actionTypes.UPDATE_NOTION_DATABASES,
+        payload: databases?.results,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [databases]);
+
   return (
     <>
       <main className="container mx-auto flex min-h-screen flex-col items-center  p-4">

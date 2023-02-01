@@ -1,4 +1,5 @@
 import packageJSON from "../../package.json";
+import { zonedTimeToUtc } from "date-fns-tz";
 
 export function generateUUID() {
   // Public Domain/MIT
@@ -27,3 +28,16 @@ export const sleep = (delay = 3000) =>
   new Promise((resolve) => setTimeout(resolve, delay));
 
 export const getAppVersion = () => packageJSON.version;
+
+export const getZonedUtcTime = (time = new Date()) => {
+  return zonedTimeToUtc(
+    time,
+    Intl.DateTimeFormat().resolvedOptions().timeZone
+  ).toISOString();
+};
+
+export const getUtcTimeRange = (time: string) => {
+  return new Date(
+    new Date(time).getTime() - 60000 * new Date().getTimezoneOffset()
+  ).toISOString();
+};
