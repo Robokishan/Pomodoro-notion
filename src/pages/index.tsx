@@ -46,7 +46,7 @@ function Home({
       <main className="container mx-auto flex min-h-screen flex-col items-center  p-4">
         <Header imgSrc={workspace?.workspace_icon} />
 
-        {databases?.results ? (
+        {databases?.results && databases.results.length > 0 ? (
           <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
             {databases.results.map((d) => (
               <DatabaseCard
