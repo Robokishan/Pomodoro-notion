@@ -1,10 +1,10 @@
-import { usePomoState } from "@/utils/Context/PomoContext/Context";
-import { useProjectState } from "@/utils/Context/ProjectContext/Context";
-import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
+import { ExcalidrawProps } from "@excalidraw/excalidraw/types/types";
 import { useLocalStorage } from "../../hooks/Storage/useLocalStorage";
-const Excalidraw = dynamic(
+import { usePomoState } from "@/utils/Context/PomoContext/Context";
+
+const Excalidraw = dynamic<ExcalidrawProps>(
   () => import("@excalidraw/excalidraw").then((comp) => comp.Excalidraw),
   {
     loading: () => <div>Loading...</div>,
@@ -14,8 +14,8 @@ const Excalidraw = dynamic(
 
 export default function Notes() {
   const [{ project }] = usePomoState();
-
   const [initialData, setInitialData] = useLocalStorage<ExcalidrawElement[]>(project?.value ?? undefined, []);
+
   return (
     <>
       {initialData ?
