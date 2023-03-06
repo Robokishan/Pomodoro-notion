@@ -12,6 +12,7 @@
     "commit": "git-cz"
   },
   "dependencies": {
+    "@excalidraw/excalidraw": "^0.14.2",
     "@heroicons/react": "^2.0.13",
     "@nivo/core": "^0.80.0",
     "@nivo/pie": "^0.80.0",
