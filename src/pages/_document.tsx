@@ -11,6 +11,7 @@ class MyDocument extends Document {
         </Head>
         <body>
           <Main />
+          <div id="note"></div>
           <NextScript />
         </body>
       </Html>

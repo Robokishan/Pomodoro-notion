@@ -34,6 +34,7 @@ import { notEmpty } from "../../types/notEmpty";
 import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
 import { useUserState } from "../../utils/Context/UserContext/Context";
 import { useProjectState } from "@/utils/Context/ProjectContext/Context";
+import { TabsOptions } from "../../Components/Views/utils";
 
 export const getServerSideProps = async ({
   query,
@@ -76,20 +77,6 @@ export const getServerSideProps = async ({
   }
 };
 
-const tabs = [
-  {
-    label: "Timer",
-    value: "timer",
-  },
-  {
-    label: "Noise",
-    value: "noise",
-  },
-  {
-    label: "Analytics",
-    value: "analytics",
-  },
-];
 export default function Pages({
   userId,
   database,
@@ -107,7 +94,7 @@ export default function Pages({
     }>
   >([]);
 
-  const [activeTab, setActiveTab] = useState(tab || tabs[0]!.value);
+  const [activeTab, setActiveTab] = useState(tab || TabsOptions[0]!.value);
 
   const [{ busyIndicator, project }, dispatch] = usePomoState();
   const [, userDispatch] = useUserState();
@@ -249,7 +236,7 @@ export default function Pages({
             <Tabs
               activeTab={activeTab}
               setActiveTab={setActiveTab}
-              tabs={tabs}
+              tabs={TabsOptions}
             />
             <div className="m-5">
               <ProjectSelection

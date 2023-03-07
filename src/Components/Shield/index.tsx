@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import NextProgress from "nextjs-progressbar";
+import { shouldIgnore } from "@/utils/routes";
 
 interface Props {
   children: JSX.Element | React.ReactNode;
@@ -25,7 +26,7 @@ export default function Shield({ children }: Props) {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (!session && status != "loading") {
+    if (!session && status != "loading" && !shouldIgnore(Router.pathname)) {
       Router.push("/login");
     }
   }, [session, status]);

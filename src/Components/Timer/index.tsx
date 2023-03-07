@@ -15,6 +15,7 @@ import Break from "../Break";
 import Controls from "../Controls";
 import SoundLevel from "../Noises/NoiseCard/SoundLevel";
 import Session from "../Session";
+import Switch from "../Switch";
 import WakeLockNote from "./WakeLockNote";
 
 type Props = {
@@ -152,19 +153,7 @@ export default function Timer({ projectName }: Props) {
       </div>
 
       <div className="mt-2 flex items-center">
-        <label className="relative inline-flex cursor-pointer items-center">
-          <input
-            checked={shouldTickSound}
-            onChange={handleTickChange}
-            type="checkbox"
-            value=""
-            className="peer sr-only"
-          />
-          <div className="peer h-6 w-11 rounded-full bg-gray-300 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white "></div>
-          <span className="ml-3 text-sm font-medium text-gray-900 ">
-            Ticking
-          </span>
-        </label>
+        <Switch checked={shouldTickSound} onChange={handleTickChange} text="Ticking" />
         <OutsideClickHandler onOutsideClick={() => setPopover(false)}>
           <div className="relative mx-3 flex items-center ">
             <button
@@ -251,11 +240,10 @@ function PopOver({ visible } = { visible: false }) {
   return (
     <div
       id="volumebar-popover"
-      className={`${
-        visible
-          ? "scale-100 transform opacity-100"
-          : "pointer-events-none scale-95 transform opacity-0"
-      } absolute -left-20 top-8 w-52 rounded-lg border border-slate-300 bg-white p-1 text-sm font-light text-slate-500 shadow-2xl transition duration-75 ease-in`}
+      className={`${visible
+        ? "scale-100 transform opacity-100"
+        : "pointer-events-none scale-95 transform opacity-0"
+        } absolute -left-20 top-8 w-52 rounded-lg border border-slate-300 bg-white p-1 text-sm font-light text-slate-500 shadow-2xl transition duration-75 ease-in`}
     >
       <div className="relative">
         <div
