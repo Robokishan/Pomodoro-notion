@@ -47,14 +47,14 @@ export default function Views({
           <Noises />
         </div>
       </div>
-      <div
+      {activeTab === "notes" ? <div
         className={`${activeTab === "notes" ? "flex" : "hidden"
           } absolute  w-full items-center justify-center `}
       >
         <div className="w-full">
           <Notes />
         </div>
-      </div>
+      </div> : null}
     </div>
   );
 }

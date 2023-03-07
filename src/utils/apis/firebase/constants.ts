@@ -7,4 +7,5 @@ export enum FIREBASE_COLLECTIONS {
 export enum POMO_TSH_APIS {
   TIMESHEET = "/api/pomo/timesheet",
   NOTE = "/api/note",
+  NOTE_PUBLIC = "/api/note/public"
 }

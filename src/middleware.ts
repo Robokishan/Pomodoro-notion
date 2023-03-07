@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { shouldIgnore } from "./utils/routes";
 
-const publicFileRegex = /\.(.*)$/;
 const anonymousRoutes = [
   //   "/",
   "/login",
@@ -9,23 +9,14 @@ const anonymousRoutes = [
   "/auth/verify-request",
 ]; // The whitelisted routes
 
-const publicUrls = ["/privacy", "/terms", "/about", "/_offline"];
-
-const ignoredApiRoutes = ["/api/auth"];
-
 //https://stackoverflow.com/a/73845472/4919370
 
 export default function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-
   // ignore api _next static files and publicpathname
   if (
     // ignore all api routes
-    ignoredApiRoutes.findIndex((route) => pathname.startsWith(route)) != -1 ||
-    pathname.startsWith("_next") ||
-    pathname.startsWith("/static") ||
-    publicFileRegex.test(pathname) ||
-    publicUrls.findIndex((r) => pathname.startsWith(r)) != -1
+    shouldIgnore(pathname)
   ) {
     return NextResponse.next();
   }

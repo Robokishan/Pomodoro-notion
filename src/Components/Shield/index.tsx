@@ -26,7 +26,7 @@ export default function Shield({ children }: Props) {
 
   useEffect(() => {
     if (!session && status != "loading") {
-      Router.push("/login");
+      // Router.push("/login");
     }
   }, [session, status]);
 
