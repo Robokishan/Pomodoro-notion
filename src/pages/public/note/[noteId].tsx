@@ -38,10 +38,7 @@ export default function Note({
   return (
     <>
       {noteData ? (
-        <div
-          id="excalidraw-wrapper"
-          className={"mx-auto mt-10 h-screen border"}
-        >
+        <div id="excalidraw-wrapper" className={"h-screen border"}>
           <Excalidraw
             zenModeEnabled={true}
             viewModeEnabled={true}
