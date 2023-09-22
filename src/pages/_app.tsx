@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import Shield from "../Components/Shield";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 import "../styles/globals.css";
 
 interface CustomPageProps {
@@ -14,12 +15,15 @@ const MyApp = ({
   pageProps: { session, ...pageProps },
 }: AppProps<CustomPageProps>) => {
   return (
-    <SessionProvider session={session}>
-      <Shield>
-        <Component {...pageProps} />
-      </Shield>
-      <Analytics />
-    </SessionProvider>
+    <>
+      <GoogleAnalytics trackPageViews />
+      <SessionProvider session={session}>
+        <Shield>
+          <Component {...pageProps} />
+        </Shield>
+        <Analytics />
+      </SessionProvider>
+    </>
   );
 };
 
