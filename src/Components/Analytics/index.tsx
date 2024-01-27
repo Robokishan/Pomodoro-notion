@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Piechart, { PieData } from "../PieChart";
 import TimesheetList from "../TimesheetList";
 import Switcher, { SwitcherChildType } from "../Switcher";
-import WeekViewCalendar from "../Calendar";
+import CalendarView from "../CalendarView";
 
 type Props = {
   pieData: PieData[];
@@ -57,7 +57,6 @@ export default function Analytics({ pieData }: Props) {
         className={`${viewType === "chartview" ? "block" : "hidden"} w-[100%]`}
       >
         <Piechart onProjectSelect={onProjectSelect} data={pieData} />
-        <TimesheetList />
       </div>
 
       <div
@@ -65,8 +64,9 @@ export default function Analytics({ pieData }: Props) {
           viewType === "calendarview" ? "block" : "hidden"
         }   w-full items-center justify-center `}
       >
-        <h1>This is chart</h1>
+        <CalendarView />
       </div>
+      <TimesheetList />
     </div>
   );
 }
