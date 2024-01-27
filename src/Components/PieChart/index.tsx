@@ -22,11 +22,15 @@ type Props = {
 function Piechart({ data, onProjectSelect }: Props) {
   const [{ busyIndicator }] = usePomoState();
 
-  const [, userDispatch] = useUserState();
+  const [{ startDate, endDate }, userDispatch] = useUserState();
 
   return (
     <div className="h-[600px] w-full">
       <DateRange
+        dateRanges={{
+          startDate: new Date(startDate * 1000),
+          endDate: new Date(endDate * 1000),
+        }}
         onDateRangeChange={(dates) =>
           userDispatch({
             type: actionTypes.SET_DATES,
@@ -108,7 +112,7 @@ function Piechart({ data, onProjectSelect }: Props) {
           }}
         />
       ) : (
-        <h2 className="w-ful mt-10 text-center font-quicksand text-3xl font-extrabold leading-normal text-gray-700">
+        <h2 className="w-ful font-quicksand mt-10 text-center text-3xl font-extrabold leading-normal text-gray-700">
           No data for analysis
         </h2>
       )}
