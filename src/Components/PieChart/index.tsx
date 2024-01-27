@@ -113,7 +113,7 @@ function Piechart({ data, onProjectSelect }: Props) {
         />
       ) : (
         <h2 className="w-ful font-quicksand mt-10 text-center text-3xl font-extrabold leading-normal text-gray-700">
-          No data for analysis
+          No Tasks for analysis
         </h2>
       )}
     </div>

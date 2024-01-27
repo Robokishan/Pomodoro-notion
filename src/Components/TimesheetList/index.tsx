@@ -55,104 +55,116 @@ export default function TimesheetList() {
             </tr>
           </thead>
           <tbody>
-            {projectTimesheets.map((proj) => {
-              const isDisabledBtn =
-                disabledButtons.findIndex((id) => id == proj.timesheetId) != -1;
-              return (
-                <tr
-                  className="border-b border-slate-100 text-center"
-                  key={proj.timesheetId}
-                >
-                  <td className="whitespace-nowrap p-4 pl-8	underline">
-                    <Link href={proj.href ?? ""}>
-                      <a>{proj.projectName}</a>
-                    </Link>
-                  </td>
-                  <td>
-                    <span
-                      {...(proj.startTime.approx == true
-                        ? { title: "Approx value" }
-                        : {})}
-                      className={`mx-2 whitespace-nowrap ${
-                        proj.startTime.approx == true
-                          ? "cursor-pointer text-orange-500" //if approximate value then show orange
-                          : null
-                      }`}
-                    >
-                      {proj.startTime.value}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      {...(proj.susp == true
-                        ? { title: "Suspicious value" }
-                        : {})}
-                      className={`mx-2 whitespace-nowrap ${
-                        proj.susp == true
-                          ? "cursor-pointer text-blue-400" //if susp value then show blue
-                          : null
-                      }`}
-                    >
-                      {proj.createdAt}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      {...(proj.susp == true
-                        ? { title: "Suspicious value" }
-                        : {})}
-                      className={`mx-2 ${
-                        proj.susp == true
-                          ? "cursor-pointer text-blue-400" //if susp value then show blue
-                          : null
-                      }`}
-                    >
-                      {convertToMMSS(proj.timerValue, true, true)}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      disabled={isDisabledBtn}
-                      className={`rounded-md ${
-                        isDisabledBtn
-                          ? "bg-red-300 text-slate-200 "
-                          : "bg-red-400 text-gray-50 hover:bg-red-500 active:bg-red-600"
-                      } px-4 py-2`}
-                      onClick={async () => {
-                        setDisabledButtons((prev) => [
-                          ...prev,
-                          proj.timesheetId,
-                        ]);
-                        deleteTimesheet({
-                          projectId: proj.projectId,
-                          timesheetId: proj.timesheetId,
-                          userId,
-                        })
-                          .then(() => {
-                            toast.success("Delete done", {
-                              autoClose: 1000,
-                            });
-                            if (prefTimeout.current)
-                              clearTimeout(prefTimeout.current);
-                            prefTimeout.current = setTimeout(() => {
-                              mutate().finally(() =>
-                                setDisabledButtons((prev) => [
-                                  ...prev.filter(
-                                    (id) => id != proj.timesheetId
-                                  ),
-                                ])
-                              );
-                            }, 3000);
+            {projectTimesheets.length > 0 ? (
+              projectTimesheets.map((proj) => {
+                const isDisabledBtn =
+                  disabledButtons.findIndex((id) => id == proj.timesheetId) !=
+                  -1;
+                return (
+                  <tr
+                    className="border-b border-slate-100 text-center"
+                    key={proj.timesheetId}
+                  >
+                    <td className="whitespace-nowrap p-4 pl-8	underline">
+                      <Link href={proj.href ?? ""}>
+                        <a>{proj.projectName}</a>
+                      </Link>
+                    </td>
+                    <td>
+                      <span
+                        {...(proj.startTime.approx == true
+                          ? { title: "Approx value" }
+                          : {})}
+                        className={`mx-2 whitespace-nowrap ${
+                          proj.startTime.approx == true
+                            ? "cursor-pointer text-orange-500" //if approximate value then show orange
+                            : null
+                        }`}
+                      >
+                        {proj.startTime.value}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        {...(proj.susp == true
+                          ? { title: "Suspicious value" }
+                          : {})}
+                        className={`mx-2 whitespace-nowrap ${
+                          proj.susp == true
+                            ? "cursor-pointer text-blue-400" //if susp value then show blue
+                            : null
+                        }`}
+                      >
+                        {proj.createdAt}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        {...(proj.susp == true
+                          ? { title: "Suspicious value" }
+                          : {})}
+                        className={`mx-2 ${
+                          proj.susp == true
+                            ? "cursor-pointer text-blue-400" //if susp value then show blue
+                            : null
+                        }`}
+                      >
+                        {convertToMMSS(proj.timerValue, true, true)}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        disabled={isDisabledBtn}
+                        className={`rounded-md ${
+                          isDisabledBtn
+                            ? "bg-red-300 text-slate-200 "
+                            : "bg-red-400 text-gray-50 hover:bg-red-500 active:bg-red-600"
+                        } px-4 py-2`}
+                        onClick={async () => {
+                          setDisabledButtons((prev) => [
+                            ...prev,
+                            proj.timesheetId,
+                          ]);
+                          deleteTimesheet({
+                            projectId: proj.projectId,
+                            timesheetId: proj.timesheetId,
+                            userId,
                           })
-                          .catch(() => toast.error("Delete error"));
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                            .then(() => {
+                              toast.success("Delete done", {
+                                autoClose: 1000,
+                              });
+                              if (prefTimeout.current)
+                                clearTimeout(prefTimeout.current);
+                              prefTimeout.current = setTimeout(() => {
+                                mutate().finally(() =>
+                                  setDisabledButtons((prev) => [
+                                    ...prev.filter(
+                                      (id) => id != proj.timesheetId
+                                    ),
+                                  ])
+                                );
+                              }, 3000);
+                            })
+                            .catch(() => toast.error("Delete error"));
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr className="border-b border-slate-100 text-center text-slate-600">
+                <td
+                  colSpan={5}
+                  className="w-full bg-gray-100/50 p-2 text-center"
+                >
+                  No Timesheets
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
