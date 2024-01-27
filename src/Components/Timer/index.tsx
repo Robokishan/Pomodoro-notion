@@ -153,7 +153,11 @@ export default function Timer({ projectName }: Props) {
       </div>
 
       <div className="mt-2 flex items-center">
-        <Switch checked={shouldTickSound} onChange={handleTickChange} text="Ticking" />
+        <Switch
+          checked={shouldTickSound}
+          onChange={handleTickChange}
+          text="Ticking"
+        />
         <OutsideClickHandler onOutsideClick={() => setPopover(false)}>
           <div className="relative mx-3 flex items-center ">
             <button
@@ -171,9 +175,10 @@ export default function Timer({ projectName }: Props) {
           <ArrowsPointingOutIcon className="h-5 w-5" />
         </button>
       </div>
-      {showNote && (
+      {/* disabled wakelock not now since it is no longer needed */}
+      {/* {showNote && (
         <WakeLockNote onCloseClick={() => setNote(null)} type={showNote} />
-      )}
+      )} */}
       <FullScreen handle={timerScreen}>
         <div className={`${timerScreen.active ? "block" : "hidden"} `}>
           <div className="flex h-screen w-screen flex-col items-center justify-center">
@@ -240,10 +245,11 @@ function PopOver({ visible } = { visible: false }) {
   return (
     <div
       id="volumebar-popover"
-      className={`${visible
-        ? "scale-100 transform opacity-100"
-        : "pointer-events-none scale-95 transform opacity-0"
-        } absolute -left-20 top-8 w-52 rounded-lg border border-slate-300 bg-white p-1 text-sm font-light text-slate-500 shadow-2xl transition duration-75 ease-in`}
+      className={`${
+        visible
+          ? "scale-100 transform opacity-100"
+          : "pointer-events-none scale-95 transform opacity-0"
+      } absolute -left-20 top-8 w-52 rounded-lg border border-slate-300 bg-white p-1 text-sm font-light text-slate-500 shadow-2xl transition duration-75 ease-in`}
     >
       <div className="relative">
         <div
