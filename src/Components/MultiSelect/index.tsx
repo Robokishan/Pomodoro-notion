@@ -1,5 +1,5 @@
 import React from "react";
-import chroma from "chroma-js";
+import chroma, { Color } from "chroma-js";
 
 export interface ColourOption {
   readonly value: string;
@@ -31,7 +31,14 @@ const colourStyles: StylesConfig<ColourOption, true> = {
     };
   },
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    const color = chroma(data.color);
+    let color: Color;
+    try {
+      color = chroma(data.color);
+    } catch (e) {
+      //handle notion undentified colors
+      console.error({ e, color: data.color });
+      color = chroma("#D1D5E6");
+    }
     return {
       ...styles,
       backgroundColor: isDisabled
