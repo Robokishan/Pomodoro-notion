@@ -17,6 +17,7 @@ import SoundLevel from "../Noises/NoiseCard/SoundLevel";
 import Session from "../Session";
 import Switch from "../Switch";
 import WakeLockNote from "./WakeLockNote";
+import Clock from "../Clock";
 
 type Props = {
   projectName: string;
@@ -203,6 +204,7 @@ export default function Timer({ projectName }: Props) {
             >
               {clockifiedValue}
             </h1>
+            <Clock />
           </div>
         </div>
       </FullScreen>
