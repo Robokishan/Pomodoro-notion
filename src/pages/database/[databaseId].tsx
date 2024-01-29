@@ -3,17 +3,13 @@ import { trpc } from "@/utils/trpc";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getSession } from "next-auth/react";
 import Link from "next/link";
 import ContentLoader from "react-content-loader";
 
 export const getServerSideProps = async ({
   query,
-  req,
 }: GetServerSidePropsContext) => {
   try {
-    const session = await getSession({ req });
-    if (!session?.user?.email) throw new Error("Something went wrong");
     return {
       props: {
         databaseId: query.databaseId as string,

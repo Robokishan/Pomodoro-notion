@@ -1,7 +1,6 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -11,6 +10,8 @@ import NotionTags from "../../Components/NotionTags";
 
 import { useProjectState } from "@/utils/Context/ProjectContext/Context";
 import { trpc } from "@/utils/trpc";
+import ContentLoader from "react-content-loader";
+import PlaceHolderLoader from "../../Components/PlaceHolderLoader";
 import Tabs from "../../Components/Tabs";
 import { TabsOptions } from "../../Components/Views/utils";
 import useFormattedData from "../../hooks/useFormattedData";
@@ -21,8 +22,6 @@ import { actionTypes as projActiontype } from "../../utils/Context/ProjectContex
 import { useUserState } from "../../utils/Context/UserContext/Context";
 import { actionTypes as userActiontype } from "../../utils/Context/UserContext/reducer";
 import { getProjectId, getProjectTitle } from "../../utils/notionutils";
-import ContentLoader from "react-content-loader";
-import PlaceHolderLoader from "../../Components/PlaceHolderLoader";
 
 const ProjectSelection = dynamic(
   () => import("../../Components/ProjectSelection"),
@@ -37,11 +36,8 @@ const Views = dynamic(() => import("../../Components/Views"), {
 
 export const getServerSideProps = async ({
   query,
-  req,
 }: GetServerSidePropsContext) => {
   try {
-    const session = await getSession({ req });
-    if (!session?.user?.email) throw new Error("Session not found");
     return {
       props: {
         tab: (query?.tab as string) || null,
