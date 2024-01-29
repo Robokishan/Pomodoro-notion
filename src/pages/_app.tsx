@@ -5,6 +5,7 @@ import Shield from "../Components/Shield";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import "../styles/globals.css";
+import { trpc } from "../utils/trpc";
 
 interface CustomPageProps {
   session: Session;
@@ -27,4 +28,4 @@ const MyApp = ({
   );
 };
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);
