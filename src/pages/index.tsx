@@ -4,6 +4,7 @@ import { useState } from "react";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import NotionConnectModal from "../Components/NotionConnectModal";
+import ContentLoader from "react-content-loader";
 
 function Home() {
   const [showModal, setModal] = useState(false);
@@ -13,6 +14,26 @@ function Home() {
   return (
     <>
       <main className="container mx-auto flex min-h-screen flex-col items-center  p-4">
+        {isFetching && (
+          <div>
+            <ContentLoader
+              className="mt-2"
+              height={100}
+              width={160}
+              viewBox="0 0 160 100"
+            >
+              <rect x="0" y="0" rx="5" ry="5" width="160" height="100" />
+            </ContentLoader>
+            <ContentLoader
+              className="mt-2"
+              height={100}
+              width={160}
+              viewBox="0 0 160 100"
+            >
+              <rect x="0" y="0" rx="5" ry="5" width="160" height="100" />
+            </ContentLoader>
+          </div>
+        )}
         {!isFetching && data && (
           <>
             <Header imgSrc={data?.workspace?.workspace_icon} />

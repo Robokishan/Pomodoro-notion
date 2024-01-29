@@ -1,16 +1,17 @@
 import dynamic from "next/dynamic";
+import PlaceHolderLoader from "../PlaceHolderLoader";
 const Noises = dynamic(() => import("../Noises"), {
-  loading: () => <div>Loading...</div>,
+  loading: () => <PlaceHolderLoader />,
 });
 const Analytics = dynamic(() => import("../Analytics"), {
-  loading: () => <div>Loading...</div>,
+  loading: () => <PlaceHolderLoader />,
 });
 const Timer = dynamic(() => import("../Timer"), {
-  loading: () => <div>Loading...</div>,
+  loading: () => <PlaceHolderLoader />,
 });
 
 const Notes = dynamic(() => import("../Notes"), {
-  loading: () => <div>Loading...</div>,
+  loading: () => <PlaceHolderLoader />,
 });
 
 import { PieData } from "../PieChart";
@@ -27,34 +28,40 @@ export default function Views({
   return (
     <div className="relative w-full ">
       <div
-        className={`${activeTab === "analytics" ? "block" : "hidden"
-          } absolute w-[100%]`}
+        className={`${
+          activeTab === "analytics" ? "block" : "hidden"
+        } absolute w-[100%]`}
       >
         <Analytics pieData={pieData} />
       </div>
 
       <div
-        className={`${activeTab === "timer" ? "flex" : "hidden"
-          } absolute  w-full items-center justify-center `}
+        className={`${
+          activeTab === "timer" ? "flex" : "hidden"
+        } absolute  w-full items-center justify-center `}
       >
         <Timer projectName={projectName} />
       </div>
       <div
-        className={`${activeTab === "noise" ? "flex" : "hidden"
-          } absolute  w-full items-center justify-center `}
+        className={`${
+          activeTab === "noise" ? "flex" : "hidden"
+        } absolute  w-full items-center justify-center `}
       >
         <div className="w-full">
           <Noises />
         </div>
       </div>
-      {activeTab === "notes" ? <div
-        className={`${activeTab === "notes" ? "flex" : "hidden"
+      {activeTab === "notes" ? (
+        <div
+          className={`${
+            activeTab === "notes" ? "flex" : "hidden"
           } absolute  w-full items-center justify-center `}
-      >
-        <div className="w-full">
-          <Notes />
+        >
+          <div className="w-full">
+            <Notes />
+          </div>
         </div>
-      </div> : null}
+      ) : null}
     </div>
   );
 }

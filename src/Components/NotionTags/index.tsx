@@ -1,7 +1,8 @@
 import dynamic from "next/dynamic";
 import React from "react";
+import PlaceHolderLoader from "../PlaceHolderLoader";
 const MultiSelect = dynamic(() => import("../MultiSelect"), {
-  loading: () => <div>Loading...</div>,
+  loading: () => <PlaceHolderLoader />,
 });
 
 type Props = {

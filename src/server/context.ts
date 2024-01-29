@@ -5,8 +5,6 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 export async function createContext(ctx: trpcNext.CreateNextContextOptions) {
-  const { req } = ctx;
-  console.log({ req });
   try {
     const session = await unstable_getServerSession(
       ctx.req,
