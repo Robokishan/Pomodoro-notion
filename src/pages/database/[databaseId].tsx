@@ -1,11 +1,11 @@
+import { getProjectTitle } from "@/utils/notionutils";
+import { trpc } from "@/utils/trpc";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
-import { getSession } from "next-auth/react";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
-import { queryDatabase } from "../../utils/apis/notion/database";
-import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
-import { getProjectTitle } from "@/utils/notionutils";
+import ContentLoader from "react-content-loader";
 
 export const getServerSideProps = async ({
   query,
@@ -14,16 +14,9 @@ export const getServerSideProps = async ({
   try {
     const session = await getSession({ req });
     if (!session?.user?.email) throw new Error("Something went wrong");
-    const user = await fetchNotionUser(session?.user?.email);
-    if (!user) throw new Error("User not found");
-    const database = await queryDatabase(
-      query.databaseId as string,
-      true,
-      user.accessToken
-    );
     return {
       props: {
-        database,
+        databaseId: query.databaseId as string,
       },
     };
   } catch (error) {
@@ -37,9 +30,12 @@ export const getServerSideProps = async ({
 };
 
 export default function Pages({
-  database,
-  error,
+  databaseId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { data, isFetching } = trpc.private.queryDatabase.useQuery({
+    databaseId: databaseId as string,
+  });
+
   return (
     <>
       <main className=" container mx-auto flex min-h-screen flex-col items-center p-4">
@@ -52,10 +48,10 @@ export default function Pages({
           </span>
         </h2>
 
-        {database ? (
+        {!isFetching && data?.database ? (
           <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
-            {database.results && database.results?.length > 0 ? (
-              database.results.map((r) => (
+            {data?.database.results && data?.database.results?.length > 0 ? (
+              data?.database.results.map((r) => (
                 <PageTile
                   key={r.id}
                   icon={r.icon?.emoji || ""}
@@ -67,9 +63,19 @@ export default function Pages({
             )}
           </div>
         ) : (
-          <h2 className="w-100 mt-10 text-center leading-normal text-gray-500">
-            {JSON.stringify(error)}
-          </h2>
+          <div className="m-5 flex flex-col gap-3">
+            {new Array(2).fill(0).map((val, index) => (
+              <ContentLoader
+                key={`database-query-loader-${index}`}
+                className="mt-2"
+                height={48}
+                width={310}
+                viewBox="0 0 310 48"
+              >
+                <rect x="0" y="0" rx="5" ry="5" width="310" height="48" />
+              </ContentLoader>
+            ))}
+          </div>
         )}
       </main>
     </>
