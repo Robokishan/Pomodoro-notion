@@ -4,42 +4,56 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import Line from "../../Components/Line";
 import NotionTags from "../../Components/NotionTags";
 
-import { useProjectState } from "@/utils/Context/ProjectContext/Context";
-import { trpc } from "@/utils/trpc";
-import ContentLoader from "react-content-loader";
-import PlaceHolderLoader from "../../Components/PlaceHolderLoader";
-import Tabs from "../../Components/Tabs";
-import { TabsOptions } from "../../Components/Views/utils";
-import useFormattedData from "../../hooks/useFormattedData";
-import { notEmpty } from "../../types/notEmpty";
-import { usePomoState } from "../../utils/Context/PomoContext/Context";
-import { actionTypes } from "../../utils/Context/PomoContext/reducer";
-import { actionTypes as projActiontype } from "../../utils/Context/ProjectContext/reducer";
-import { useUserState } from "../../utils/Context/UserContext/Context";
-import { actionTypes as userActiontype } from "../../utils/Context/UserContext/reducer";
-import { getProjectId, getProjectTitle } from "../../utils/notionutils";
-
 const ProjectSelection = dynamic(
   () => import("../../Components/ProjectSelection"),
   {
-    loading: () => <PlaceHolderLoader />,
+    loading: () => <div>Loading...</div>,
   }
 );
 
+import Tabs from "../../Components/Tabs";
 const Views = dynamic(() => import("../../Components/Views"), {
-  loading: () => <PlaceHolderLoader />,
+  loading: () => <div>Loading...</div>,
 });
+import useFormattedData from "../../hooks/useFormattedData";
+import {
+  queryDatabase,
+  retrieveDatabase,
+} from "../../utils/apis/notion/database";
+import { getProjectId, getProjectTitle } from "../../utils/notionutils";
+import { actionTypes } from "../../utils/Context/PomoContext/reducer";
+import { actionTypes as userActiontype } from "../../utils/Context/UserContext/reducer";
+import { actionTypes as projActiontype } from "../../utils/Context/ProjectContext/reducer";
+import { usePomoState } from "../../utils/Context/PomoContext/Context";
+import { notEmpty } from "../../types/notEmpty";
+import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
+import { useUserState } from "../../utils/Context/UserContext/Context";
+import { useProjectState } from "@/utils/Context/ProjectContext/Context";
+import { TabsOptions } from "../../Components/Views/utils";
 
 export const getServerSideProps = async ({
   query,
+  req,
 }: GetServerSidePropsContext) => {
   try {
+    const session = await getSession({ req });
+    if (!session?.user?.email) throw new Error("Session not found");
+    const user = await fetchNotionUser(session?.user?.email);
+    if (!user) throw new Error("User not found");
+    const [database, db] = await Promise.all([
+      queryDatabase(query.databaseId as string, true, user.accessToken),
+      retrieveDatabase(query.databaseId as string, true, user.accessToken),
+    ]);
     return {
       props: {
+        userId: user.id,
+        database,
+        db,
         tab: (query?.tab as string) || null,
         databaseId: query.databaseId as string,
       },
@@ -64,13 +78,13 @@ export const getServerSideProps = async ({
 };
 
 export default function Pages({
+  userId,
+  database,
+  db,
   tab,
+  error,
   databaseId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data, isFetching, error } = trpc.private.getDatabaseDetail.useQuery({
-    databaseId: databaseId as string,
-  });
-
   const router = useRouter();
   const [selectedProperties, setProperties] = useState<
     Array<{
@@ -101,13 +115,14 @@ export default function Pages({
     );
   }, [activeTab]);
 
-  useEffect(() => {
-    if (data?.userId && !isFetching)
+  useEffect(
+    () =>
       userDispatch({
         type: userActiontype.SET_USERID,
-        payload: data?.userId,
-      });
-  }, [data, isFetching]);
+        payload: userId,
+      }),
+    [userId]
+  );
 
   useEffect(() => {
     if (databaseId)
@@ -118,9 +133,9 @@ export default function Pages({
   }, [databaseId]);
 
   useEffect(() => {
-    if (data?.database?.results) {
+    if (database?.results) {
       const notionProjects =
-        data.database?.results
+        database?.results
           .map((project) => {
             // filter project list based on tags selected
             if (
@@ -141,13 +156,13 @@ export default function Pages({
         payload: notionProjects,
       });
     }
-  }, [data?.database?.results, selectedProperties]);
+  }, [database?.results, selectedProperties]);
 
   const [piedata] = useFormattedData();
 
   const projects = useMemo(() => {
     return (
-      data?.database?.results
+      database?.results
         .map((project) => {
           // filter project list based on tags selected
           if (
@@ -167,21 +182,21 @@ export default function Pages({
         })
         .filter(notEmpty) || []
     );
-  }, [data?.database?.results, selectedProperties]);
+  }, [database?.results, selectedProperties]);
 
   const properties = useMemo(() => {
     if (
-      data?.db?.properties &&
-      data?.db.properties.Tags?.multi_select &&
-      data?.db.properties.Tags.multi_select.options
+      db?.properties &&
+      db.properties.Tags?.multi_select &&
+      db.properties.Tags.multi_select.options
     )
-      return data?.db?.properties?.Tags?.multi_select?.options.map((prp) => ({
+      return db?.properties?.Tags?.multi_select?.options.map((prp) => ({
         label: prp.name,
         value: prp.id,
         color: prp.color,
       }));
     else return [];
-  }, [data?.db]);
+  }, []);
 
   const onProjectSelect = (proj: { label: string; value: string } | null) => {
     if (!proj)
@@ -223,47 +238,27 @@ export default function Pages({
               setActiveTab={setActiveTab}
               tabs={TabsOptions}
             />
-            {isFetching ? (
-              <div className="m-5 flex flex-col gap-3">
-                {new Array(2).fill(0).map((val, index) => (
-                  <ContentLoader
-                    key={`database-loader-${index}`}
-                    className="mt-2"
-                    height={48}
-                    width={310}
-                    viewBox="0 0 310 48"
-                  >
-                    <rect x="0" y="0" rx="5" ry="5" width="310" height="48" />
-                  </ContentLoader>
-                ))}
-              </div>
-            ) : (
-              <>
-                <div className="m-5">
-                  <ProjectSelection
-                    disabled={busyIndicator}
-                    value={project}
-                    handleSelect={onProjectSelect}
-                    projects={projects}
-                  />
-                </div>
-                <NotionTags
-                  disabled={busyIndicator}
-                  handleSelect={setProperties}
-                  options={properties}
-                />
-                <Views
-                  activeTab={activeTab}
-                  pieData={piedata}
-                  projectName={getProjectTitle(
-                    data?.database?.results.find(
-                      (pr) => pr.id == String(project?.value)
-                    ),
-                    "Please select project"
-                  )}
-                />
-              </>
-            )}
+            <div className="m-5">
+              <ProjectSelection
+                disabled={busyIndicator}
+                value={project}
+                handleSelect={onProjectSelect}
+                projects={projects}
+              />
+            </div>
+            <NotionTags
+              disabled={busyIndicator}
+              handleSelect={setProperties}
+              options={properties}
+            />
+            <Views
+              activeTab={activeTab}
+              pieData={piedata}
+              projectName={getProjectTitle(
+                database?.results.find((pr) => pr.id == String(project?.value)),
+                "Please select project"
+              )}
+            />
           </>
         ) : (
           JSON.stringify(error)
