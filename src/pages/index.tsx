@@ -9,7 +9,9 @@ import ContentLoader from "react-content-loader";
 function Home() {
   const [showModal, setModal] = useState(false);
 
-  const { data, isFetching } = trpc.private.getDatabases.useQuery();
+  const { data, isFetching } = trpc.private.getDatabases.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <>

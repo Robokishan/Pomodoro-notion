@@ -28,9 +28,14 @@ export const getServerSideProps = async ({
 export default function Pages({
   databaseId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data, isFetching } = trpc.private.queryDatabase.useQuery({
-    databaseId: databaseId as string,
-  });
+  const { data, isFetching } = trpc.private.queryDatabase.useQuery(
+    {
+      databaseId: databaseId as string,
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   return (
     <>
