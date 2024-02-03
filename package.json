@@ -22,6 +22,7 @@
     "@trpc/react-query": "^11.0.0-next-beta.242",
     "@trpc/server": "^11.0.0-next-beta.242",
     "@vercel/analytics": "^0.1.10",
+    "@vercel/speed-insights": "^1.0.9",
     "axios": "^1.2.1",
     "chroma-js": "^2.4.2",
     "date-fns": "^2.29.3",

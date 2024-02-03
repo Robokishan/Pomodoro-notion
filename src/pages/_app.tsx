@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import "../styles/globals.css";
 import { trpc } from "../utils/trpc";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 interface CustomPageProps {
   session: Session;
@@ -18,6 +19,7 @@ const MyApp = ({
   return (
     <>
       <GoogleAnalytics trackPageViews />
+      <SpeedInsights />
       <SessionProvider session={session}>
         <Shield>
           <Component {...pageProps} />
