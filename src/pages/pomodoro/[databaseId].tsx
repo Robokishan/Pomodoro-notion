@@ -1,16 +1,26 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import Line from "../../Components/Line";
 import NotionTags from "../../Components/NotionTags";
-import ProjectSelection from "../../Components/ProjectSelection";
+
+const ProjectSelection = dynamic(
+  () => import("../../Components/ProjectSelection"),
+  {
+    loading: () => <div>Loading...</div>,
+  }
+);
+
 import Tabs from "../../Components/Tabs";
-import Views from "../../Components/Views";
+const Views = dynamic(() => import("../../Components/Views"), {
+  loading: () => <div>Loading...</div>,
+});
 import useFormattedData from "../../hooks/useFormattedData";
-import { getSession } from "next-auth/react";
 import {
   queryDatabase,
   retrieveDatabase,
@@ -24,6 +34,7 @@ import { notEmpty } from "../../types/notEmpty";
 import { fetchNotionUser } from "../../utils/apis/firebase/userNotion";
 import { useUserState } from "../../utils/Context/UserContext/Context";
 import { useProjectState } from "@/utils/Context/ProjectContext/Context";
+import { TabsOptions } from "../../Components/Views/utils";
 
 export const getServerSideProps = async ({
   query,
@@ -66,20 +77,6 @@ export const getServerSideProps = async ({
   }
 };
 
-const tabs = [
-  {
-    label: "Timer",
-    value: "timer",
-  },
-  {
-    label: "Noise",
-    value: "noise",
-  },
-  {
-    label: "Analytics",
-    value: "analytics",
-  },
-];
 export default function Pages({
   userId,
   database,
@@ -97,7 +94,7 @@ export default function Pages({
     }>
   >([]);
 
-  const [activeTab, setActiveTab] = useState(tab || tabs[0]!.value);
+  const [activeTab, setActiveTab] = useState(tab || TabsOptions[0]!.value);
 
   const [{ busyIndicator, project }, dispatch] = usePomoState();
   const [, userDispatch] = useUserState();
@@ -239,7 +236,7 @@ export default function Pages({
             <Tabs
               activeTab={activeTab}
               setActiveTab={setActiveTab}
-              tabs={tabs}
+              tabs={TabsOptions}
             />
             <div className="m-5">
               <ProjectSelection

@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FirestoreAdapter from "../../../Adapters/Firestore";
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -12,4 +12,6 @@ export default NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   adapter: FirestoreAdapter(db),
-});
+};
+
+export default NextAuth(authOptions);

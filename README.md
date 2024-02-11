@@ -18,6 +18,8 @@ Purpose of this app to demonstrate how to use notion apis and to develop product
 | Deployment | Vercel |
 | Authentication | https://next-auth.js.org/ |
 | Charts | https://nivo.rocks/ |
+| Excalidraw | [Excalidraw](https://www.npmjs.com/package/@excalidraw/excalidraw) |
+| tRPC | [tRPC](https://trpc.io/)|
 
 
 ###  Purpose

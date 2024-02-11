@@ -6,7 +6,7 @@ import { StopNoiseCard } from "./StopNoiseCard";
 export default function Noises() {
   return (
     <NoiseContext>
-      <div className="mx-auto mt-10 grid w-fit grid-cols-[repeat(2,auto)] place-content-center place-items-center gap-10 sm:grid-cols-[repeat(3,auto)] md:grid-cols-[repeat(4,auto)] ">
+      <div className="mx-auto my-10 grid w-fit grid-cols-[repeat(2,auto)] place-content-center place-items-center gap-10 sm:grid-cols-[repeat(3,auto)] md:grid-cols-[repeat(4,auto)] ">
         <StopNoiseCard />
         {noises.map((noise) => (
           <NoiseCard

@@ -1,7 +1,20 @@
-import Analytics from "../Analytics";
-import Noises from "../Noises";
+import dynamic from "next/dynamic";
+import PlaceHolderLoader from "../PlaceHolderLoader";
+const Noises = dynamic(() => import("../Noises"), {
+  loading: () => <PlaceHolderLoader />,
+});
+const Analytics = dynamic(() => import("../Analytics"), {
+  loading: () => <PlaceHolderLoader />,
+});
+const Timer = dynamic(() => import("../Timer"), {
+  loading: () => <PlaceHolderLoader />,
+});
+
+const Notes = dynamic(() => import("../Notes"), {
+  loading: () => <PlaceHolderLoader />,
+});
+
 import { PieData } from "../PieChart";
-import Timer from "../Timer";
 
 export default function Views({
   activeTab,
@@ -16,7 +29,7 @@ export default function Views({
     <div className="relative w-full ">
       <div
         className={`${
-          activeTab === "analytics" ? "visible" : "invisible"
+          activeTab === "analytics" ? "block" : "hidden"
         } absolute w-[100%]`}
       >
         <Analytics pieData={pieData} />
@@ -24,20 +37,31 @@ export default function Views({
 
       <div
         className={`${
-          activeTab === "timer" ? "visible" : "invisible"
-        } absolute flex w-full items-center justify-center `}
+          activeTab === "timer" ? "flex" : "hidden"
+        } absolute  w-full items-center justify-center `}
       >
         <Timer projectName={projectName} />
       </div>
       <div
         className={`${
-          activeTab === "noise" ? "visible" : "invisible"
-        } absolute flex w-full items-center justify-center `}
+          activeTab === "noise" ? "flex" : "hidden"
+        } absolute  w-full items-center justify-center `}
       >
         <div className="w-full">
           <Noises />
         </div>
       </div>
+      {activeTab === "notes" ? (
+        <div
+          className={`${
+            activeTab === "notes" ? "flex" : "hidden"
+          } absolute  w-full items-center justify-center `}
+        >
+          <div className="w-full">
+            <Notes />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

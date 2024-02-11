@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import ContentLoader from "react-content-loader";
 import { toast } from "react-toastify";
 import useNotification from "../../hooks/useNotification";
 import Dropdown, { MenuType } from "../Dropdown";
@@ -11,7 +12,7 @@ import ExportAsModal from "../ExportAsModal";
 import NotionModifyModal from "../NotionModifyModal";
 
 export default function Header({ imgSrc }: { imgSrc?: string }) {
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
 
   const [showNotionModal, setNotionModal] = useState(false);
   const [showExportAs, setExportAs] = useState(false);
@@ -161,22 +162,53 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
         </Link>
       </h1>
       {/* show dropdown if user logged in */}
-      {session && (
+      {sessionStatus == "loading" ? (
         <div>
           <div className="hidden flex-col items-center justify-center sm:flex ">
-            {session.user && session?.user.name} <br />
+            <ContentLoader
+              className="bg-red-50"
+              height={20}
+              width={89}
+              viewBox="0 0 89 20"
+            >
+              <rect x="0" y="0" width={89} height={20} />
+            </ContentLoader>
           </div>
-          <Image
-            loading="lazy"
-            src={imgSrc ?? session.user?.image ?? "https://picsum.photos/50"}
-            alt="pic"
-            width={50}
+          <ContentLoader
+            className="mt-2"
             height={50}
-          />
-          <div>
-            <Dropdown menuList={menuList} />
-          </div>
+            width={50}
+            viewBox="0 0 50 50"
+          >
+            <rect x="0" y="0" rx="5" ry="5" width="50" height="50" />
+          </ContentLoader>
+          <ContentLoader
+            className="mt-2"
+            height={30}
+            width={30}
+            viewBox="0 0 30 30"
+          >
+            <rect x="0" y="0" rx="100" ry="100" width="30" height="30" />
+          </ContentLoader>
         </div>
+      ) : (
+        session && (
+          <div>
+            <div className="hidden flex-col items-center justify-center sm:flex ">
+              {session.user && session?.user.name} <br />
+            </div>
+            <Image
+              loading="lazy"
+              src={imgSrc ?? session.user?.image ?? "https://picsum.photos/50"}
+              alt="pic"
+              width={50}
+              height={50}
+            />
+            <div>
+              <Dropdown menuList={menuList} />
+            </div>
+          </div>
+        )
       )}
       {showNotionModal && <NotionModifyModal setModal={setNotionModal} />}
       {showExportAs && (

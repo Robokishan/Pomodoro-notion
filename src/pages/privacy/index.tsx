@@ -1,9 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import { BASE_URL } from "@/utils/constants";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
 import Footer from "../../Components/Footer";
-import Header from "../../Components/Header";
+
+const Header = dynamic(() => import("../../Components/Header"), {
+  loading: () => <div>Loading...</div>,
+});
 
 export default function Privacy() {
   return (

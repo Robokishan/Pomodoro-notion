@@ -36,8 +36,10 @@ const getTodayRange = () => ({
 });
 
 export default function DateRange({
+  dateRanges,
   onDateRangeChange,
 }: {
+  dateRanges: Range;
   onDateRangeChange: ({
     startDate,
     endDate,
@@ -50,7 +52,6 @@ export default function DateRange({
   const [calendarDates, setCalendarDates] = useState<[Range]>([
     getTodayRange(),
   ]);
-  const [dateRanges, setDateRanges] = useState<Range>();
 
   const handleDateRangeChange = (range: RangeKeyDict) => {
     if (
@@ -72,10 +73,7 @@ export default function DateRange({
       };
 
       setCalendarDates([selection]);
-      setDateRanges({
-        startDate: selection.startDate,
-        endDate: selection.endDate,
-      });
+
       onDateRangeChange({
         startDate: getUnixTime(selection.startDate),
         endDate: getUnixTime(selection.endDate),

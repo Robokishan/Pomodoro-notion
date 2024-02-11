@@ -1,3 +1,4 @@
+import { useWorkerInterval } from "@/utils/worker-interval";
 import { useEffect, useRef } from "react";
 
 export default function useInterval(
@@ -5,6 +6,9 @@ export default function useInterval(
   delay?: number | null
 ) {
   const callbacRef = useRef<() => void>();
+
+  // web worker based setInterval to avoid sleeping of setInterval when tab is in background
+  const { clearInterval, setInterval } = useWorkerInterval();
 
   // update callback function with current render callback that has access to latest props and state
   useEffect(() => {
@@ -16,7 +20,9 @@ export default function useInterval(
       const interval = setInterval(() => {
         callbacRef.current?.();
       }, delay);
-      return () => clearInterval(interval);
+      return () => {
+        if (interval) clearInterval(interval);
+      };
     }
-  }, [delay]);
+  }, [delay, clearInterval, setInterval]);
 }

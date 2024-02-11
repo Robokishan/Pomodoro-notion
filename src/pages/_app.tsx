@@ -2,7 +2,10 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import Shield from "../Components/Shield";
+import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 import "../styles/globals.css";
+import { trpc } from "../utils/trpc";
 
 interface CustomPageProps {
   session: Session;
@@ -13,12 +16,16 @@ const MyApp = ({
   pageProps: { session, ...pageProps },
 }: AppProps<CustomPageProps>) => {
   return (
-    <SessionProvider session={session}>
-      <Shield>
-        <Component {...pageProps} />
-      </Shield>
-    </SessionProvider>
+    <>
+      <GoogleAnalytics trackPageViews />
+      <SessionProvider session={session}>
+        <Shield>
+          <Component {...pageProps} />
+        </Shield>
+        <Analytics />
+      </SessionProvider>
+    </>
   );
 };
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);

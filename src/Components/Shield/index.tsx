@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { useEffect } from "react";
-import NextNProgress from "nextjs-progressbar";
+
 import { PomoStateProvider } from "../../utils/Context/PomoContext/Context";
 import reducer, { initialState } from "../../utils/Context/PomoContext/reducer";
 import ureducer, {
@@ -15,6 +15,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
+import NextProgress from "nextjs-progressbar";
+import { shouldIgnore } from "@/utils/routes";
 
 interface Props {
   children: JSX.Element | React.ReactNode;
@@ -24,7 +26,7 @@ export default function Shield({ children }: Props) {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (!session && status != "loading") {
+    if (!session && status != "loading" && !shouldIgnore(Router.pathname)) {
       Router.push("/login");
     }
   }, [session, status]);
@@ -33,7 +35,7 @@ export default function Shield({ children }: Props) {
     <ProjectStateProvider reducer={preducer} initialState={projInitial}>
       <UserStateProvider reducer={ureducer} initialState={userInitial}>
         <PomoStateProvider reducer={reducer} initialState={initialState}>
-          <NextNProgress
+          <NextProgress
             color="#374151"
             showOnShallow={false}
             stopDelayMs={0}
@@ -41,6 +43,7 @@ export default function Shield({ children }: Props) {
               showSpinner: false,
             }}
           />
+
           <ToastContainer hideProgressBar newestOnTop={true} />
 
           <Head>

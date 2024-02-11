@@ -18,7 +18,7 @@ export default function GoogleButton() {
             alt="googleImage"
             width={20}
             height={20}
-            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+            src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
           />
         </div>
         <div className="flex items-center self-stretch   px-3 text-sm text-white">

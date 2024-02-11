@@ -9,7 +9,7 @@ export interface IAppState {
   frozePomodoro: boolean;
   project?: { label: string; value: string } | null;
   databaseId?: string;
-  shouldTickSound?: boolean;
+  shouldTickSound: boolean;
   tickVolume: number;
   startTime: number; //when session is started
 }
@@ -87,42 +87,42 @@ type SET_DATABASEID = {
 
 export type IAction =
   | {
-      type: actionTypes.CHANGE_TICKING_SOUND;
-      payload: boolean;
-    }
+    type: actionTypes.CHANGE_TICKING_SOUND;
+    payload: boolean;
+  }
   | { type: actionTypes.RESTART_POMODORO }
   | { type: actionTypes.RESET_STATE }
   | SET_PROJECTID
   | SET_DATABASEID
   | {
-      type: actionTypes.SET_PROJECTNAME;
-      payload: { projectName: string; timerLabel: TimerLabelType };
-    }
+    type: actionTypes.SET_PROJECTNAME;
+    payload: { projectName: string; timerLabel: TimerLabelType };
+  }
   | { type: actionTypes.FROZE_POMODORO; payload: boolean }
   | { type: actionTypes.RESET_TIMERS }
   | { type: actionTypes.START_TIMER; payload: { timerValue: number } }
   | {
-      type: actionTypes.TOGGLE_TIMER_LABEL;
-      payload: { timerLabel: TimerLabelType };
-    }
+    type: actionTypes.TOGGLE_TIMER_LABEL;
+    payload: { timerLabel: TimerLabelType };
+  }
   | {
-      type: actionTypes.TOGGLE_ISBUSY_INDICATOR;
-      payload: { busyIndicator: boolean };
-    }
+    type: actionTypes.TOGGLE_ISBUSY_INDICATOR;
+    payload: { busyIndicator: boolean };
+  }
   | { type: actionTypes.INCREASE_BREAK_VALUE; payload: { breakValue: number } }
   | { type: actionTypes.DECREASE_BREAK_VALUE; payload: { breakValue: number } }
   | {
-      type: actionTypes.INCREASE_SESSION_VALUE;
-      payload: { sessionValue: number; timerValue: number };
-    }
+    type: actionTypes.INCREASE_SESSION_VALUE;
+    payload: { sessionValue: number; timerValue: number };
+  }
   | {
-      type: actionTypes.DECREASE_SESSION_VALUE;
-      payload: { sessionValue: number; timerValue: number };
-    }
+    type: actionTypes.DECREASE_SESSION_VALUE;
+    payload: { sessionValue: number; timerValue: number };
+  }
   | {
-      type: actionTypes.CHANGE_TICK_VOLUME;
-      payload: number;
-    }
+    type: actionTypes.CHANGE_TICK_VOLUME;
+    payload: number;
+  }
   | SET_START_TIME;
 
 const reducer = (state = initialState, action: IAction): IAppState => {

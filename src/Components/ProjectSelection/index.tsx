@@ -1,5 +1,9 @@
+import dynamic from "next/dynamic";
 import React from "react";
-import Select from "react-select";
+import PlaceHolderLoader from "../PlaceHolderLoader";
+const Select = dynamic(() => import("react-select"), {
+  loading: () => <PlaceHolderLoader />,
+});
 
 type Props = {
   disabled: boolean;

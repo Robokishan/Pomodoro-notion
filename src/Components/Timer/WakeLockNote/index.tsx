@@ -20,7 +20,7 @@ export default function WakeLockNote({ type, onCloseClick }: Props) {
             hoverColor="bg-green-800"
             onCloseClick={onCloseClick}
             icon={<CheckBadgeIcon className="h-6 w-6 fill-white" />}
-            text="Wake Lock aquired"
+            text="Now Focus"
           />
         </>
       ) : type == "error" ? (
@@ -30,7 +30,7 @@ export default function WakeLockNote({ type, onCloseClick }: Props) {
             hoverColor="bg-red-800"
             onCloseClick={onCloseClick}
             icon={<ShieldExclamationIcon className="h-6 w-6 fill-white" />}
-            text="Wake Lock aquire failed"
+            text="Screen may go to sleep"
           />
         </>
       ) : type == "warning" ? (
@@ -40,7 +40,7 @@ export default function WakeLockNote({ type, onCloseClick }: Props) {
             hoverColor="bg-yellow-800"
             onCloseClick={onCloseClick}
             icon={<ExclamationCircleIcon className="h-6 w-6 fill-white" />}
-            text="Wake Lock released"
+            text="Focusing"
           />
         </>
       ) : null}
