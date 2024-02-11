@@ -8,12 +8,14 @@ import ContentLoader from "react-content-loader";
 import { toast } from "react-toastify";
 import useNotification from "../../hooks/useNotification";
 import Dropdown, { MenuType } from "../Dropdown";
-import NotionConnectModal from "../NotionModifyModal";
+import ExportAsModal from "../ExportAsModal";
+import NotionModifyModal from "../NotionModifyModal";
 
 export default function Header({ imgSrc }: { imgSrc?: string }) {
   const { data: session, status: sessionStatus } = useSession();
 
-  const [showModal, setModal] = useState(false);
+  const [showNotionModal, setNotionModal] = useState(false);
+  const [showExportAs, setExportAs] = useState(false);
 
   const [notify] = useNotification();
 
@@ -35,7 +37,7 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
         component: {
           type: "button",
           onClick() {
-            setModal(true);
+            setNotionModal(true);
           },
         },
       },
@@ -86,12 +88,12 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
         },
       },
       {
-        label: "Export data as (coming soon)", //export modal will open and we can export as csv , text or excel. this will not be backup data and data will be mailed modal open
-        value: "exportasexcel",
+        label: "Export data as", //export modal will open and we can export as csv , text or excel. this will not be backup data and data will be mailed modal open
+        value: "exportas",
         component: {
           type: "button",
           onClick() {
-            // dummy onClick
+            setExportAs(true);
           },
         },
       },
@@ -208,8 +210,10 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
           </div>
         )
       )}
-
-      {showModal && <NotionConnectModal setModal={setModal} />}
+      {showNotionModal && <NotionModifyModal setModal={setNotionModal} />}
+      {showExportAs && (
+        <ExportAsModal modalIsOpen={showExportAs} setModal={setExportAs} />
+      )}
     </div>
   );
 }

@@ -94,3 +94,28 @@ export const deleteTimesheet = async ({
     },
   });
 };
+
+type ExportArgType = {
+  startDate: number;
+  endDate: number;
+  databaseId: string[];
+  type: string;
+};
+
+export const exportTimesheet = async ({
+  startDate,
+  endDate,
+  databaseId,
+  type,
+}: ExportArgType) => {
+  const { data } = await PomodoroClient.get(POMO_TSH_APIS.TIMESHEET_EXPORT, {
+    params: {
+      startDate,
+      endDate,
+      "databaseId[]": [...databaseId],
+      type,
+    },
+  });
+
+  return data;
+};

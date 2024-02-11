@@ -1,10 +1,10 @@
 import { trpc } from "@/utils/trpc";
 import Link from "next/link";
 import { useState } from "react";
+import ContentLoader from "react-content-loader";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import NotionConnectModal from "../Components/NotionConnectModal";
-import ContentLoader from "react-content-loader";
 
 function Home() {
   const [showModal, setModal] = useState(false);
