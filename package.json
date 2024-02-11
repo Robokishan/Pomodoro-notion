@@ -34,6 +34,7 @@
     "nextjs-google-analytics": "^2.3.3",
     "nextjs-progressbar": "^0.0.16",
     "nodemailer": "^6.8.0",
+    "nodemailer-postmark-transport": "^6.0.0",
     "react": "18.2.0",
     "react-big-calendar": "^1.8.7",
     "react-content-loader": "^6.2.0",
