@@ -216,7 +216,7 @@ export default function Pages({
 
   return (
     <>
-      <main className="container mx-auto flex  flex-col  items-center  p-4 ">
+      <main className=" mx-auto flex  flex-col  items-center  p-4 ">
         <h2 className="flex items-center gap-5 text-4xl font-extrabold leading-normal text-gray-700">
           <Link href="/">
             <ArrowLeftIcon className="inline h-5 w-5 cursor-pointer text-gray-700 md:top-[45px] md:left-[-45px] md:h-[1.75rem] md:w-[1.75rem]" />

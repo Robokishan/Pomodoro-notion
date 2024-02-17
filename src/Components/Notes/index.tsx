@@ -11,7 +11,6 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useNote } from "../../hooks/useNote";
-import Portal from "../Portal";
 import Switch from "../Switch";
 
 const Excalidraw = dynamic<ExcalidrawProps>(
@@ -76,76 +75,74 @@ export default function Notes() {
   }, []);
 
   return (
-    <Portal element="note">
-      <>
-        {loading == "done" && project?.value ? (
-          <div className={"mx-auto mt-2"}>
-            <div className="mr-4 flex flex-row-reverse gap-6">
-              <div>
-                <Switch
-                  disabled={isPublic === "loading"}
-                  checked={isPublic == "public" ? true : false}
-                  onChange={(e) =>
-                    databaseId &&
-                    makePublic({
-                      projectId: project.value,
-                      databaseId,
-                      shouldPublic: e.target.checked,
-                    })
-                  }
-                  text="Public"
-                />
-              </div>
-              {isPublic === "public" && (
-                <div>
-                  <CopyToClipboard
-                    text={`${window.location.origin}/public/note/${noteId}`}
-                    onCopy={() => setCopied(true)}
-                  >
-                    {copied === false ? (
-                      <ClipboardIcon className="h-6 w-5 cursor-pointer" />
-                    ) : (
-                      <ClipboardDocumentCheckIcon className="h-6 w-5 cursor-pointer" />
-                    )}
-                  </CopyToClipboard>
-                </div>
-              )}
-            </div>
-            <div
-              id="excalidraw-wrapper"
-              className={"mx-auto mt-2 h-screen border"}
-            >
-              <Excalidraw
-                renderTopRightUI={() => {
-                  return (
-                    <button
-                      onClick={scroll}
-                      className="flex h-8 w-8 items-center justify-center rounded border"
-                    >
-                      {inViewPort == true ? (
-                        <ArrowSmallUpIcon className="h-5 w-5" />
-                      ) : (
-                        <ArrowSmallDownIcon className="h-5 w-5" />
-                      )}
-                    </button>
-                  );
-                }}
-                onChange={(elements) => {
-                  updateNote(elements as ExcalidrawElement[]);
-                }}
-                initialData={{
-                  elements: initialData ?? [],
-                  scrollToContent: true,
-                }}
+    <>
+      {loading == "done" && project?.value ? (
+        <div className={"mx-auto mt-2"}>
+          <div className="mr-4 flex flex-row-reverse gap-6">
+            <div>
+              <Switch
+                disabled={isPublic === "loading"}
+                checked={isPublic == "public" ? true : false}
+                onChange={(e) =>
+                  databaseId &&
+                  makePublic({
+                    projectId: project.value,
+                    databaseId,
+                    shouldPublic: e.target.checked,
+                  })
+                }
+                text="Public"
               />
             </div>
+            {isPublic === "public" && (
+              <div>
+                <CopyToClipboard
+                  text={`${window.location.origin}/public/note/${noteId}`}
+                  onCopy={() => setCopied(true)}
+                >
+                  {copied === false ? (
+                    <ClipboardIcon className="h-6 w-5 cursor-pointer" />
+                  ) : (
+                    <ClipboardDocumentCheckIcon className="h-6 w-5 cursor-pointer" />
+                  )}
+                </CopyToClipboard>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="mt-10 flex w-full justify-center">
-            <span>Select Project to get started</span>
+          <div
+            id="excalidraw-wrapper"
+            className={"mx-auto mt-2 h-screen border"}
+          >
+            <Excalidraw
+              renderTopRightUI={() => {
+                return (
+                  <button
+                    onClick={scroll}
+                    className="flex h-8 w-8 items-center justify-center rounded border"
+                  >
+                    {inViewPort == true ? (
+                      <ArrowSmallUpIcon className="h-5 w-5" />
+                    ) : (
+                      <ArrowSmallDownIcon className="h-5 w-5" />
+                    )}
+                  </button>
+                );
+              }}
+              onChange={(elements) => {
+                updateNote(elements as ExcalidrawElement[]);
+              }}
+              initialData={{
+                elements: initialData ?? [],
+                scrollToContent: true,
+              }}
+            />
           </div>
-        )}
-      </>
-    </Portal>
+        </div>
+      ) : (
+        <div className="mt-10 flex w-full justify-center">
+          <span>Select Project to get started</span>
+        </div>
+      )}
+    </>
   );
 }

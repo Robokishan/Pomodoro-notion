@@ -26,7 +26,7 @@ export default function Views({
   projectName?: string;
 }) {
   return (
-    <div className="relative w-full ">
+    <div className="relative w-full">
       <div
         className={`${
           activeTab === "analytics" ? "block" : "hidden"
@@ -38,7 +38,7 @@ export default function Views({
       <div
         className={`${
           activeTab === "timer" ? "flex" : "hidden"
-        } absolute  w-full items-center justify-center `}
+        } absolute w-full items-center justify-center`}
       >
         <Timer projectName={projectName} />
       </div>
@@ -51,17 +51,15 @@ export default function Views({
           <Noises />
         </div>
       </div>
-      {activeTab === "notes" ? (
-        <div
-          className={`${
-            activeTab === "notes" ? "flex" : "hidden"
-          } absolute  w-full items-center justify-center `}
-        >
-          <div className="w-full">
-            <Notes />
-          </div>
+      <div
+        className={`${
+          activeTab === "notes" ? "flex" : "hidden"
+        } absolute  w-full items-center justify-center `}
+      >
+        <div className="w-full">
+          <Notes />
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }
