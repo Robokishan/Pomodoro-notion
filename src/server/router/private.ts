@@ -11,7 +11,14 @@ export const privateRouter = router({
   getDatabases: protectedProcedure.query(async ({ ctx: { session } }) => {
     if (!session?.user?.email) throw new Error("Session not found");
     const user = await fetchNotionUser(session?.user?.email);
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      return {
+        databases: {
+          results: [],
+        },
+        workspace: null,
+      };
+    }
     const databases = await listDatabases(true, user.accessToken);
 
     return {
