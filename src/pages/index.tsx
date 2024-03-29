@@ -97,7 +97,7 @@ const DatabaseCard = ({
   pomodorohref,
 }: DatabaseProps) => {
   return (
-    <Link href={databasehref}>
+    <Link href={pomodorohref}>
       <section className="flex cursor-pointer flex-col justify-center rounded-md border-2 border-gray-500 p-6 shadow-xl duration-500 motion-safe:hover:scale-105">
         <h2 className="text-lg text-gray-700">{title}</h2>
         <p className="text-sm text-gray-600">{description}</p>
