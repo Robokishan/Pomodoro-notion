@@ -10,6 +10,7 @@ import { ArrowSmallDownIcon } from "@heroicons/react/24/solid";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import ContentLoader from "react-content-loader";
 import { useNote } from "../../hooks/useNote";
 import Switch from "../Switch";
 
@@ -146,6 +147,23 @@ export default function Notes() {
               }}
             />
           </div>
+        </div>
+      ) : project?.value ? (
+        <div className="mx-auto mt-2">
+          <ContentLoader
+            width="100%"
+            height={500}
+            viewBox="0 0 800 500"
+            backgroundColor="#e0e0e0"
+            foregroundColor="#f5f5f5"
+          >
+            {/* Toolbar row */}
+            <rect x="0" y="0" rx="5" ry="5" width="60" height="32" />
+            <rect x="70" y="0" rx="5" ry="5" width="60" height="32" />
+            <rect x="680" y="0" rx="5" ry="5" width="110" height="32" />
+            {/* Canvas area */}
+            <rect x="0" y="48" rx="8" ry="8" width="800" height="440" />
+          </ContentLoader>
         </div>
       ) : (
         <div className="mt-10 flex w-full justify-center">
