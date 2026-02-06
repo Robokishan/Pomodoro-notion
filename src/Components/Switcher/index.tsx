@@ -3,7 +3,7 @@ import React, { ReactElement, useMemo } from "react";
 export type SwitcherChildType = {
   label: string;
   value: string;
-  labelIcon?: JSX.Element;
+  labelIcon?: React.ReactNode;
   labelIconMargin?: string;
   labelIconPadding?: string;
 };

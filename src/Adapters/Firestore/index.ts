@@ -13,6 +13,7 @@ import {
 import { Account } from "next-auth";
 import {
   Adapter,
+  AdapterAccount,
   AdapterSession,
   AdapterUser,
   VerificationToken,
@@ -32,7 +33,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
   // const customTokenCollection = collection(db, AdapterCollections.CUSTOM_TOKEN);
 
   return {
-    async createUser(data) {
+    async createUser(data: Omit<AdapterUser, "id">) {
       const userData = {
         name: data.name ?? null,
         email: data.email ?? null,
@@ -48,13 +49,13 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       } as AdapterUser;
       return user;
     },
-    async getUser(id) {
+    async getUser(id: string) {
       const userDoc = await getDoc(doc(db, AdapterCollections.USER, id));
       if (!userDoc.exists()) return null;
       const user = userDoc.data() as AdapterUser;
       return user;
     },
-    async getUserByEmail(email) {
+    async getUserByEmail(email: string) {
       const q = query(userCollection, where("email", "==", email));
       const userRef = await findOne(q);
       if (!userRef) return null;
@@ -64,7 +65,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       } as AdapterUser;
       return user;
     },
-    async getUserByAccount({ providerAccountId, provider }) {
+    async getUserByAccount({ providerAccountId, provider }: Pick<AdapterAccount, "provider" | "providerAccountId">) {
       const q = query(
         accountCollection,
         where("provider", "==", provider),
@@ -91,7 +92,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       } as AdapterUser;
       return user;
     },
-    async updateUser(data) {
+    async updateUser(data: Partial<AdapterUser> & Pick<AdapterUser, "id">) {
       const { id, ...userData } = data;
       await setDoc(doc(db, AdapterCollections.USER, id as string), userData, {
         merge: true,
@@ -99,15 +100,15 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       const user = data as AdapterUser;
       return user;
     },
-    async deleteUser(userId) {
+    async deleteUser(userId: string) {
       await deleteDoc(doc(db, AdapterCollections.USER, userId as string));
     },
-    async linkAccount(data) {
+    async linkAccount(data: AdapterAccount) {
       const accountData = data;
       await addDoc(accountCollection, accountData);
     },
 
-    async unlinkAccount({ providerAccountId, provider }) {
+    async unlinkAccount({ providerAccountId, provider }: Pick<AdapterAccount, "provider" | "providerAccountId">) {
       const q = query(
         accountCollection,
         where("provider", "==", provider),
@@ -119,7 +120,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       if (!accountRef) return;
       deleteDoc(doc(db, AdapterCollections.ACCOUNT, accountRef.id as string));
     },
-    async createSession(data) {
+    async createSession(data: { sessionToken: string; userId: string; expires: Date }) {
       const sessionData = {
         sessionToken: data.sessionToken ?? null,
         userId: data.userId ?? null,
@@ -132,7 +133,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       } as AdapterSession;
       return session;
     },
-    async getSessionAndUser(sessionToken) {
+    async getSessionAndUser(sessionToken: string) {
       const q = query(
         sessionCollection,
         where("sessionToken", "==", sessionToken),
@@ -162,7 +163,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
         session: from(session),
       };
     },
-    async updateSession(data) {
+    async updateSession(data: Partial<AdapterSession> & Pick<AdapterSession, "sessionToken">) {
       const { sessionToken, ...sessionData } = data;
       const q = query(
         sessionCollection,
@@ -178,7 +179,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       );
       return data as AdapterSession;
     },
-    async deleteSession(sessionToken) {
+    async deleteSession(sessionToken: string) {
       const q = query(
         sessionCollection,
         where("sessionToken", "==", sessionToken),
@@ -188,21 +189,13 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       const sessionRef = await findOne(q);
       if (!sessionRef) return;
 
-      // const userRef = await getDoc(
-      //   doc(db, AdapterCollections.SESSION, sessionRef.data().userId)
-      // );
-
-      // const email = userRef.data()?.email ?? "";
-
       await Promise.allSettled([
         await deleteDoc(doc(db, AdapterCollections.SESSION, sessionRef.id)),
         await deleteDoc(doc(db, AdapterCollections.CUSTOM_TOKEN, sessionToken)),
       ]);
       return;
     },
-    async createVerificationToken(data) {
-      // need test
-
+    async createVerificationToken(data: VerificationToken) {
       const verificationTokenRef = await addDoc(
         verificationTokenCollection,
         data
@@ -214,8 +207,7 @@ export default function FirestoreAdapter(db: Firestore): Adapter {
       return verificationToken;
     },
 
-    async useVerificationToken({ identifier, token }) {
-      // need test
+    async useVerificationToken({ identifier, token }: { identifier: string; token: string }) {
       const q = query(
         verificationTokenCollection,
         where("identifier", "==", identifier),

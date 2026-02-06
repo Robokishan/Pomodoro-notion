@@ -5,7 +5,7 @@ export default function useNotification(): [
   (text: string, title: string) => Promise<boolean>,
   () => void
 ] {
-  const notification = useRef<Notification>();
+  const notification = useRef<Notification | null>(null);
 
   useEffect(() => {
     notificationRequest();

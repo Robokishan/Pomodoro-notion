@@ -1,6 +1,6 @@
 import { useUserState } from "@/utils/Context/UserContext/Context";
 import { getNote, markPublic, pushNote } from "@/utils/noteAPI";
-import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
+import type { ExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import {
   Dispatch,
   SetStateAction,

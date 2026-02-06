@@ -108,7 +108,7 @@ function Piechart({ data, onProjectSelect }: Props) {
             },
           ]}
           theme={{
-            fontSize: 16,
+            text: { fontSize: 16 },
           }}
         />
       ) : (

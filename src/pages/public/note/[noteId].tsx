@@ -1,6 +1,7 @@
 import { getPublicNoteData } from "@/utils/apis/firebase/notes";
 import dynamic from "next/dynamic";
-import { ExcalidrawProps } from "@excalidraw/excalidraw/types/types";
+import type { ExcalidrawProps } from "@excalidraw/excalidraw/types";
+import "@excalidraw/excalidraw/index.css";
 const Excalidraw = dynamic<ExcalidrawProps>(
   () => import("@excalidraw/excalidraw").then((comp) => comp.Excalidraw),
   {

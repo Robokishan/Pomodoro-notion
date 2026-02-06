@@ -13,10 +13,8 @@ export default function About() {
       <div className="flex flex-col items-center justify-center px-5 pb-5 ">
         <h1 className="my-5 flex flex-col items-center gap-5 text-4xl font-extrabold leading-normal text-gray-700 md:flex-row">
           <Link href="/">
-            <a>
               Pomodoro <span className="text-purple-300">for </span> Notion
               Database
-            </a>
           </Link>
           {status == "unauthenticated" && <GoogleButton />}
         </h1>

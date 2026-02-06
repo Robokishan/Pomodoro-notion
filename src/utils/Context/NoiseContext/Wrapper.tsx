@@ -3,7 +3,7 @@ import { NoiseStateProvider } from "./Context";
 import reducer, { initialState } from "./reducer";
 
 type Props = {
-  children: JSX.Element | React.ReactNode;
+  children: React.ReactNode;
 };
 
 export default function NoiseContext({ children }: Props) {

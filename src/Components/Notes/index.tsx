@@ -1,12 +1,13 @@
 import { usePomoState } from "@/utils/Context/PomoContext/Context";
-import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
-import { ExcalidrawProps } from "@excalidraw/excalidraw/types/types";
+import type { ExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import type { ExcalidrawProps } from "@excalidraw/excalidraw/types";
+import "@excalidraw/excalidraw/index.css";
 import {
-  ArrowSmallUpIcon,
+  ArrowUpIcon,
   ClipboardIcon,
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/24/outline";
-import { ArrowSmallDownIcon } from "@heroicons/react/24/solid";
+import { ArrowDownIcon } from "@heroicons/react/24/solid";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -131,9 +132,9 @@ export default function Notes() {
                     className="flex h-8 w-8 items-center justify-center rounded border"
                   >
                     {inViewPort == true ? (
-                      <ArrowSmallUpIcon className="h-5 w-5" />
+                      <ArrowUpIcon className="h-5 w-5" />
                     ) : (
-                      <ArrowSmallDownIcon className="h-5 w-5" />
+                      <ArrowDownIcon className="h-5 w-5" />
                     )}
                   </button>
                 );

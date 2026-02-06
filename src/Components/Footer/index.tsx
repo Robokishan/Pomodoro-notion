@@ -12,12 +12,12 @@ export default function Footer() {
         </h1>
       </section>
       <section className="mt-5">
-        <Link href="/privacy">
-          <a className="underline">Privacy Policy</a>
+        <Link href="/privacy" className="underline">
+          Privacy Policy
         </Link>
         {` - `}
-        <Link href="/terms">
-          <a className="underline">Terms and condition</a>
+        <Link href="/terms" className="underline">
+          Terms and condition
         </Link>
       </section>
     </footer>

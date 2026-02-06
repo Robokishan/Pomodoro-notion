@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const PomodoroClient = axios.create();
 
@@ -9,8 +9,8 @@ const parseErrorCodeV1 = (error: AxiosError) => {
 
 // Request parsing interceptor
 const pomoRequestInterceptor = (
-  config: AxiosRequestConfig
-): AxiosRequestConfig => {
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
   if (!config.baseURL) config.baseURL = window.location.origin;
   config.withCredentials = true;
   return config;

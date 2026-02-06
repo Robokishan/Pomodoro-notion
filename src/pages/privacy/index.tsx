@@ -562,11 +562,9 @@ export default function Privacy() {
 }
 
 const PomoWebsite = () => (
-  <Link href="/">
-    <a className="font-normal underline">
-      {` `}
-      {BASE_URL}
-      {` `}
-    </a>
+  <Link href="/" className="font-normal underline">
+    {` `}
+    {BASE_URL}
+    {` `}
   </Link>
 );

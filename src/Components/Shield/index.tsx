@@ -19,7 +19,7 @@ import NextProgress from "nextjs-progressbar";
 import { shouldIgnore } from "@/utils/routes";
 
 interface Props {
-  children: JSX.Element | React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function Shield({ children }: Props) {
