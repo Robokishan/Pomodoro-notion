@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const NotionClient = axios.create();
 
@@ -9,8 +9,8 @@ const parseErrorCodeV1 = (error: AxiosError) => {
 
 // Request parsing interceptor
 const notionRequestInterceptor = (
-  config: AxiosRequestConfig
-): AxiosRequestConfig => {
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
   config.url = "/notion" + config.url;
   return config;
 };

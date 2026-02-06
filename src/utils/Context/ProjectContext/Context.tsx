@@ -13,12 +13,12 @@ export const ProjectStateProvider = ({
   initialState,
   children,
 }: {
-  reducer: any;
-  initialState: any;
-  children: JSX.Element | React.ReactNode;
+  reducer: React.Reducer<IAppState, IAction>;
+  initialState: IAppState;
+  children: React.ReactNode;
 }) => (
   <StateContext.Provider
-    value={useReducer<React.Reducer<IAppState, IAction>>(reducer, initialState)}
+    value={useReducer(reducer, initialState)}
   >
     {children}
   </StateContext.Provider>

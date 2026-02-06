@@ -1,15 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import useFormattedData from "../../hooks/useFormattedData";
 import { Calendar, dateFnsLocalizer, Event } from "react-big-calendar";
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-import enUS from "date-fns/locale/en-US";
+import { format, parse, startOfWeek, getDay, endOfDay, getUnixTime, startOfDay } from "date-fns";
+import { enUS } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useUserState } from "@/utils/Context/UserContext/Context";
 import { actionTypes } from "@/utils/Context/UserContext/reducer";
-import { endOfDay, getUnixTime, startOfDay } from "date-fns";
 import { convertToMMSS } from "../../hooks/Pomodoro/Time/useTime";
 
 const locales = {

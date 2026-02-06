@@ -5,7 +5,7 @@ export default function useInterval(
   callback: () => void,
   delay?: number | null
 ) {
-  const callbacRef = useRef<() => void>();
+  const callbacRef = useRef<(() => void) | null>(null);
 
   // web worker based setInterval to avoid sleeping of setInterval when tab is in background
   const { clearInterval, setInterval } = useWorkerInterval();

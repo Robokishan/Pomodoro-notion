@@ -154,9 +154,7 @@ export default function Header({ imgSrc }: { imgSrc?: string }) {
     <div className="flex flex-row gap-10 sm:flex-row sm:justify-center">
       <h1 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[4rem]">
         <Link href="/">
-          <a>
             Pomodoro <span className="text-purple-300">Databases</span> Notion
-          </a>
         </Link>
       </h1>
       {/* show dropdown if user logged in */}

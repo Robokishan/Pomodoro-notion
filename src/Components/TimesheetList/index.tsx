@@ -13,7 +13,7 @@ export default function TimesheetList() {
   const [mutate, , isLoading] = usePomoClient();
   const [totalTime, setTotalTime] = useState(0);
   const [{ userId, startDate, endDate }] = useUserState();
-  const prefTimeout = useRef<NodeJS.Timeout>();
+  const prefTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (projectTimesheets.length > 0) {
@@ -67,7 +67,7 @@ export default function TimesheetList() {
                   >
                     <td className="whitespace-nowrap p-4 pl-8	underline">
                       <Link href={proj.href ?? ""}>
-                        <a>{proj.projectName}</a>
+                        {proj.projectName}
                       </Link>
                     </td>
                     <td>

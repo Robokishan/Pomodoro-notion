@@ -91,17 +91,16 @@ const Components = ({
 
     case "link":
       return (
-        <Link href={component.href}>
-          <a
-            className={`hover block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 ${
-              style && style
-            }`}
-            role="menuitem"
-            tabIndex={-1}
-            id="menu-item-0"
-          >
-            <span>{label}</span>
-          </a>
+        <Link
+          href={component.href}
+          className={`hover block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 ${
+            style && style
+          }`}
+          role="menuitem"
+          tabIndex={-1}
+          id="menu-item-0"
+        >
+          <span>{label}</span>
         </Link>
       );
     case "text":

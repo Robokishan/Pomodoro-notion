@@ -41,7 +41,7 @@ export default function Timer({ projectName }: Props) {
   >();
 
   // prevent screen lock when timer is in focus
-  const wakeLock = useRef<WakeLockSentinel>();
+  const wakeLock = useRef<WakeLockSentinel | null>(null);
 
   const lockScreen = async () => {
     if ("wakeLock" in navigator) {
@@ -217,7 +217,7 @@ function Container({
   title,
 }: {
   title: string;
-  children: JSX.Element | React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col items-center">

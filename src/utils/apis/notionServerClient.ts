@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const notionClient = axios.create();
 
@@ -9,13 +9,10 @@ const parseErrorCodeV1 = (error: AxiosError) => {
 
 // Request parsing interceptor
 const notionRequestInterceptor = (
-  config: AxiosRequestConfig
-): AxiosRequestConfig => {
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
   config.baseURL = "https://api.notion.com";
-  config.headers = {
-    ...config.headers,
-    "Notion-Version": "2021-08-16",
-  };
+  config.headers.set("Notion-Version", "2021-08-16");
   return config;
 };
 

@@ -4,7 +4,7 @@ export default function BigButton({
   disabled = false,
 }: {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-  children: JSX.Element | React.ReactNode;
+  children: React.ReactNode;
   disabled?: boolean;
 }) {
   return (

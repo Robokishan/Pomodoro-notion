@@ -71,10 +71,10 @@ export const usePomoClient = (): Return => {
 
         const projectMap: Record<string, number> = {};
         projects.forEach((proj) => {
-          if (projectMap[proj.projectId])
-            projectMap[proj.projectId] += proj.timerValue
+          if (projectMap[proj.projectId] !== undefined)
+            projectMap[proj.projectId] = (projectMap[proj.projectId] ?? 0) + (proj.timerValue
               ? Number(proj.timerValue)
-              : 0;
+              : 0);
           else projectMap[proj.projectId] = proj.timerValue;
         });
 

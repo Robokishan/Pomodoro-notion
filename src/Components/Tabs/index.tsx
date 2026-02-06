@@ -17,7 +17,7 @@ function Tab({
   value,
   onClick,
 }: {
-  children: JSX.Element | React.ReactNode;
+  children: React.ReactNode;
   value: string;
   activeTab: boolean;
   onClick: (tab: any) => void;

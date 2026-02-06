@@ -11,7 +11,7 @@ export default function useHoldPress(
 ) {
   const [sticky, setSticky] = useState(false);
   const holdTriggerred = useRef<boolean>(false);
-  const timeOut = useRef<NodeJS.Timer>();
+  const timeOut = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const HoldTrigger = () => {
     holdTriggerred.current = true;
@@ -31,7 +31,7 @@ export default function useHoldPress(
   }
 
   function clear(shouldTrigger = true) {
-    clearTimeout(timeOut.current);
+    if (timeOut.current) clearTimeout(timeOut.current);
     if (!holdTriggerred.current && !disabled && shouldTrigger) callback();
     else if (holdTriggerred.current) setSticky(false);
     holdTriggerred.current = false;

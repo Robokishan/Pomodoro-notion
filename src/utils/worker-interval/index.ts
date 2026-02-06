@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import WorkerInterval from "./workerInterval";
 
 export const useWorkerInterval = () => {
-  const workerInterval = useRef<WorkerInterval>();
+  const workerInterval = useRef<WorkerInterval | null>(null);
 
   useEffect(() => {
     workerInterval.current = new WorkerInterval();
