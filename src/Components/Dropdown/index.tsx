@@ -1,6 +1,7 @@
 import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useState } from "react";
+import OutsideClickHandler from "react-outside-click-handler";
 
 type ButtonType = {
   type: "button";
@@ -37,38 +38,40 @@ interface DropdownProps {
 export default function Dropdown({ menuList }: DropdownProps) {
   const [show, setshow] = useState(false);
   return (
-    <div className="relative inline-block text-left">
-      <div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setshow((prev) => !prev);
-          }}
-        >
-          <EllipsisHorizontalCircleIcon className="h-7 w-7 cursor-pointer text-heading" />
-        </button>
-      </div>
+    <OutsideClickHandler onOutsideClick={() => setshow(false)}>
+      <div className="relative inline-block text-left">
+        <div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setshow((prev) => !prev);
+            }}
+          >
+            <EllipsisHorizontalCircleIcon className="h-7 w-7 cursor-pointer text-heading" />
+          </button>
+        </div>
 
-      <div
-        className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-surface-card shadow-lg ring-1 ring-black ring-opacity-5 transition duration-75 ease-in focus:outline-none
-        ${
-          show
-            ? "scale-100 transform opacity-100"
-            : "pointer-events-none scale-95 transform opacity-0"
-        }
-        `}
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="menu-button"
-        tabIndex={-1}
-      >
-        <div className="py-1" role="none">
-          {menuList.map((menu, index) => (
-            <Components key={index} menu={menu} />
-          ))}
+        <div
+          className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-surface-card shadow-lg ring-1 ring-black ring-opacity-5 transition duration-75 ease-in focus:outline-none
+          ${
+            show
+              ? "scale-100 transform opacity-100"
+              : "pointer-events-none scale-95 transform opacity-0"
+          }
+          `}
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="menu-button"
+          tabIndex={-1}
+        >
+          <div className="py-1" role="none">
+            {menuList.map((menu, index) => (
+              <Components key={index} menu={menu} />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </OutsideClickHandler>
   );
 }
 
