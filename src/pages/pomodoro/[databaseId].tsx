@@ -11,9 +11,7 @@ import NotionTags from "../../Components/NotionTags";
 
 const ProjectSelection = dynamic(
   () => import("../../Components/ProjectSelection"),
-  {
-    loading: () => <div>Loading...</div>,
-  }
+  { loading: () => <div>Loading...</div> }
 );
 
 import Tabs from "../../Components/Tabs";
@@ -51,9 +49,7 @@ export const getServerSideProps = async ({
     ]);
     return {
       props: {
-        userId: user.id,
-        database,
-        db,
+        userId: user.id, database, db,
         tab: (query?.tab as string) || null,
         databaseId: query.databaseId as string,
       },
@@ -62,36 +58,20 @@ export const getServerSideProps = async ({
     console.log(error);
     const err = error as AxiosError;
     if (process.env.NODE_ENV === "development")
-      return {
-        props: {
-          error: err.response?.data,
-        },
-      };
+      return { props: { error: err.response?.data } };
     return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
+      redirect: { permanent: false, destination: "/login" },
       props: {},
     };
   }
 };
 
 export default function Pages({
-  userId,
-  database,
-  db,
-  tab,
-  error,
-  databaseId,
+  userId, database, db, tab, error, databaseId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [selectedProperties, setProperties] = useState<
-    Array<{
-      label: string;
-      value: string;
-      color: string;
-    }>
+    Array<{ label: string; value: string; color: string }>
   >([]);
 
   const [activeTab, setActiveTab] = useState(tab || TabsOptions[0]!.value);
@@ -102,34 +82,19 @@ export default function Pages({
 
   useEffect(() => {
     router.push(
-      {
-        query: {
-          databaseId: router.query.databaseId,
-          tab: activeTab,
-        },
-      },
-      undefined,
-      {
-        shallow: true,
-      }
+      { query: { databaseId: router.query.databaseId, tab: activeTab } },
+      undefined, { shallow: true }
     );
   }, [activeTab]);
 
   useEffect(
-    () =>
-      userDispatch({
-        type: userActiontype.SET_USERID,
-        payload: userId,
-      }),
+    () => userDispatch({ type: userActiontype.SET_USERID, payload: userId }),
     [userId]
   );
 
   useEffect(() => {
     if (databaseId)
-      dispatch({
-        type: actionTypes.SET_DATABASEID,
-        payload: databaseId,
-      });
+      dispatch({ type: actionTypes.SET_DATABASEID, payload: databaseId });
   }, [databaseId]);
 
   useEffect(() => {
@@ -137,15 +102,13 @@ export default function Pages({
       const notionProjects =
         database?.results
           .map((project) => {
-            // filter project list based on tags selected
             if (
               selectedProperties.every(
                 (sp) =>
                   project.properties?.Tags?.multi_select?.findIndex(
                     (m) => m.id == sp.value
                   ) != -1
-              ) ||
-              selectedProperties.length == 0
+              ) || selectedProperties.length == 0
             )
               return project;
             return null;
@@ -164,20 +127,15 @@ export default function Pages({
     return (
       database?.results
         .map((project) => {
-          // filter project list based on tags selected
           if (
             selectedProperties.every(
               (sp) =>
                 project.properties?.Tags?.multi_select?.findIndex(
                   (m) => m.id == sp.value
                 ) != -1
-            ) ||
-            selectedProperties.length == 0
+            ) || selectedProperties.length == 0
           )
-            return {
-              label: getProjectTitle(project),
-              value: getProjectId(project),
-            };
+            return { label: getProjectTitle(project), value: getProjectId(project) };
           return null;
         })
         .filter(notEmpty) || []
@@ -185,75 +143,43 @@ export default function Pages({
   }, [database?.results, selectedProperties]);
 
   const properties = useMemo(() => {
-    if (
-      db?.properties &&
-      db.properties.Tags?.multi_select &&
-      db.properties.Tags.multi_select.options
-    )
-      return db?.properties?.Tags?.multi_select?.options.map((prp) => ({
-        label: prp.name,
-        value: prp.id,
-        color: prp.color,
+    if (db?.properties?.Tags?.multi_select?.options)
+      return db.properties.Tags.multi_select.options.map((prp) => ({
+        label: prp.name, value: prp.id, color: prp.color,
       }));
-    else return [];
+    return [];
   }, []);
 
   const onProjectSelect = (proj: { label: string; value: string } | null) => {
-    if (!proj)
-      dispatch({
-        type: actionTypes.RESET_TIMERS,
-      });
-
-    dispatch({
-      type: actionTypes.SET_PROJECTID,
-      payload: proj,
-    });
-    dispatch({
-      type: actionTypes.FROZE_POMODORO,
-      payload: !proj,
-    });
+    if (!proj) dispatch({ type: actionTypes.RESET_TIMERS });
+    dispatch({ type: actionTypes.SET_PROJECTID, payload: proj });
+    dispatch({ type: actionTypes.FROZE_POMODORO, payload: !proj });
   };
 
   return (
     <>
-      <main className=" mx-auto flex  flex-col  items-center  p-4 ">
-        <h2 className="flex items-center gap-5 text-4xl font-extrabold leading-normal text-gray-700">
+      <main className="mx-auto flex flex-col items-center p-4">
+        <h2 className="flex items-center gap-5 text-4xl font-extrabold leading-normal text-heading">
           <Link href="/">
-            <ArrowLeftIcon className="inline h-5 w-5 cursor-pointer text-gray-700 md:top-[45px] md:left-[-45px] md:h-[1.75rem] md:w-[1.75rem]" />
+            <ArrowLeftIcon className="inline h-5 w-5 cursor-pointer text-heading md:top-[45px] md:left-[-45px] md:h-[1.75rem] md:w-[1.75rem]" />
           </Link>
           <span>
             Pomo<span className="text-purple-300">doro</span>
           </span>
         </h2>
-        <Line
-          margin="10px 0px 10px 0px"
-          height="1px"
-          backgroundColor="#37415130"
-          width="50%"
-        />
+        <Line margin="10px 0px 10px 0px" height="1px" backgroundColor="#37415130" width="50%" />
         {!error ? (
           <>
-            <Tabs
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              tabs={TabsOptions}
-            />
+            <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={TabsOptions} />
             <div className="m-5">
               <ProjectSelection
-                disabled={busyIndicator}
-                value={project}
-                handleSelect={onProjectSelect}
-                projects={projects}
+                disabled={busyIndicator} value={project}
+                handleSelect={onProjectSelect} projects={projects}
               />
             </div>
-            <NotionTags
-              disabled={busyIndicator}
-              handleSelect={setProperties}
-              options={properties}
-            />
+            <NotionTags disabled={busyIndicator} handleSelect={setProperties} options={properties} />
             <Views
-              activeTab={activeTab}
-              pieData={piedata}
+              activeTab={activeTab} pieData={piedata}
               projectName={getProjectTitle(
                 database?.results.find((pr) => pr.id == String(project?.value)),
                 "Please select project"

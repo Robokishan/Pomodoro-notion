@@ -5,7 +5,7 @@ export default function Clock() {
   const { hours, minutes, ampm, date, month, year, suffix } = useClock();
   return (
     <>
-      <h4 className="relative mt-6 flex text-2xl">
+      <h4 className="relative mt-6 flex text-2xl text-heading">
         <span>{hours}</span>
         <span className="blink relative w-[0.57rem]">
           <span className="absolute -mt-[1px] ">:</span>
@@ -13,7 +13,7 @@ export default function Clock() {
         <span>{minutes}</span>
         <span className="ml-1 ">{ampm}</span>
       </h4>
-      <h4 className="relative mt-2 flex gap-1  text-xl">
+      <h4 className="relative mt-2 flex gap-1 text-xl text-body">
         <div>
           <span>{date}</span>
           <sup className=" text-xs">{suffix}</sup>

@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import ContentLoader from "react-content-loader";
 import { useNote } from "../../hooks/useNote";
+import { useTheme } from "../../utils/Context/ThemeContext";
 import Switch from "../Switch";
 
 const Excalidraw = dynamic<ExcalidrawProps>(
@@ -30,6 +31,7 @@ export default function Notes() {
   const [inViewPort, setInView] = useState(false);
   const [copied, setCopied] = useState(false);
   const prevCheckedRef = useRef(false);
+  const { resolvedTheme } = useTheme();
 
   const isPublicLoading = isPublic === "loading";
   if (!isPublicLoading) {
@@ -85,6 +87,8 @@ export default function Notes() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isDark = resolvedTheme === "dark";
+
   return (
     <>
       {loading == "done" && project?.value ? (
@@ -112,9 +116,9 @@ export default function Notes() {
                   onCopy={() => setCopied(true)}
                 >
                   {copied === false ? (
-                    <ClipboardIcon className="h-6 w-5 cursor-pointer" />
+                    <ClipboardIcon className="h-6 w-5 cursor-pointer text-icon" />
                   ) : (
-                    <ClipboardDocumentCheckIcon className="h-6 w-5 cursor-pointer" />
+                    <ClipboardDocumentCheckIcon className="h-6 w-5 cursor-pointer text-icon" />
                   )}
                 </CopyToClipboard>
               </div>
@@ -122,14 +126,15 @@ export default function Notes() {
           </div>
           <div
             id="excalidraw-wrapper"
-            className={"mx-auto mt-2 h-screen border"}
+            className={"mx-auto mt-2 h-screen border border-theme"}
           >
             <Excalidraw
+              theme={isDark ? "dark" : "light"}
               renderTopRightUI={() => {
                 return (
                   <button
                     onClick={scroll}
-                    className="flex h-8 w-8 items-center justify-center rounded border"
+                    className="flex h-8 w-8 items-center justify-center rounded border border-theme text-heading"
                   >
                     {inViewPort == true ? (
                       <ArrowUpIcon className="h-5 w-5" />
@@ -145,6 +150,9 @@ export default function Notes() {
               initialData={{
                 elements: initialData ?? [],
                 scrollToContent: true,
+                appState: {
+                  theme: isDark ? "dark" : "light",
+                },
               }}
             />
           </div>
@@ -155,8 +163,8 @@ export default function Notes() {
             width="100%"
             height={500}
             viewBox="0 0 800 500"
-            backgroundColor="#e0e0e0"
-            foregroundColor="#f5f5f5"
+            backgroundColor={isDark ? "#374151" : "#e0e0e0"}
+            foregroundColor={isDark ? "#4b5563" : "#f5f5f5"}
           >
             {/* Toolbar row */}
             <rect x="0" y="0" rx="5" ry="5" width="60" height="32" />
@@ -168,7 +176,7 @@ export default function Notes() {
         </div>
       ) : (
         <div className="mt-10 flex w-full justify-center">
-          <span>Select Project to get started</span>
+          <span className="text-muted">Select Project to get started</span>
         </div>
       )}
     </>

@@ -49,7 +49,6 @@ export default function Timer({ projectName }: Props) {
     null | "success" | "error" | "warning"
   >();
 
-  // prevent screen lock when timer is in focus
   const wakeLock = useRef<WakeLockSentinel | null>(null);
 
   const lockScreen = async () => {
@@ -65,26 +64,19 @@ export default function Timer({ projectName }: Props) {
         }, 5000);
       } catch (error) {
         setNote("error");
-        // Wake lock was not allowed.
-        // log for development only
         if (process.env.NODE_ENV == "development") console.error(error);
       }
     }
   };
 
   useEffect(() => {
-    // requestWakeLock
     if (isWindowActive) {
-      // timer #1 for lockscreen
       setTimeout(() => {
-        // if wantLock current is undefined or wakelock is released then lockscreen
         if (!wakeLock.current || wakeLock.current.released) lockScreen();
-      }, 1000); //make delay to make interface ready
-
-      // timer #2 for controls
+      }, 1000);
       setTimeout(() => {
         setDisableControls(false);
-      }, 2000); //make delay to make interface ready
+      }, 2000);
     } else {
       setDisableControls(true);
     }
@@ -103,11 +95,12 @@ export default function Timer({ projectName }: Props) {
   return (
     <div
       className="
+      mt-3
       flex
       min-w-[350px] flex-col items-center justify-items-center 
       rounded-[50px]
-      bg-white
-      p-9 text-gray-700 shadow-lg"
+      bg-surface-card
+      p-9 text-heading shadow-lg"
     >
       {clockifiedValue && (
         <Head>
@@ -118,7 +111,7 @@ export default function Timer({ projectName }: Props) {
       <h2 className="mt-[0.5em] mb-[1.5em] text-2xl">{projectName}</h2>
       <h3
         id="timer-label"
-        className="relative z-30 mb-[15px] mt-5 text-xl font-medium text-gray-300"
+        className="relative z-30 mb-[15px] mt-5 text-xl font-medium text-faint"
       >
         {timerLabel}
       </h3>
@@ -129,7 +122,7 @@ export default function Timer({ projectName }: Props) {
         mb-3 
         text-5xl
         font-extralight
-        text-gray-500
+        text-muted
         after:absolute
         after:top-1/2
         after:left-1/2
@@ -142,7 +135,7 @@ export default function Timer({ projectName }: Props) {
         after:rounded-full 
         after:bg-bgColor-10
         after:shadow-md
-        after:shadow-gray-400
+        after:shadow-theme
         "
       >
         {clockifiedValue}
@@ -176,28 +169,24 @@ export default function Timer({ projectName }: Props) {
               type="button"
               className="cursor-pointer text-center text-sm font-medium focus:outline-none"
             >
-              <SpeakerWaveIcon className=" h-6 w-6 text-slate-700 hover:text-slate-400 active:text-slate-900" />
+              <SpeakerWaveIcon className="h-6 w-6 text-icon hover:text-muted active:text-heading" />
             </button>
             <PopOver visible={showPopover} />
           </div>
         </OutsideClickHandler>
         <button onClick={timerScreen.enter} className="mx-2">
-          <ArrowsPointingOutIcon className="h-5 w-5" />
+          <ArrowsPointingOutIcon className="h-5 w-5 text-heading" />
         </button>
       </div>
-      {/* disabled wakelock not now since it is no longer needed */}
-      {/* {showNote && (
-        <WakeLockNote onCloseClick={() => setNote(null)} type={showNote} />
-      )} */}
       <FullScreen handle={timerScreen}>
         <div className={`${timerScreen.active ? "block" : "hidden"} `}>
-          <div className="flex h-screen w-screen flex-col items-center justify-center">
-            <h3 className="text-xl">{projectName}</h3>
-            <h4 className="my-5 text-4xl">
+          <div className="flex h-screen w-screen flex-col items-center justify-center bg-surface">
+            <h3 className="text-xl text-heading">{projectName}</h3>
+            <h4 className="my-5 text-4xl text-heading">
               <div className="flex items-baseline gap-3">
                 {timerLabel}
                 <button className="h-6 w-6" onClick={timerScreen.exit}>
-                  <ArrowsPointingInIcon className="h-6 w-6" />
+                  <ArrowsPointingInIcon className="h-6 w-6 text-heading" />
                 </button>
               </div>
             </h4>
@@ -208,7 +197,7 @@ export default function Timer({ projectName }: Props) {
             mb-3 
             text-9xl
             font-extralight
-            text-gray-500
+            text-muted
         "
             >
               {clockifiedValue}
@@ -248,7 +237,6 @@ function PopOver({ visible } = { visible: false }) {
   const [volume, setVolume] = useState(tickVolume);
 
   useEffect(() => {
-    // reason for this is context is slow i guess slow update to dom
     dispatch({
       type: actionTypes.CHANGE_TICK_VOLUME,
       payload: volume,
@@ -258,19 +246,18 @@ function PopOver({ visible } = { visible: false }) {
   return (
     <div
       id="volumebar-popover"
-      className={`${
-        visible
+      className={`${visible
           ? "scale-100 transform opacity-100"
           : "pointer-events-none scale-95 transform opacity-0"
-      } absolute -left-20 top-8 w-52 rounded-lg border border-slate-300 bg-white p-1 text-sm font-light text-slate-500 shadow-2xl transition duration-75 ease-in`}
+        } absolute -left-20 top-8 w-52 rounded-lg border border-theme bg-surface-card p-1 text-sm font-light text-muted shadow-2xl transition duration-75 ease-in`}
     >
       <div className="relative">
         <div
           className="absolute -top-[9px] left-[41%] z-0 h-2 w-2 rotate-45 rounded-tl-sm border-t border-l
-         border-slate-300  bg-white"
+         border-theme bg-surface-card"
         ></div>
       </div>
-      <div className="flex flex-col gap-2 bg-white px-2 py-1">
+      <div className="flex flex-col gap-2 bg-surface-card px-2 py-1">
         <div className="flex items-center gap-3">
           <div className="w-6">{Math.floor(volume * 100)}</div>
           <SoundLevel
@@ -279,8 +266,8 @@ function PopOver({ visible } = { visible: false }) {
             handleChange={setVolume}
           />
         </div>
-        <div className="flex items-center justify-between border-t border-slate-100 pt-2">
-          <span className="text-xs text-slate-500">
+        <div className="flex items-center justify-between border-t border-theme-subtle pt-2">
+          <span className="text-xs text-muted">
             Media keys also control timer
           </span>
           <Switch

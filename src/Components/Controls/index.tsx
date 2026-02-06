@@ -24,8 +24,6 @@ export default function Controls({
   const { clickPlay } = useAlert();
   const [{ busyIndicator, frozePomodoro }] = usePomoState();
 
-  // major condition if timer is running then and then disableControls otherwise ignore it
-  // otherwise chekc confition for frozePomodoro
   const checkMarkDisabled = frozePomodoro || (busyIndicator && disableControls);
   const playPauseButtonDisabled =
     frozePomodoro || (busyIndicator && disableControls);
@@ -42,11 +40,11 @@ export default function Controls({
       >
         {!busyIndicator ? (
           <PlayIcon
-            className={`h-5 w-5 ${playPauseButtonDisabled && "fill-gray-200"}`}
+            className={`h-5 w-5 ${playPauseButtonDisabled ? "fill-icon-disabled" : "fill-icon-default"}`}
           />
         ) : (
           <PauseIcon
-            className={`h-5 w-5 ${playPauseButtonDisabled && "fill-gray-200"}`}
+            className={`h-5 w-5 ${playPauseButtonDisabled ? "fill-icon-disabled" : "fill-icon-default"}`}
           />
         )}
       </BigButton>
@@ -58,7 +56,7 @@ export default function Controls({
         }}
       >
         <CheckIcon
-          className={`h-5 w-5 ${checkMarkDisabled && "fill-gray-200"}`}
+          className={`h-5 w-5 ${checkMarkDisabled ? "fill-icon-disabled" : "fill-icon-default"}`}
         />
       </BigButton>
       <BigButton
@@ -69,7 +67,7 @@ export default function Controls({
         }}
       >
         <ArrowPathIcon
-          className={`h-5 w-5 ${resetButtonDisabled && "fill-gray-200"}`}
+          className={`h-5 w-5 ${resetButtonDisabled ? "fill-icon-disabled" : "fill-icon-default"}`}
         />
       </BigButton>
     </div>

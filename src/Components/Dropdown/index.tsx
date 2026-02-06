@@ -16,7 +16,12 @@ type TextType = {
   type: "text";
 };
 
-type ComponentType = ButtonType | LinkType | TextType;
+type CustomType = {
+  type: "custom";
+  render: () => React.ReactNode;
+};
+
+type ComponentType = ButtonType | LinkType | TextType | CustomType;
 
 export interface MenuType {
   style?: string;
@@ -40,18 +45,17 @@ export default function Dropdown({ menuList }: DropdownProps) {
             setshow((prev) => !prev);
           }}
         >
-          <EllipsisHorizontalCircleIcon className="h-7 w-7 cursor-pointer" />
+          <EllipsisHorizontalCircleIcon className="h-7 w-7 cursor-pointer text-heading" />
         </button>
       </div>
 
       <div
-        className={`absolute  right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition duration-75 ease-in focus:outline-none
+        className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-surface-card shadow-lg ring-1 ring-black ring-opacity-5 transition duration-75 ease-in focus:outline-none
         ${
           show
             ? "scale-100 transform opacity-100"
             : "pointer-events-none scale-95 transform opacity-0"
         }
-        
         `}
         role="menu"
         aria-orientation="vertical"
@@ -78,7 +82,7 @@ const Components = ({
       return (
         <button
           onClick={component.onClick}
-          className={`hover block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 ${
+          className={`hover block w-full px-4 py-2 text-left text-sm text-heading hover:bg-surface-hover ${
             style && style
           }`}
           role="menuitem"
@@ -93,7 +97,7 @@ const Components = ({
       return (
         <Link
           href={component.href}
-          className={`hover block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 ${
+          className={`hover block w-full px-4 py-2 text-left text-sm text-heading hover:bg-surface-hover ${
             style && style
           }`}
           role="menuitem"
@@ -106,12 +110,14 @@ const Components = ({
     case "text":
       return (
         <span
-          className={`hover block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 ${
+          className={`hover block w-full px-4 py-2 text-left text-sm text-heading hover:bg-surface-hover ${
             style && style
           }`}
         >
           {label}
         </span>
       );
+    case "custom":
+      return <>{component.render()}</>;
   }
 };

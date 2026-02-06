@@ -3,6 +3,74 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
+/* ============================================
+   Semantic color tokens — define once, auto-switch
+   Usage: bg-surface, text-heading, border-theme, etc.
+   ============================================ */
+@layer base {
+  :root {
+    /* surfaces */
+    --color-surface:       255 255 255; /* white */
+    --color-surface-card:  255 255 255; /* white */
+    --color-surface-btn:   255 255 255; /* white */
+    --color-surface-hover: 249 250 251; /* gray-50 */
+    --color-surface-muted: 243 244 246; /* gray-100 */
+    --color-surface-active: 229 231 235; /* gray-200 */
+
+    /* text */
+    --color-heading: 55 65 81;    /* gray-700 */
+    --color-body:    75 85 99;    /* gray-600 */
+    --color-muted:   107 114 128; /* gray-500 */
+    --color-faint:   156 163 175; /* gray-400 */
+    --color-icon:    51 65 85;    /* slate-700 */
+
+    /* border */
+    --color-border:        229 231 235; /* gray-200 */
+    --color-border-subtle: 243 244 246; /* gray-100 */
+
+    /* fills for icons */
+    --color-fill-disabled: 229 231 235; /* gray-200 */
+    --color-fill-icon:     55 65 81;    /* gray-700 */
+
+    /* shadow (used in box-shadow via theme) */
+    --color-shadow: 229 231 235; /* gray-200 */
+
+    /* skeleton loader */
+    --skeleton-bg: #e0e0e0;
+    --skeleton-fg: #f5f5f5;
+  }
+
+  .dark {
+    --color-surface:       17 24 39;  /* gray-900 */
+    --color-surface-card:  31 41 55;  /* gray-800 */
+    --color-surface-btn:   55 65 81;  /* gray-700 */
+    --color-surface-hover: 55 65 81;  /* gray-700 */
+    --color-surface-muted: 31 41 55;  /* gray-800 */
+    --color-surface-active: 75 85 99; /* gray-600 */
+
+    --color-heading: 229 231 235; /* gray-200 */
+    --color-body:    156 163 175; /* gray-400 */
+    --color-muted:   156 163 175; /* gray-400 */
+    --color-faint:   107 114 128; /* gray-500 */
+    --color-icon:    203 213 225; /* slate-300 */
+
+    --color-border:        55 65 81;  /* gray-700 */
+    --color-border-subtle: 55 65 81;  /* gray-700 */
+
+    --color-fill-disabled: 75 85 99;  /* gray-600 */
+    --color-fill-icon:     209 213 219; /* gray-300 */
+
+    --color-shadow: 17 24 39; /* gray-900 */
+
+    --skeleton-bg: #374151;
+    --skeleton-fg: #4b5563;
+  }
+
+  body {
+    @apply bg-surface text-heading transition-colors duration-200;
+  }
+}
+
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
@@ -11,19 +79,199 @@
     background: #7373733a;
     border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: #737373;
 }
-
+.dark ::-webkit-scrollbar-thumb {
+    background: #55555580;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}
 
 @keyframes blink {
   50% {
     opacity: 0;
   }
 }
-
 .blink {
   animation: blink 2s infinite;
 }
 
+/* ============================================
+   react-big-calendar dark mode overrides
+   ============================================ */
+.rbc-dark .rbc-calendar {
+  color: #d1d5db;
+}
+.rbc-dark .rbc-toolbar button {
+  color: #d1d5db;
+  border-color: #4b5563;
+}
+.rbc-dark .rbc-toolbar button:hover,
+.rbc-dark .rbc-toolbar button:focus {
+  background-color: #374151;
+  color: #f3f4f6;
+  border-color: #6b7280;
+}
+.rbc-dark .rbc-toolbar button.rbc-active {
+  background-color: #4b5563;
+  color: #f9fafb;
+  border-color: #6b7280;
+}
+.rbc-dark .rbc-header {
+  border-bottom-color: #374151;
+  color: #9ca3af;
+}
+.rbc-dark .rbc-header + .rbc-header {
+  border-left-color: #374151;
+}
+.rbc-dark .rbc-month-view,
+.rbc-dark .rbc-time-view {
+  border-color: #374151;
+}
+.rbc-dark .rbc-month-row + .rbc-month-row {
+  border-top-color: #374151;
+}
+.rbc-dark .rbc-day-bg + .rbc-day-bg {
+  border-left-color: #374151;
+}
+.rbc-dark .rbc-today {
+  background-color: #1e3a5f30;
+}
+.rbc-dark .rbc-off-range-bg {
+  background-color: #111827;
+}
+.rbc-dark .rbc-off-range {
+  color: #4b5563;
+}
+.rbc-dark .rbc-date-cell {
+  color: #d1d5db;
+}
+.rbc-dark .rbc-event {
+  background-color: #3b82f6;
+  border-color: #2563eb;
+}
+.rbc-dark .rbc-event.rbc-selected {
+  background-color: #2563eb;
+}
+.rbc-dark .rbc-show-more {
+  color: #60a5fa;
+}
+.rbc-dark .rbc-time-content {
+  border-top-color: #374151;
+}
+.rbc-dark .rbc-timeslot-group {
+  border-bottom-color: #374151;
+}
+.rbc-dark .rbc-time-slot {
+  border-top-color: #1f2937;
+}
+.rbc-dark .rbc-time-header-content {
+  border-left-color: #374151;
+}
+.rbc-dark .rbc-time-content > * + * > * {
+  border-left-color: #374151;
+}
+.rbc-dark .rbc-day-slot .rbc-time-slot {
+  border-top-color: #1f293780;
+}
+.rbc-dark .rbc-current-time-indicator {
+  background-color: #ef4444;
+}
+.rbc-dark .rbc-overlay {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+.rbc-dark .rbc-overlay-header {
+  border-bottom-color: #374151;
+  color: #d1d5db;
+}
+
+/* ============================================
+   react-date-range dark mode overrides
+   ============================================ */
+.dark .rdrCalendarWrapper {
+  background-color: #1f2937;
+  color: #d1d5db;
+}
+.dark .rdrDateDisplayWrapper {
+  background-color: #111827;
+}
+.dark .rdrDateDisplay {
+  color: #d1d5db;
+}
+.dark .rdrDateDisplayItem {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+.dark .rdrDateDisplayItem input {
+  color: #d1d5db;
+}
+.dark .rdrMonthAndYearWrapper {
+  color: #d1d5db;
+}
+.dark .rdrMonthAndYearPickers select {
+  color: #d1d5db;
+  background-color: #1f2937;
+}
+.dark .rdrNextPrevButton {
+  background-color: #374151;
+}
+.dark .rdrNextPrevButton:hover {
+  background-color: #4b5563;
+}
+.dark .rdrPprevButton i {
+  border-color: transparent #9ca3af transparent transparent;
+}
+.dark .rdrNextButton i {
+  border-color: transparent transparent transparent #9ca3af;
+}
+.dark .rdrMonth {
+  background-color: #1f2937;
+}
+.dark .rdrWeekDay {
+  color: #6b7280;
+}
+.dark .rdrDay {
+  color: #d1d5db;
+}
+.dark .rdrDayNumber span {
+  color: #d1d5db;
+}
+.dark .rdrDayPassive .rdrDayNumber span {
+  color: #4b5563;
+}
+.dark .rdrDayToday .rdrDayNumber span::after {
+  background: #60a5fa;
+}
+.dark .rdrDayDisabled {
+  background-color: #111827;
+}
+.dark .rdrDayDisabled .rdrDayNumber span {
+  color: #374151;
+}
+.dark .rdrDefinedRangesWrapper {
+  background-color: #1f2937;
+  border-right-color: #374151;
+}
+.dark .rdrStaticRange {
+  background-color: #1f2937;
+  color: #d1d5db;
+  border-bottom-color: #374151;
+}
+.dark .rdrStaticRange:hover .rdrStaticRangeLabel,
+.dark .rdrStaticRange:focus .rdrStaticRangeLabel {
+  background-color: #374151;
+}
+.dark .rdrInputRanges {
+  background-color: #1f2937;
+}
+.dark .rdrInputRange {
+  color: #d1d5db;
+}
+.dark .rdrInputRangeInput {
+  background-color: #374151;
+  border-color: #4b5563;
+  color: #d1d5db;
+}

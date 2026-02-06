@@ -14,10 +14,7 @@ export default function Session() {
     clickPlay();
     dispatch({
       type: actionTypes.DECREASE_SESSION_VALUE,
-      payload: {
-        sessionValue: sessionValue - 1,
-        timerValue: (sessionValue - 1) * 60,
-      },
+      payload: { sessionValue: sessionValue - 1, timerValue: (sessionValue - 1) * 60 },
     });
   }
 
@@ -25,10 +22,7 @@ export default function Session() {
     clickPlay();
     dispatch({
       type: actionTypes.INCREASE_SESSION_VALUE,
-      payload: {
-        sessionValue: sessionValue + 1,
-        timerValue: (sessionValue + 1) * 60,
-      },
+      payload: { sessionValue: sessionValue + 1, timerValue: (sessionValue + 1) * 60 },
     });
   }
 
@@ -41,20 +35,13 @@ export default function Session() {
   return (
     <>
       <SmallButton {...decreamentCallbacks}>
-        <MinusIcon
-          className={`h-5 w-5 ${decreaseDisabled && "fill-gray-200"}`}
-        />
+        <MinusIcon className={`h-5 w-5 ${decreaseDisabled ? "fill-icon-disabled" : "fill-icon-default"}`} />
       </SmallButton>
-      <p
-        id="session-length"
-        className="text-md min-w-[27px] px-2 py-4 font-bold"
-      >
+      <p id="session-length" className="text-md min-w-[27px] px-2 py-4 font-bold">
         {sessionValue}
       </p>
       <SmallButton {...increamentCallbacks}>
-        <PlusIcon
-          className={`h-5 w-5 ${increaseDisabled && "fill-gray-200"}`}
-        />
+        <PlusIcon className={`h-5 w-5 ${increaseDisabled ? "fill-icon-disabled" : "fill-icon-default"}`} />
       </SmallButton>
     </>
   );

@@ -27,9 +27,9 @@ export default function Menu({ menu }: Props) {
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M19 9l-7 7-7-7"
           ></path>
         </svg>
@@ -37,15 +37,15 @@ export default function Menu({ menu }: Props) {
 
       <div
         id="dropdown"
-        className="z-10 hidden w-44 divide-y divide-gray-100 rounded bg-white shadow dark:bg-gray-700"
+        className="z-10 hidden w-44 divide-y divide-gray-100 rounded bg-surface-card shadow"
       >
         <ul
-          className="py-1 text-sm text-gray-700 dark:text-gray-200"
+          className="py-1 text-sm text-heading"
           aria-labelledby="dropdownDefault"
         >
           {menu.map((m) => (
             <li key={m.value} onClick={() => m.onClick(m.value)}>
-              <span className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+              <span className="block py-2 px-4 hover:bg-surface-hover">
                 {m.label}
               </span>
             </li>

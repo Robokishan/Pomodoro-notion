@@ -30,7 +30,7 @@ export default function TimesheetList() {
   }
 
   return (
-    <div className="mb-10 mt-10 rounded-md bg-white p-5 shadow-2xl">
+    <div className="mb-10 mt-10 rounded-md bg-surface-card p-5 shadow-2xl">
       <span className="relative flex h-3 w-3">
         {isLoading && (
           <>
@@ -40,13 +40,12 @@ export default function TimesheetList() {
         )}
       </span>
 
-      <h1 className="mr-5 text-center text-xl text-gray-400">Timesheets</h1>
-      <hr className="my-3 h-px border-0 bg-gray-200 " />
+      <h1 className="mr-5 text-center text-xl text-faint">Timesheets</h1>
+      <hr className="my-3 h-px border-0 bg-theme" />
       <div className="max-h-96 overflow-auto ">
         <table className="w-full table-auto">
-          {/* sticky table header */}
-          <thead className="sticky top-0 bg-white">
-            <tr className="border-b border-slate-100 text-center text-slate-600">
+          <thead className="sticky top-0 bg-surface-card">
+            <tr className="border-b border-theme text-center text-muted">
               <th className="p-2">Name</th>
               <th className="p-2">Start Time</th>
               <th className="p-2">End Time</th>
@@ -58,56 +57,32 @@ export default function TimesheetList() {
             {projectTimesheets.length > 0 ? (
               projectTimesheets.map((proj) => {
                 const isDisabledBtn =
-                  disabledButtons.findIndex((id) => id == proj.timesheetId) !=
-                  -1;
+                  disabledButtons.findIndex((id) => id == proj.timesheetId) !== -1;
                 return (
-                  <tr
-                    className="border-b border-slate-100 text-center"
-                    key={proj.timesheetId}
-                  >
-                    <td className="whitespace-nowrap p-4 pl-8	underline">
-                      <Link href={proj.href ?? ""}>
-                        {proj.projectName}
-                      </Link>
+                  <tr className="border-b border-theme text-center text-heading" key={proj.timesheetId}>
+                    <td className="whitespace-nowrap p-4 pl-8 underline">
+                      <Link href={proj.href ?? ""}>{proj.projectName}</Link>
                     </td>
                     <td>
                       <span
-                        {...(proj.startTime.approx == true
-                          ? { title: "Approx value" }
-                          : {})}
-                        className={`mx-2 whitespace-nowrap ${
-                          proj.startTime.approx == true
-                            ? "cursor-pointer text-orange-500" //if approximate value then show orange
-                            : null
-                        }`}
+                        {...(proj.startTime.approx ? { title: "Approx value" } : {})}
+                        className={`mx-2 whitespace-nowrap ${proj.startTime.approx ? "cursor-pointer text-orange-500" : ""}`}
                       >
                         {proj.startTime.value}
                       </span>
                     </td>
                     <td>
                       <span
-                        {...(proj.susp == true
-                          ? { title: "Suspicious value" }
-                          : {})}
-                        className={`mx-2 whitespace-nowrap ${
-                          proj.susp == true
-                            ? "cursor-pointer text-blue-400" //if susp value then show blue
-                            : null
-                        }`}
+                        {...(proj.susp ? { title: "Suspicious value" } : {})}
+                        className={`mx-2 whitespace-nowrap ${proj.susp ? "cursor-pointer text-blue-400" : ""}`}
                       >
                         {proj.createdAt}
                       </span>
                     </td>
                     <td>
                       <span
-                        {...(proj.susp == true
-                          ? { title: "Suspicious value" }
-                          : {})}
-                        className={`mx-2 ${
-                          proj.susp == true
-                            ? "cursor-pointer text-blue-400" //if susp value then show blue
-                            : null
-                        }`}
+                        {...(proj.susp ? { title: "Suspicious value" } : {})}
+                        className={`mx-2 ${proj.susp ? "cursor-pointer text-blue-400" : ""}`}
                       >
                         {convertToMMSS(proj.timerValue, true, true)}
                       </span>
@@ -117,32 +92,24 @@ export default function TimesheetList() {
                         disabled={isDisabledBtn}
                         className={`rounded-md ${
                           isDisabledBtn
-                            ? "bg-red-300 text-slate-200 "
+                            ? "bg-red-300 text-slate-200 dark:bg-red-900 dark:text-slate-500"
                             : "bg-red-400 text-gray-50 hover:bg-red-500 active:bg-red-600"
                         } px-4 py-2`}
                         onClick={async () => {
-                          setDisabledButtons((prev) => [
-                            ...prev,
-                            proj.timesheetId,
-                          ]);
+                          setDisabledButtons((prev) => [...prev, proj.timesheetId]);
                           deleteTimesheet({
                             projectId: proj.projectId,
                             timesheetId: proj.timesheetId,
                             userId,
                           })
                             .then(() => {
-                              toast.success("Delete done", {
-                                autoClose: 1000,
-                              });
-                              if (prefTimeout.current)
-                                clearTimeout(prefTimeout.current);
+                              toast.success("Delete done", { autoClose: 1000 });
+                              if (prefTimeout.current) clearTimeout(prefTimeout.current);
                               prefTimeout.current = setTimeout(() => {
                                 mutate().finally(() =>
-                                  setDisabledButtons((prev) => [
-                                    ...prev.filter(
-                                      (id) => id != proj.timesheetId
-                                    ),
-                                  ])
+                                  setDisabledButtons((prev) =>
+                                    prev.filter((id) => id != proj.timesheetId)
+                                  )
                                 );
                               }, 3000);
                             })
@@ -156,11 +123,8 @@ export default function TimesheetList() {
                 );
               })
             ) : (
-              <tr className="border-b border-slate-100 text-center text-slate-600">
-                <td
-                  colSpan={5}
-                  className="w-full bg-gray-100/50 p-2 text-center"
-                >
+              <tr className="border-b border-theme text-center text-muted">
+                <td colSpan={5} className="w-full bg-surface-muted/50 p-2 text-center">
                   No Timesheets
                 </td>
               </tr>
@@ -168,7 +132,7 @@ export default function TimesheetList() {
           </tbody>
         </table>
       </div>
-      <div className="mt-5">
+      <div className="mt-5 text-heading">
         <span>{`Total: ${diff_hours(startDate, endDate)} Hours`}</span>
         <div>
           <span>{`Spent: ${convertToMMSS(totalTime, true, true)} Hours`}</span>

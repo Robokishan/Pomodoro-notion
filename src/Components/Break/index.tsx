@@ -14,18 +14,14 @@ export default function Break() {
     clickPlay();
     dispatch({
       type: actionTypes.DECREASE_BREAK_VALUE,
-      payload: {
-        breakValue: breakValue - 1,
-      },
+      payload: { breakValue: breakValue - 1 },
     });
   };
   const handleIncrement = () => {
     clickPlay();
     dispatch({
       type: actionTypes.INCREASE_BREAK_VALUE,
-      payload: {
-        breakValue: breakValue + 1,
-      },
+      payload: { breakValue: breakValue + 1 },
     });
   };
 
@@ -38,17 +34,13 @@ export default function Break() {
   return (
     <>
       <SmallButton {...decreamentCallbacks}>
-        <MinusIcon
-          className={`h-5 w-5 ${decreaseDisabled && "fill-gray-200"}`}
-        />
+        <MinusIcon className={`h-5 w-5 ${decreaseDisabled ? "fill-icon-disabled" : "fill-icon-default"}`} />
       </SmallButton>
       <p id="break-length" className="text-md min-w-[27px] px-2 py-4 font-bold">
         {breakValue}
       </p>
       <SmallButton {...increamentCallbacks}>
-        <PlusIcon
-          className={`h-5 w-5 ${increaseDisabled && "fill-gray-200"}`}
-        />
+        <PlusIcon className={`h-5 w-5 ${increaseDisabled ? "fill-icon-disabled" : "fill-icon-default"}`} />
       </SmallButton>
     </>
   );

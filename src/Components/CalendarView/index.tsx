@@ -7,6 +7,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useUserState } from "@/utils/Context/UserContext/Context";
 import { actionTypes } from "@/utils/Context/UserContext/reducer";
 import { convertToMMSS } from "../../hooks/Pomodoro/Time/useTime";
+import { useTheme } from "../../utils/Context/ThemeContext";
 
 const locales = {
   "en-US": enUS,
@@ -23,8 +24,10 @@ const localizer = dateFnsLocalizer({
 export default function CalendarView() {
   const [{ startDate }, userDispatch] = useUserState();
   const [, projectTimesheets] = useFormattedData();
+  const { resolvedTheme } = useTheme();
 
   const clickRef = useRef<any>(null);
+  const isDark = resolvedTheme === "dark";
 
   const eventList: Event[] = useMemo(() => {
     return projectTimesheets.map((sheet) => ({
@@ -59,32 +62,34 @@ export default function CalendarView() {
   }, []);
 
   return (
-    <Calendar
-      defaultView="month"
-      defaultDate={new Date(startDate * 1000)}
-      onRangeChange={(_range: Date[] | { start: Date; end: Date }) => {
-        const startDate = Array.isArray(_range) ? _range[0] : _range.start;
-        const endDate = Array.isArray(_range)
-          ? _range[_range.length - 1]
-          : _range.end;
+    <div className={isDark ? "rbc-dark" : ""}>
+      <Calendar
+        defaultView="month"
+        defaultDate={new Date(startDate * 1000)}
+        onRangeChange={(_range: Date[] | { start: Date; end: Date }) => {
+          const startDate = Array.isArray(_range) ? _range[0] : _range.start;
+          const endDate = Array.isArray(_range)
+            ? _range[_range.length - 1]
+            : _range.end;
 
-        if (startDate && endDate)
-          userDispatch({
-            type: actionTypes.SET_DATES,
-            payload: {
-              startDate: getUnixTime(startOfDay(startDate)),
-              endDate: getUnixTime(endOfDay(endDate)),
-            },
-          });
-      }}
-      popup={true}
-      selectable={true}
-      localizer={localizer}
-      events={eventList}
-      startAccessor="start"
-      endAccessor="end"
-      style={{ height: 700 }}
-      onSelectEvent={onSelectEvent}
-    />
+          if (startDate && endDate)
+            userDispatch({
+              type: actionTypes.SET_DATES,
+              payload: {
+                startDate: getUnixTime(startOfDay(startDate)),
+                endDate: getUnixTime(endOfDay(endDate)),
+              },
+            });
+        }}
+        popup={true}
+        selectable={true}
+        localizer={localizer}
+        events={eventList}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 700 }}
+        onSelectEvent={onSelectEvent}
+      />
+    </div>
   );
 }

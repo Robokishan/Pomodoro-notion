@@ -1,5 +1,6 @@
 import React from "react";
 import chroma, { Color } from "chroma-js";
+import { useTheme } from "../../utils/Context/ThemeContext";
 
 export interface ColourOption {
   readonly value: string;
@@ -11,7 +12,7 @@ export interface ColourOption {
 
 import Select, { StylesConfig } from "react-select";
 
-const colourStyles: StylesConfig<ColourOption, true> = {
+const getColourStyles = (isDark: boolean): StylesConfig<ColourOption, true> => ({
   control: (styles) => {
     return {
       ...styles,
@@ -20,11 +21,11 @@ const colourStyles: StylesConfig<ColourOption, true> = {
       boxShadow: "unset",
       cursor: "pointer",
       margin: "unset",
-      backgroundColor: "white",
-      border: `1px solid #DAE6EF`,
+      backgroundColor: isDark ? "#1f2937" : "white",
+      border: isDark ? `1px solid #374151` : `1px solid #DAE6EF`,
       "&:hover": {
         fontWeight: 0,
-        backgroundColor: "white",
+        backgroundColor: isDark ? "#374151" : "white",
       },
       borderRadius: "6px",
       minHeight: "48px",
@@ -87,7 +88,8 @@ const colourStyles: StylesConfig<ColourOption, true> = {
   menu: (styles) => ({
     ...styles,
     minWidth: "310px",
-    boxShadow: `0px 2px 24px #DAE6EF`,
+    boxShadow: isDark ? `0px 2px 24px #00000050` : `0px 2px 24px #DAE6EF`,
+    backgroundColor: isDark ? "#1f2937" : "white",
     zIndex: 99999, //fix so that it can overlap over other components
   }),
   menuList: (styles) => ({
@@ -98,8 +100,27 @@ const colourStyles: StylesConfig<ColourOption, true> = {
     const { ...rest } = base;
     return { ...rest, zIndex: 9999 };
   },
+  input: (styles) => ({
+    ...styles,
+    color: isDark ? "#d1d5db" : "#374151",
+  }),
+  placeholder: (styles) => ({
+    ...styles,
+    color: isDark ? "#6b7280" : "#9ca3af",
+  }),
+  dropdownIndicator: (style) => ({
+    ...style,
+    color: isDark ? "#6b7280" : undefined,
+  }),
+  clearIndicator: (style) => ({
+    ...style,
+    color: isDark ? "#6b7280" : undefined,
+    ":hover": {
+      color: isDark ? "#9ca3af" : undefined,
+    },
+  }),
   indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
-};
+});
 
 interface Props {
   options: ColourOption[];
@@ -112,12 +133,15 @@ export default function MultiSelect({
   disabled = false,
   handleSelect,
 }: Props) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+
   return (
     <Select
       closeMenuOnSelect={false}
       isMulti
       options={options}
-      styles={colourStyles}
+      styles={getColourStyles(isDark)}
       isDisabled={disabled}
       id="notion-tags-select"
       instanceId="notion-tags-select"

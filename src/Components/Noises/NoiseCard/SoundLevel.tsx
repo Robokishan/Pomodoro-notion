@@ -24,9 +24,8 @@ export default function SoundLevel({
           e.stopPropagation();
           handleChange(e.target.valueAsNumber / 100);
         }}
-        // value="50"
         defaultValue={defaultValue}
-        className={`h-1 w-full cursor-pointer rounded-lg ${"bg-gray-200 accent-slate-400 dark:bg-gray-700"}`}
+        className="h-1 w-full cursor-pointer rounded-lg bg-surface-active accent-slate-400"
       ></input>
     </>
   );
