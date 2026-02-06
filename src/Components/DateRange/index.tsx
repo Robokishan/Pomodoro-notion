@@ -2,20 +2,15 @@ import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import { format, getUnixTime, isWeekend, startOfDay, endOfDay } from "date-fns";
 import { useEffect, useState } from "react";
 import { DateRangePicker, Range, RangeKeyDict } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 import OutsideClickHandler from "react-outside-click-handler";
 
 const extraDot = (
   <div
     style={{
-      height: "5px",
-      width: "5px",
-      borderRadius: "100%",
-      background: "orange",
-      position: "absolute",
-      top: 2,
-      right: 2,
+      height: "5px", width: "5px", borderRadius: "100%",
+      background: "orange", position: "absolute", top: 2, right: 2,
     }}
   />
 );
@@ -40,40 +35,23 @@ export default function DateRange({
   onDateRangeChange,
 }: {
   dateRanges: Range;
-  onDateRangeChange: ({
-    startDate,
-    endDate,
-  }: {
-    startDate: number;
-    endDate: number;
-  }) => void;
+  onDateRangeChange: ({ startDate, endDate }: { startDate: number; endDate: number }) => void;
 }) {
   const [showCalendar, setVisibility] = useState(false);
-  const [calendarDates, setCalendarDates] = useState<[Range]>([
-    getTodayRange(),
-  ]);
+  const [calendarDates, setCalendarDates] = useState<[Range]>([getTodayRange()]);
 
   const handleDateRangeChange = (range: RangeKeyDict) => {
-    if (
-      range?.selection &&
-      range.selection?.startDate &&
-      range.selection?.endDate
-    ) {
+    if (range?.selection && range.selection?.startDate && range.selection?.endDate) {
       const startDate = startOfDay(range.selection.startDate);
       const endDate = endOfDay(
-        range.selection.endDate > endOfDay(new Date())
-          ? new Date()
-          : range.selection.endDate
+        range.selection.endDate > endOfDay(new Date()) ? new Date() : range.selection.endDate
       );
-
       const selection: ReturnType<typeof getTodayRange> = {
         key: range.selection.key as string,
-        startDate: startDate,
-        endDate: endDate,
+        startDate,
+        endDate,
       };
-
       setCalendarDates([selection]);
-
       onDateRangeChange({
         startDate: getUnixTime(selection.startDate),
         endDate: getUnixTime(selection.endDate),
@@ -85,34 +63,20 @@ export default function DateRange({
 
   return (
     <div className="relative m-auto w-fit ">
-      <OutsideClickHandler
-        onOutsideClick={() => {
-          setVisibility(false);
-        }}
-      >
+      <OutsideClickHandler onOutsideClick={() => setVisibility(false)}>
         <div
           onClick={() => setVisibility((prev) => !prev)}
-          className="mt-5 flex cursor-pointer select-none items-center gap-3 rounded-md bg-gray-100 p-3 text-gray-500 shadow-xl"
+          className="mt-5 flex cursor-pointer select-none items-center gap-3 rounded-md bg-surface-muted p-3 text-muted shadow-xl"
         >
-          <span>
-            {dateRanges?.endDate
-              ? format(dateRanges?.endDate, "yyyy-MM-dd")
-              : ""}
-          </span>
+          <span>{dateRanges?.endDate ? format(dateRanges?.endDate, "yyyy-MM-dd") : ""}</span>
           <ArrowLongLeftIcon className="h-5 w-5" />
-          <span>
-            {dateRanges?.startDate
-              ? format(dateRanges?.startDate, "yyyy-MM-dd")
-              : ""}
-          </span>
+          <span>{dateRanges?.startDate ? format(dateRanges?.startDate, "yyyy-MM-dd") : ""}</span>
         </div>
         <div className="absolute -left-[110%] top-14 z-50 shadow-xl">
           {showCalendar && (
             <DateRangePicker
               preventSnapRefocus={true}
-              onChange={(item: RangeKeyDict) => {
-                handleDateRangeChange(item);
-              }}
+              onChange={(item: RangeKeyDict) => handleDateRangeChange(item)}
               moveRangeOnFirstSelection={false}
               maxDate={new Date()}
               dayContentRenderer={customDayContent}

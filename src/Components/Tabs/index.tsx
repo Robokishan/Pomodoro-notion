@@ -27,8 +27,8 @@ function Tab({
       <span
         className={`active inline-block cursor-pointer rounded-t-lg p-4 ${
           activeTab
-            ? `bg-gray-100  text-blue-600 dark:bg-gray-800 dark:text-gray-200`
-            : "hover:bg-gray-50 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+            ? `bg-surface-muted text-blue-600`
+            : "hover:bg-surface-hover hover:text-body"
         }`}
       >
         {children}
@@ -39,7 +39,7 @@ function Tab({
 
 export default function Tabs({ tabs, activeTab, setActiveTab }: Props) {
   return (
-    <ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+    <ul className="flex flex-wrap border-b border-theme text-center text-sm font-medium text-muted">
       {tabs.map((tab, index) => (
         <Tab
           value={tab.value}

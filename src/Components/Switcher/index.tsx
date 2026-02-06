@@ -39,7 +39,7 @@ export default function Switcher({
   title,
   margin,
   value,
-  width = 130,
+  width,
   height = 40,
   checkedBackgroundColor,
   tabWrapperStyle,
@@ -52,22 +52,23 @@ export default function Switcher({
     return filters.findIndex((option) => option.value === value);
   }, [value, filters]);
 
+  const tabCount = filters.length;
+  const gliderWidthPercent = 100 / tabCount;
+
   return (
-    <div className={`flex ${margin || "mt-0"} items-center justify-center`}>
+    <div className={`flex ${margin || "mt-0"} w-full items-center justify-center px-4 sm:px-0`}>
       {title && (
-        <p className="m-0 text-lg font-semibold text-gray-600">{title}</p>
+        <p className="m-0 text-lg font-semibold text-heading">{title}</p>
       )}
       <div
-        className="relative ml-4 flex rounded-3xl bg-white p-1 shadow-md"
+        className="relative flex w-full max-w-md rounded-3xl bg-surface-card p-1 shadow-md sm:ml-4"
         style={tabWrapperStyle}
       >
         <div
-          className="duration-250 absolute flex h-full rounded-3xl bg-slate-400/30 transition-transform ease-out"
+          className="duration-250 absolute top-1 bottom-1 rounded-3xl bg-surface-active/40 transition-transform ease-out"
           style={{
-            width: `${width}px`,
+            width: `${gliderWidthPercent}%`,
             transform: `translateX(${selectedIndex * 100}%)`,
-            // borderRadius: gliderBorderRadius,
-            height: height,
             margin: gliderMargin,
           }}
         />
@@ -83,10 +84,8 @@ export default function Switcher({
             />
             <label
               htmlFor={`${switcherId}-${index + 1}`}
-              className=" relative flex h-full w-full cursor-pointer select-none items-center justify-center rounded-3xl font-semibold text-gray-600 transition-colors duration-150 ease-in"
+              className="relative z-10 flex flex-1 cursor-pointer select-none items-center justify-center rounded-3xl py-2 font-semibold text-heading transition-colors duration-150 ease-in"
               style={{
-                width: `${width}px`,
-                // borderRadius: gliderBorderRadius,
                 height: height,
                 margin: gliderMargin,
               }}

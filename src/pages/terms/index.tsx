@@ -3,7 +3,7 @@ import Header from "../../Components/Header";
 
 export default function Terms() {
   return (
-    <main className="container mx-auto p-4  text-lg text-gray-700">
+    <main className="container mx-auto p-4  text-lg text-gray-700 dark:text-gray-300">
       <Header />
       <h2 className=" gap-5 text-center text-4xl font-extrabold leading-normal ">
         <span>
@@ -13,7 +13,7 @@ export default function Terms() {
           </span>
           Condition
         </span>
-        <hr className="my-3 h-px border-0 bg-gray-200 " />
+        <hr className="my-3 h-px border-0 bg-gray-200 dark:bg-gray-700" />
       </h2>
       <section className="mt-5 pb-5">
         <p className="my-5">Last updated: January 05, 2023</p>

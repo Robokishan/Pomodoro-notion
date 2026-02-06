@@ -13,7 +13,7 @@ export default function SmallButton({
     <button
       {...props}
       disabled={disabled}
-      className={`cursor-pointer rounded-full bg-white p-3 shadow-xl shadow-gray-200 transition delay-100 ease-in-out ${
+      className={`cursor-pointer rounded-full bg-surface-btn p-3 shadow-xl shadow-theme transition delay-100 ease-in-out ${
         !disabled && `hover:scale-110`
       }`}
       type="button"

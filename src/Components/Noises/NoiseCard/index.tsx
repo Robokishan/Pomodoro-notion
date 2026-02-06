@@ -31,7 +31,6 @@ export default function NoiseCard({
     volume,
     loop: true,
     onload() {
-      // check if howler is loaded
       setEnable(true);
     },
   });
@@ -47,18 +46,13 @@ export default function NoiseCard({
   }, [stop]);
 
   useEffect(() => {
-    return () => {
-      // stop on unmount
-      stopSound();
-    };
+    return () => { stopSound(); };
   }, [stopSound]);
 
   useEffect(() => {
     if (!noisesRunning.includes(value)) {
-      //stop noise
       stopSound();
     } else if (noisesRunning.includes(value) && !show) {
-      // play noise
       playSound();
     }
   }, [dispatch, noisesRunning, playSound, show, stopSound, value]);
@@ -68,42 +62,29 @@ export default function NoiseCard({
       onClick={(e) => {
         e.preventDefault();
         if (!show && isEnabled) {
-          dispatch({
-            type: actionTypes.ADD_NOISE_RUNNING,
-            payload: value,
-          });
-          dispatch({
-            type: actionTypes.SET_CURRENT_TRACK_INDEX,
-            payload: trackIndex,
-          });
+          dispatch({ type: actionTypes.ADD_NOISE_RUNNING, payload: value });
+          dispatch({ type: actionTypes.SET_CURRENT_TRACK_INDEX, payload: trackIndex });
         } else {
-          dispatch({
-            type: actionTypes.REMOVE_NOISE_RUNNING,
-            payload: value,
-          });
+          dispatch({ type: actionTypes.REMOVE_NOISE_RUNNING, payload: value });
         }
       }}
-      className={`flex h-28 w-28 cursor-pointer flex-col items-center rounded-xl bg-gradient-to-r from-slate-50 via-slate-100
-      to-slate-50
-      p-3	
-    align-top text-slate-50 shadow-md 
-  
-    `}
+      className="flex h-28 w-28 cursor-pointer flex-col items-center rounded-xl bg-surface-muted
+      p-3 align-top shadow-md"
     >
       {Icon ? (
         <div
           title={label}
-          className={`h-[56px] w-[56px]    ${
+          className={`h-[56px] w-[56px] ${
             isEnabled
-              ? "fill-slate-400 stroke-slate-400"
-              : "fill-slate-200 stroke-slate-200"
+              ? "fill-icon-default stroke-icon"
+              : "fill-icon-disabled stroke-faint"
           }`}
         >
           <Icon />
         </div>
       ) : (
         <div className="h-[56px] w-[56px]">
-          <span>{label}</span>
+          <span className="text-heading">{label}</span>
         </div>
       )}
       <div className={`w-full ${!show && "opacity-30"}`}>

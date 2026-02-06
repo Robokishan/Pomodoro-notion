@@ -10,7 +10,7 @@ export default function BigButton({
   return (
     <button
       disabled={disabled}
-      className="m-3 cursor-pointer rounded-full bg-white px-[1em] py-[1em] shadow-xl shadow-gray-200 transition delay-100 ease-in-out hover:scale-110"
+      className="m-3 cursor-pointer rounded-full bg-surface-btn px-[1em] py-[1em] shadow-xl shadow-theme transition delay-100 ease-in-out hover:scale-110"
       type="button"
       id="reset"
       onClick={onClick}
