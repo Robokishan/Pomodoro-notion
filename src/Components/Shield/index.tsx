@@ -11,12 +11,18 @@ import preducer, {
 } from "../../utils/Context/ProjectContext/reducer";
 import { UserStateProvider } from "../../utils/Context/UserContext/Context";
 import { ProjectStateProvider } from "../../utils/Context/ProjectContext/Context";
+import { NoiseStateProvider } from "../../utils/Context/NoiseContext/Context";
+import noiseReducer, {
+  initialState as noiseInitial,
+} from "../../utils/Context/NoiseContext/reducer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import NextProgress from "nextjs-progressbar";
 import { shouldIgnore } from "@/utils/routes";
+import { MediaKeysPreferenceProvider } from "@/utils/Context/MediaKeysPreferenceContext";
+import MediaSessionHandler from "../MediaSessionHandler";
 
 interface Props {
   children: React.ReactNode;
@@ -35,14 +41,20 @@ export default function Shield({ children }: Props) {
     <ProjectStateProvider reducer={preducer} initialState={projInitial}>
       <UserStateProvider reducer={ureducer} initialState={userInitial}>
         <PomoStateProvider reducer={reducer} initialState={initialState}>
-          <NextProgress
-            color="#374151"
-            showOnShallow={false}
-            stopDelayMs={0}
-            options={{
-              showSpinner: false,
-            }}
-          />
+          <NoiseStateProvider
+            reducer={noiseReducer}
+            initialState={noiseInitial}
+          >
+            <MediaKeysPreferenceProvider>
+              <MediaSessionHandler />
+              <NextProgress
+                color="#374151"
+                showOnShallow={false}
+                stopDelayMs={0}
+                options={{
+                  showSpinner: false,
+                }}
+              />
 
           <ToastContainer hideProgressBar newestOnTop={true} />
 
@@ -52,6 +64,8 @@ export default function Shield({ children }: Props) {
             <link rel="icon" href="/favicon.ico" />
           </Head>
           {children}
+            </MediaKeysPreferenceProvider>
+          </NoiseStateProvider>
         </PomoStateProvider>
       </UserStateProvider>
     </ProjectStateProvider>

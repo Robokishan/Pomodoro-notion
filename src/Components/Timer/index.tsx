@@ -11,6 +11,8 @@ import OutsideClickHandler from "react-outside-click-handler";
 import useSyncPomo from "../../hooks/useSyncPomo";
 import useWindowActive from "../../hooks/useWindowActive";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
+import { useMediaKeysPreference } from "../../utils/Context/MediaKeysPreferenceContext";
+import { pomodoroMediaRef } from "../../utils/mediaSessionRef";
 import Break from "../Break";
 import Controls from "../Controls";
 import SoundLevel from "../Noises/NoiseCard/SoundLevel";
@@ -32,6 +34,13 @@ export default function Timer({ projectName }: Props) {
     useSyncPomo();
 
   const isWindowActive = useWindowActive();
+
+  useEffect(() => {
+    pomodoroMediaRef.current = togglePlayPause;
+    return () => {
+      pomodoroMediaRef.current = null;
+    };
+  }, [togglePlayPause]);
 
   const [disableControls, setDisableControls] = useState(false);
 
@@ -233,6 +242,8 @@ function Container({
 
 function PopOver({ visible } = { visible: false }) {
   const [{ tickVolume }, dispatch] = usePomoState();
+  const [mediaKeysControlPomodoro, setMediaKeysControlPomodoro] =
+    useMediaKeysPreference();
 
   const [volume, setVolume] = useState(tickVolume);
 
@@ -259,13 +270,25 @@ function PopOver({ visible } = { visible: false }) {
          border-slate-300  bg-white"
         ></div>
       </div>
-      <div className="flex items-center gap-3   bg-white px-2 py-1">
-        <div className="w-6">{Math.floor(volume * 100)}</div>
-        <SoundLevel
-          defaultValue={volume * 100}
-          value="Tickvolume"
-          handleChange={setVolume}
-        />
+      <div className="flex flex-col gap-2 bg-white px-2 py-1">
+        <div className="flex items-center gap-3">
+          <div className="w-6">{Math.floor(volume * 100)}</div>
+          <SoundLevel
+            defaultValue={volume * 100}
+            value="Tickvolume"
+            handleChange={setVolume}
+          />
+        </div>
+        <div className="flex items-center justify-between border-t border-slate-100 pt-2">
+          <span className="text-xs text-slate-500">
+            Media keys also control timer
+          </span>
+          <Switch
+            checked={Boolean(mediaKeysControlPomodoro)}
+            onChange={(e) => setMediaKeysControlPomodoro(e.target.checked)}
+            text=""
+          />
+        </div>
       </div>
     </div>
   );
