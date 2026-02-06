@@ -180,13 +180,13 @@ export default function Timer({ projectName }: Props) {
       </div>
       <FullScreen handle={timerScreen}>
         <div className={`${timerScreen.active ? "block" : "hidden"} `}>
-          <div className="flex h-screen w-screen flex-col items-center justify-center bg-surface">
-            <h3 className="text-xl text-heading">{projectName}</h3>
-            <h4 className="my-5 text-4xl text-heading">
+          <div className="flex h-screen w-screen flex-col items-center justify-center bg-black text-gray-500">
+            <h3 className="text-xl">{projectName}</h3>
+            <h4 className="my-5 text-4xl">
               <div className="flex items-baseline gap-3">
                 {timerLabel}
                 <button className="h-6 w-6" onClick={timerScreen.exit}>
-                  <ArrowsPointingInIcon className="h-6 w-6 text-heading" />
+                  <ArrowsPointingInIcon className="h-6 w-6" />
                 </button>
               </div>
             </h4>
@@ -197,7 +197,7 @@ export default function Timer({ projectName }: Props) {
             mb-3 
             text-9xl
             font-extralight
-            text-muted
+            text-gray-500
         "
             >
               {clockifiedValue}
