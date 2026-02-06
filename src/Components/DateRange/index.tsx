@@ -5,6 +5,7 @@ import { DateRangePicker, Range, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import OutsideClickHandler from "react-outside-click-handler";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const extraDot = (
   <div
@@ -39,6 +40,7 @@ export default function DateRange({
 }) {
   const [showCalendar, setVisibility] = useState(false);
   const [calendarDates, setCalendarDates] = useState<[Range]>([getTodayRange()]);
+  const isMobile = useIsMobile();
 
   const handleDateRangeChange = (range: RangeKeyDict) => {
     if (range?.selection && range.selection?.startDate && range.selection?.endDate) {
@@ -72,7 +74,13 @@ export default function DateRange({
           <ArrowLongLeftIcon className="h-5 w-5" />
           <span>{dateRanges?.startDate ? format(dateRanges?.startDate, "yyyy-MM-dd") : ""}</span>
         </div>
-        <div className="absolute -left-[110%] top-14 z-50 shadow-xl">
+        <div
+          className={`absolute top-14 z-50 shadow-xl ${
+            isMobile
+              ? "left-1/2 -translate-x-1/2"
+              : "-left-[110%]"
+          }`}
+        >
           {showCalendar && (
             <DateRangePicker
               preventSnapRefocus={true}
@@ -80,9 +88,9 @@ export default function DateRange({
               moveRangeOnFirstSelection={false}
               maxDate={new Date()}
               dayContentRenderer={customDayContent}
-              months={2}
+              months={isMobile ? 1 : 2}
               ranges={calendarDates}
-              direction="horizontal"
+              direction={isMobile ? "vertical" : "horizontal"}
               calendarFocus="backwards"
             />
           )}

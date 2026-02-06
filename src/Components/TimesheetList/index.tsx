@@ -46,11 +46,11 @@ export default function TimesheetList() {
         <table className="w-full table-auto">
           <thead className="sticky top-0 bg-surface-card">
             <tr className="border-b border-theme text-center text-muted">
-              <th className="p-2">Name</th>
-              <th className="p-2">Start Time</th>
-              <th className="p-2">End Time</th>
-              <th className="py-2 px-10">Time</th>
-              <th className="py-2 px-10">Action</th>
+              <th className="whitespace-nowrap p-2">Name</th>
+              <th className="whitespace-nowrap p-2">Start Time</th>
+              <th className="whitespace-nowrap p-2">End Time</th>
+              <th className="whitespace-nowrap py-2 px-4 md:px-10">Time</th>
+              <th className="whitespace-nowrap py-2 px-4 md:px-10">Action</th>
             </tr>
           </thead>
           <tbody>
