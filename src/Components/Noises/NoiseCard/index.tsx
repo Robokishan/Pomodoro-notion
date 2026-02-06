@@ -75,8 +75,10 @@ export default function NoiseCard({
         <div
           title={label}
           className={`h-[56px] w-[56px] ${
-            isEnabled
+            show
               ? "fill-icon-default stroke-icon"
+              : isEnabled
+              ? "fill-slate-400 stroke-slate-400"
               : "fill-icon-disabled stroke-faint"
           }`}
         >
