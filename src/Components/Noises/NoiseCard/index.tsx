@@ -10,6 +10,7 @@ interface NoiseCardProps {
   audio: string;
   icon?: any;
   defaultVolume?: number;
+  trackIndex?: number;
 }
 
 export default function NoiseCard({
@@ -18,6 +19,7 @@ export default function NoiseCard({
   value,
   icon: Icon,
   defaultVolume = 0.2,
+  trackIndex = 0,
 }: NoiseCardProps) {
   const [volume, setVolume] = useState(defaultVolume);
   const [show, setshow] = useState(false);
@@ -69,6 +71,10 @@ export default function NoiseCard({
           dispatch({
             type: actionTypes.ADD_NOISE_RUNNING,
             payload: value,
+          });
+          dispatch({
+            type: actionTypes.SET_CURRENT_TRACK_INDEX,
+            payload: trackIndex,
           });
         } else {
           dispatch({
