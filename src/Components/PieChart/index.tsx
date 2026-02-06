@@ -4,6 +4,7 @@ import { ResponsivePie } from "@nivo/pie";
 import React from "react";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
 import { useTheme } from "../../utils/Context/ThemeContext";
+import useIsMobile from "../../hooks/useIsMobile";
 import DateRange from "../DateRange";
 
 export type PieData = {
@@ -71,6 +72,7 @@ function Piechart({ data, onProjectSelect }: Props) {
   const [{ startDate, endDate }, userDispatch] = useUserState();
 
   const isDark = resolvedTheme === "dark";
+  const isMobile = useIsMobile();
 
   return (
     <div className="h-[600px] w-full">
@@ -96,12 +98,17 @@ function Piechart({ data, onProjectSelect }: Props) {
             });
           }}
           data={data}
-          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          margin={
+            isMobile
+              ? { top: 20, right: 20, bottom: 100, left: 20 }
+              : { top: 40, right: 80, bottom: 80, left: 80 }
+          }
           innerRadius={0.6}
           padAngle={2}
           cornerRadius={5}
           activeOuterRadiusOffset={8}
           borderWidth={2}
+          enableArcLinkLabels={!isMobile}
           arcLinkLabel={(d) => d.data.label}
           arcLabel={(d) => d.data.sessionTime}
           tooltip={(d) => {
@@ -162,6 +169,22 @@ function Piechart({ data, onProjectSelect }: Props) {
               spacing: 10,
             },
           ]}
+          legends={
+            isMobile
+              ? [
+                  {
+                    anchor: "bottom",
+                    direction: "column",
+                    translateY: 80,
+                    itemWidth: 280,
+                    itemHeight: 20,
+                    itemTextColor: isDark ? "#d1d5db" : "#374151",
+                    symbolSize: 10,
+                    symbolShape: "circle",
+                  },
+                ]
+              : []
+          }
           theme={isDark ? darkNivoTheme : lightNivoTheme}
         />
       ) : (

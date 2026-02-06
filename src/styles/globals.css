@@ -275,3 +275,13 @@
   border-color: #4b5563;
   color: #d1d5db;
 }
+
+/* react-date-range: fit within viewport on mobile */
+@media (max-width: 768px) {
+  .rdrDefinedRangesWrapper {
+    display: none;
+  }
+  .rdrCalendarWrapper {
+    max-width: 100vw;
+  }
+}
