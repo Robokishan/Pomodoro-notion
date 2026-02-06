@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { ArrowSmallDownIcon } from "@heroicons/react/24/solid";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useNote } from "../../hooks/useNote";
 import Switch from "../Switch";
@@ -27,6 +27,15 @@ export default function Notes() {
     useNote(project?.value, databaseId);
   const [inViewPort, setInView] = useState(false);
   const [copied, setCopied] = useState(false);
+  const prevCheckedRef = useRef(false);
+
+  const isPublicLoading = isPublic === "loading";
+  if (!isPublicLoading) {
+    prevCheckedRef.current = isPublic === "public";
+  }
+  const switchChecked = isPublicLoading
+    ? prevCheckedRef.current
+    : isPublic === "public";
 
   function handleScroll(): boolean {
     const myElement = document.getElementById("excalidraw-wrapper");
@@ -81,8 +90,8 @@ export default function Notes() {
           <div className="mr-4 flex flex-row-reverse gap-6">
             <div>
               <Switch
-                disabled={isPublic === "loading"}
-                checked={isPublic == "public" ? true : false}
+                loading={isPublicLoading}
+                checked={switchChecked}
                 onChange={(e) =>
                   databaseId &&
                   makePublic({
