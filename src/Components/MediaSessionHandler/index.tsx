@@ -2,8 +2,6 @@
 
 import { useNoisestate } from "@/utils/Context/NoiseContext/Context";
 import { actionTypes } from "@/utils/Context/NoiseContext/reducer";
-import { useMediaKeysPreference } from "@/utils/Context/MediaKeysPreferenceContext";
-import { pomodoroMediaRef } from "@/utils/mediaSessionRef";
 import { noises } from "@/utils/noise";
 import { useEffect, useRef } from "react";
 
@@ -16,12 +14,9 @@ import { useEffect, useRef } from "react";
  */
 export default function MediaSessionHandler() {
   const [noiseState, dispatch] = useNoisestate();
-  const [mediaKeysControlPomodoro = false] = useMediaKeysPreference();
   const stateRef = useRef(noiseState);
-  const prefRef = useRef(mediaKeysControlPomodoro);
   const anchorRef = useRef<HTMLAudioElement | null>(null);
   stateRef.current = noiseState;
-  prefRef.current = mediaKeysControlPomodoro;
 
   // Anchor: a near-silent looping <audio> element that holds the media session.
   useEffect(() => {
@@ -55,7 +50,6 @@ export default function MediaSessionHandler() {
 
     navigator.mediaSession.setActionHandler("play", () => {
       const state = stateRef.current;
-      if (prefRef.current && pomodoroMediaRef.current) pomodoroMediaRef.current();
       if (state.pausedNoisesSnapshot.length > 0) {
         dispatch({ type: actionTypes.RESTORE_PAUSED_NOISES });
       } else if (state.noisesRunning.length === 0) {
@@ -70,7 +64,6 @@ export default function MediaSessionHandler() {
       if (state.noisesRunning.length > 0) {
         dispatch({ type: actionTypes.MEDIA_PAUSE_NOISES, payload: [...state.noisesRunning] });
       }
-      if (prefRef.current && pomodoroMediaRef.current) pomodoroMediaRef.current();
     });
 
     navigator.mediaSession.setActionHandler("nexttrack", () => {

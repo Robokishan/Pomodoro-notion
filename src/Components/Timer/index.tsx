@@ -11,8 +11,6 @@ import OutsideClickHandler from "react-outside-click-handler";
 import useSyncPomo from "../../hooks/useSyncPomo";
 import useWindowActive from "../../hooks/useWindowActive";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
-import { useMediaKeysPreference } from "../../utils/Context/MediaKeysPreferenceContext";
-import { pomodoroMediaRef } from "../../utils/mediaSessionRef";
 import Break from "../Break";
 import Controls from "../Controls";
 import SoundLevel from "../Noises/NoiseCard/SoundLevel";
@@ -34,13 +32,6 @@ export default function Timer({ projectName }: Props) {
     useSyncPomo();
 
   const isWindowActive = useWindowActive();
-
-  useEffect(() => {
-    pomodoroMediaRef.current = togglePlayPause;
-    return () => {
-      pomodoroMediaRef.current = null;
-    };
-  }, [togglePlayPause]);
 
   const [disableControls, setDisableControls] = useState(false);
 
@@ -231,8 +222,6 @@ function Container({
 
 function PopOver({ visible } = { visible: false }) {
   const [{ tickVolume }, dispatch] = usePomoState();
-  const [mediaKeysControlPomodoro, setMediaKeysControlPomodoro] =
-    useMediaKeysPreference();
 
   const [volume, setVolume] = useState(tickVolume);
 
@@ -264,16 +253,6 @@ function PopOver({ visible } = { visible: false }) {
             defaultValue={volume * 100}
             value="Tickvolume"
             handleChange={setVolume}
-          />
-        </div>
-        <div className="flex items-center justify-between border-t border-theme-subtle pt-2">
-          <span className="text-xs text-muted">
-            Media keys also control timer
-          </span>
-          <Switch
-            checked={Boolean(mediaKeysControlPomodoro)}
-            onChange={(e) => setMediaKeysControlPomodoro(e.target.checked)}
-            text=""
           />
         </div>
       </div>
