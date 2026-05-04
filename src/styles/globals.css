@@ -69,6 +69,34 @@
   body {
     @apply bg-surface text-heading transition-colors duration-200;
   }
+
+  .desktop-runtime body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 40;
+    height: 72px;
+    pointer-events: none;
+    background: rgb(var(--color-surface));
+  }
+
+  .desktop-runtime body {
+    overflow-x: hidden;
+  }
+
+  .desktop-runtime main {
+    padding-top: 72px;
+  }
+
+  .desktop-titlebar-drag-region {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 360px;
+    z-index: 60;
+    height: 72px;
+    user-select: none;
+  }
 }
 
 ::-webkit-scrollbar {

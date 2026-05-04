@@ -1,7 +1,7 @@
 const publicFileRegex = /\.(.*)$/;
 const publicUrls = ["/privacy", "/terms", "/about", "/_offline", "/public"];
 
-const ignoredApiRoutes = ["/api/auth"];
+const ignoredApiRoutes = ["/api/auth", "/api/desktop/auth"];
 
 export const shouldIgnore = (pathname: string): boolean => {
   return (

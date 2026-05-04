@@ -1,0 +1,29 @@
+[package]
+name = "pomodoro-notion-desktop"
+version = "1.0.5"
+description = "macOS desktop shell for Pomodoro for Notion"
+authors = ["Kishan Joshi"]
+edition = "2021"
+rust-version = "1.88"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+base64 = "0.22"
+objc2 = "0.6.4"
+objc2-app-kit = { version = "0.3.2", features = ["NSButton", "NSButtonCell", "NSColor", "NSControl", "NSImage", "NSResponder", "NSView", "NSWindow", "objc2-core-foundation"] }
+objc2-foundation = { version = "0.3.2", features = ["NSObject", "NSString", "NSGeometry"] }
+rand = "0.8"
+reqwest = { version = "0.13", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+tauri-plugin-deep-link = "2"
+tauri-plugin-opener = "2"
+url = "2"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

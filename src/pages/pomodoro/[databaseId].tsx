@@ -4,8 +4,9 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
 import { useEffect, useMemo, useState } from "react";
+import { authOptions } from "../api/auth/[...nextauth]";
 import Line from "../../Components/Line";
 import NotionTags from "../../Components/NotionTags";
 
@@ -37,9 +38,10 @@ import { TabsOptions } from "../../Components/Views/utils";
 export const getServerSideProps = async ({
   query,
   req,
+  res,
 }: GetServerSidePropsContext) => {
   try {
-    const session = await getSession({ req });
+    const session = await getServerSession(req, res, authOptions);
     if (!session?.user?.email) throw new Error("Session not found");
     const user = await fetchNotionUser(session?.user?.email);
     if (!user) throw new Error("User not found");
@@ -58,7 +60,13 @@ export const getServerSideProps = async ({
     console.log(error);
     const err = error as AxiosError;
     if (process.env.NODE_ENV === "development")
-      return { props: { error: err.response?.data } };
+      return {
+        props: {
+          error:
+            err.response?.data ??
+            (error instanceof Error ? error.message : "Unknown error"),
+        },
+      };
     return {
       redirect: { permanent: false, destination: "/login" },
       props: {},

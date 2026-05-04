@@ -22,10 +22,33 @@ import Router from "next/router";
 import NextProgress from "nextjs-progressbar";
 import { shouldIgnore } from "@/utils/routes";
 import { ThemeProvider, useTheme } from "@/utils/Context/ThemeContext";
+import { isDesktopRuntime } from "@/utils/desktop/isDesktopRuntime";
 import MediaSessionHandler from "../MediaSessionHandler";
 
 interface Props {
   children: React.ReactNode;
+}
+
+function DesktopTitlebarDragRegion() {
+  const [isDesktop, setIsDesktop] = React.useState(false);
+
+  useEffect(() => {
+    setIsDesktop(isDesktopRuntime());
+  }, []);
+
+  if (!isDesktop) return null;
+
+  return (
+    <div
+      aria-hidden="true"
+      className="desktop-titlebar-drag-region"
+      data-tauri-drag-region
+      onMouseDown={(event) => {
+        if (event.button !== 0) return;
+        window.__TAURI__?.core?.invoke("start_window_drag");
+      }}
+    />
+  );
 }
 
 function ThemedToastContainer() {
@@ -48,6 +71,13 @@ export default function Shield({ children }: Props) {
     }
   }, [session, status]);
 
+  useEffect(() => {
+    if (!isDesktopRuntime()) return;
+
+    document.documentElement.classList.add("desktop-runtime");
+    return () => document.documentElement.classList.remove("desktop-runtime");
+  }, []);
+
   return (
     <ThemeProvider>
       <ProjectStateProvider reducer={preducer} initialState={projInitial}>
@@ -58,6 +88,7 @@ export default function Shield({ children }: Props) {
               initialState={noiseInitial}
             >
               <MediaSessionHandler />
+              <DesktopTitlebarDragRegion />
               <NextProgress
                 color="#374151"
                 showOnShallow={false}

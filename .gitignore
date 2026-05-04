@@ -19,6 +19,10 @@
 # production
 /build
 
+# tauri / rust
+/src-tauri/gen/schemas/
+/src-tauri/target/
+
 # misc
 .DS_Store
 *.pem
