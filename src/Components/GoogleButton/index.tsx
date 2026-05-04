@@ -1,11 +1,55 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import Router from "next/router";
+import { isDesktopRuntime } from "../../utils/desktop/isDesktopRuntime";
+import { DesktopAuthSuccessPayload } from "../../types/tauri-global";
 
 export default function GoogleButton() {
+  useEffect(() => {
+    if (!isDesktopRuntime()) return;
+
+    let unlisten: (() => void) | undefined;
+
+    window.__TAURI__?.event
+      ?.listen<DesktopAuthSuccessPayload>("auth-success", async ({ payload }) => {
+        const response = await fetch("/api/desktop/auth/google-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idToken: payload.id_token,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Could not create desktop session");
+        }
+
+        window.location.assign("/");
+      })
+      .then((listener) => {
+        unlisten = listener;
+      });
+
+    return () => {
+      unlisten?.();
+    };
+  }, []);
+
+  async function handleGoogleSignIn() {
+    if (isDesktopRuntime()) {
+      await window.__TAURI__?.core?.invoke("start_google_sign_in");
+      return;
+    }
+
+    signIn("google", { callbackUrl: "/" });
+  }
+
   return (
     <button
-      onClick={() => signIn("google")}
+      onClick={handleGoogleSignIn}
       className="mt-3 
     rounded-sm
       bg-blue-500 

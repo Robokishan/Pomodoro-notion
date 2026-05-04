@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Pomodoro for Notion",
+  "version": "1.0.5",
+  "identifier": "dev.kishanjoshi.pomodoro-notion",
+  "build": {
+    "beforeDevCommand": "node ./node_modules/next/dist/bin/next dev -p 3001",
+    "devUrl": "http://localhost:3001",
+    "frontendDist": "https://pomodoro.kishanjoshi.dev"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Pomodoro for Notion",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 900,
+        "minHeight": 640,
+        "resizable": true,
+        "fullscreen": false,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "trafficLightPosition": {
+          "x": 10,
+          "y": 18
+        }
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg"],
+    "icon": ["../public/icon-512x512.png"],
+    "macOS": {
+      "signingIdentity": "-"
+    }
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": ["pomodoro-notion"]
+      }
+    }
+  }
+}

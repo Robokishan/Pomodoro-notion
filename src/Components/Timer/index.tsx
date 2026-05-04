@@ -5,12 +5,12 @@ import {
   SpeakerWaveIcon,
 } from "@heroicons/react/24/outline";
 import Head from "next/head";
-import React, { useEffect, useRef, useState } from "react";
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import useSyncPomo from "../../hooks/useSyncPomo";
 import useWindowActive from "../../hooks/useWindowActive";
 import { usePomoState } from "../../utils/Context/PomoContext/Context";
+import { isDesktopRuntime } from "../../utils/desktop/isDesktopRuntime";
 import Break from "../Break";
 import Controls from "../Controls";
 import SoundLevel from "../Noises/NoiseCard/SoundLevel";
@@ -24,8 +24,6 @@ type Props = {
 };
 
 export default function Timer({ projectName }: Props) {
-  const timerScreen = useFullScreenHandle();
-
   const [{ timerLabel, project, shouldTickSound }, dispatch] = usePomoState();
 
   const { clockifiedValue, togglePlayPause, resetTimer, restartPomo } =
@@ -34,6 +32,7 @@ export default function Timer({ projectName }: Props) {
   const isWindowActive = useWindowActive();
 
   const [disableControls, setDisableControls] = useState(false);
+  const [timerScreenActive, setTimerScreenActive] = useState(false);
 
   const [showPopover, setPopover] = useState(false);
   const [showNote, setNote] = useState<
@@ -82,6 +81,69 @@ export default function Timer({ projectName }: Props) {
       payload: e.target.checked,
     });
   }
+
+  const setDesktopFullscreen = useCallback(async (fullscreen: boolean) => {
+    await window.__TAURI__?.core?.invoke("set_timer_fullscreen", {
+      fullscreen,
+    });
+  }, []);
+
+  const enterTimerScreen = useCallback(async () => {
+    try {
+      if (isDesktopRuntime()) {
+        await setDesktopFullscreen(true);
+        setTimerScreenActive(true);
+        return;
+      }
+
+      const element = document.documentElement;
+      if (element.requestFullscreen) {
+        await element.requestFullscreen();
+        setTimerScreenActive(true);
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV == "development") console.error(error);
+    }
+  }, [setDesktopFullscreen]);
+
+  const exitTimerScreen = useCallback(async () => {
+    setTimerScreenActive(false);
+    try {
+      if (isDesktopRuntime()) {
+        await setDesktopFullscreen(false);
+        return;
+      }
+
+      if (document.fullscreenElement && document.exitFullscreen) {
+        await document.exitFullscreen();
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV == "development") console.error(error);
+    }
+  }, [setDesktopFullscreen]);
+
+  useEffect(() => {
+    if (!timerScreenActive) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") void exitTimerScreen();
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [exitTimerScreen, timerScreenActive]);
+
+  useEffect(() => {
+    function handleFullscreenChange() {
+      if (!isDesktopRuntime() && !document.fullscreenElement) {
+        setTimerScreenActive(false);
+      }
+    }
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
 
   return (
     <div
@@ -165,38 +227,36 @@ export default function Timer({ projectName }: Props) {
             <PopOver visible={showPopover} />
           </div>
         </OutsideClickHandler>
-        <button onClick={timerScreen.enter} className="mx-2">
+        <button onClick={enterTimerScreen} className="mx-2">
           <ArrowsPointingOutIcon className="h-5 w-5 text-heading" />
         </button>
       </div>
-      <FullScreen handle={timerScreen}>
-        <div className={`${timerScreen.active ? "block" : "hidden"} `}>
-          <div className="flex h-screen w-screen flex-col items-center justify-center bg-black text-gray-500">
-            <h3 className="text-xl">{projectName}</h3>
-            <h4 className="my-5 text-4xl">
-              <div className="flex items-baseline gap-3">
-                {timerLabel}
-                <button className="h-6 w-6" onClick={timerScreen.exit}>
-                  <ArrowsPointingInIcon className="h-6 w-6" />
-                </button>
-              </div>
-            </h4>
-            <h1
-              id="time-left"
-              className="font-quicksand relative z-10
+      {timerScreenActive && (
+        <div className="fixed inset-0 z-[100] flex h-screen w-screen flex-col items-center justify-center bg-black text-gray-500">
+          <h3 className="text-xl">{projectName}</h3>
+          <h4 className="my-5 text-4xl">
+            <div className="flex items-baseline gap-3">
+              {timerLabel}
+              <button className="h-6 w-6" onClick={exitTimerScreen}>
+                <ArrowsPointingInIcon className="h-6 w-6" />
+              </button>
+            </div>
+          </h4>
+          <h1
+            id="time-left"
+            className="font-quicksand relative z-10
               m-0
             mb-3 
             text-9xl
             font-extralight
             text-gray-500
         "
-            >
-              {clockifiedValue}
-            </h1>
-            <Clock />
-          </div>
+          >
+            {clockifiedValue}
+          </h1>
+          <Clock />
         </div>
-      </FullScreen>
+      )}
     </div>
   );
 }

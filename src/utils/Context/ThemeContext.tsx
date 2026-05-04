@@ -39,6 +39,10 @@ function applyTheme(resolvedTheme: "light" | "dark") {
   } else {
     root.classList.remove("dark");
   }
+
+  window.__TAURI__?.core
+    ?.invoke("set_desktop_theme", { theme: resolvedTheme })
+    .catch(() => undefined);
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
